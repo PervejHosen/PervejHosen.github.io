@@ -1,0 +1,14 @@
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+
+# originals you don't want online (keep resized copies in assets/)
+originals/
+*.psd
+*.raw
+*.CR2
+*.NEF
+*.ARW
