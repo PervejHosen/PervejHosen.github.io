@@ -66,7 +66,7 @@ $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
 (function typing() {
   const el = $("#typed"), words = CONFIG.roles;
   // start with the first title fully shown (no half-typed word on arrival), then cycle
-  let w = 0, i = words[0].length, deleting = false;
+  let w = 0, i = words[0].length, deleting = true;   // next step: delete it, then type the next title
   el.textContent = words[0];
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   setTimeout(function tick() {
