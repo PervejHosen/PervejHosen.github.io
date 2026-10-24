@@ -57,6 +57,11 @@ $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
   })();
 })();
 
+/* ---------- about ---------- */
+$("#aboutText").innerHTML = CONFIG.about.map(p => `<p>${p}</p>`).join("");
+$("#facts").innerHTML = CONFIG.facts.map(f =>
+  `<div class="card fact"><b class="grad-text">${esc(f.n)}</b><span>${esc(f.l)}</span></div>`).join("");
+
 /* ---------- footer ---------- */
 $("#footer").innerHTML = `© ${new Date().getFullYear()} ${esc(CONFIG.name)} · Built with care in Dhaka`;
 
