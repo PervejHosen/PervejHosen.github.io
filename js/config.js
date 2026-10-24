@@ -9,7 +9,9 @@ const CONFIG = {
   /* ---------- basics & hero ---------- */
   name: "Pervej Hosen",
   logo: "Pervej Hosen",
-  photo: "assets/profile.jpg",        // square photo works best
+  // Hero photos: click/tap the photo to show the next one. Square photos work best.
+  // Files that don't exist yet are skipped automatically, so you can add them any time.
+  photos: ["assets/profile.jpg", "assets/profile-2.jpg", "assets/profile-3.jpg", "assets/profile-4.jpg"],
   resume: "assets/resume.pdf",        // your résumé PDF
   roles: ["Sr. BI Developer", "Independent Consultant", "Power BI Developer", "Analytics Engineer", "Data Storyteller"],
   objective: "I turn raw data into decisions people trust — Power BI dashboards, SQL models and analytics pipelines on Snowflake, BigQuery and Databricks for teams in the US, UAE, Germany and Australia.",

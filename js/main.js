@@ -52,15 +52,39 @@ if (CONFIG.location && $("#locLine")) $("#locLine").textContent = CONFIG.locatio
 $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
   `<a href="${esc(linkHref(k))}" ${linkAttrs(k)} aria-label="${k}">${ICONS[k] || ""}</a>`).join("");
 
-(function photo() {
-  const el = $("#photo");
-  const fallback = () => el.innerHTML = `<span class="initials grad-text">${initials(CONFIG.name)}</span>`;
-  if (!CONFIG.photo) return fallback();
-  const img = new Image();
-  img.alt = CONFIG.name;
-  img.onerror = fallback;
-  img.src = CONFIG.photo;
-  el.appendChild(img);
+(function photos() {
+  const el = $("#photo"), dots = $("#photoDots");
+  const list = CONFIG.photos || (CONFIG.photo ? [CONFIG.photo] : []);
+  const fallback = () => { el.innerHTML = `<span class="initials grad-text">${initials(CONFIG.name)}</span>`; };
+  if (!list.length) return fallback();
+
+  // load every listed photo; keep the ones that exist, in the listed order
+  Promise.all(list.map(src => new Promise(res => {
+    const img = new Image();
+    img.onload = () => res(img); img.onerror = () => res(null);
+    img.src = src; img.alt = CONFIG.name;
+  }))).then(imgs => {
+    const ok = imgs.filter(Boolean);
+    if (!ok.length) return fallback();
+    ok.forEach((img, i) => { img.className = i ? "" : "on"; el.appendChild(img); });
+    if (ok.length < 2) return;                       // one photo: nothing to cycle
+
+    let cur = 0;
+    dots.innerHTML = ok.map((_, i) => `<span class="${i ? "" : "on"}"></span>`).join("");
+    const ring = el.closest(".photo-ring");
+    ring.classList.add("can-cycle");
+    ring.setAttribute("role", "button");
+    ring.setAttribute("tabindex", "0");
+    ring.setAttribute("aria-label", "Show another photo");
+    const next = () => {
+      ok[cur].classList.remove("on"); dots.children[cur].classList.remove("on");
+      cur = (cur + 1) % ok.length;
+      ok[cur].classList.add("on"); dots.children[cur].classList.add("on");
+      ring.classList.remove("bump"); void ring.offsetWidth; ring.classList.add("bump");
+    };
+    ring.addEventListener("click", next);
+    ring.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); next(); } });
+  });
 })();
 
 (function typing() {

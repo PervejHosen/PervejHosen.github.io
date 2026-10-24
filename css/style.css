@@ -112,7 +112,17 @@ section { position: relative; padding: 110px 24px; }
 .photo-wrap { position: relative; justify-self: center; }
 .photo-ring { width: 380px; height: 380px; max-width: 78vw; max-height: 78vw; border-radius: 28px; padding: 3px; background: linear-gradient(135deg, var(--cyan), var(--blue) 60%, transparent); box-shadow: 0 30px 80px -30px rgba(34, 211, 238, .45); transform: rotate(-3deg); }
 .photo { width: 100%; height: 100%; border-radius: 25px; overflow: hidden; background: var(--navy-2); display: grid; place-items: center; transform: rotate(3deg) scale(1.02); }
-.photo img { width: 100%; height: 100%; object-fit: cover; }
+.photo { position: relative; }
+.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.06); transition: opacity .6s ease, transform .9s ease; }
+.photo img.on { opacity: 1; transform: none; }
+.photo-ring.can-cycle { cursor: pointer; }
+.photo-ring.can-cycle:hover { box-shadow: 0 30px 80px -24px rgba(34, 211, 238, .65); }
+.photo-ring.can-cycle:focus-visible { outline: 3px solid var(--cyan); outline-offset: 6px; }
+.photo-ring.bump { animation: bump .45s ease; }
+@keyframes bump { 40% { transform: rotate(-1deg) scale(.975); } }
+.photo-dots { display: flex; justify-content: center; gap: 8px; margin-top: 22px; min-height: 8px; }
+.photo-dots span { width: 8px; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, .25); transition: width .3s, background .3s; }
+.photo-dots span.on { width: 22px; background: var(--grad); }
 .photo .initials { font-size: 5rem; font-weight: 800; }
 .badge { position: absolute; left: -28px; bottom: 34px; background: #fff; color: var(--navy-2); border-radius: 12px; padding: 10px 16px; box-shadow: 0 20px 40px -16px rgba(0, 0, 0, .5); line-height: 1.25; }
 .badge b { display: block; font-size: 1.05rem; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
