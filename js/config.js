@@ -22,9 +22,10 @@ const CONFIG = {
   },
 
   /* ---------- about ---------- */
+  careerStart: "2022-08",   // {years} in the About text is counted from this month, so it updates itself
   about: [
-    "I'm <span class='grad-text'>Pervej Hosen</span>, a Business Intelligence developer based in Dhaka, Bangladesh. I started on the commercial side of the pharmaceutical industry in sales and distribution, which is where I learned that a report only matters if someone acts on it.",
-    "Since then I've worked remotely with teams in the US, the UAE, Germany and Australia — across circular-fashion e-commerce, prop trading, a restaurant chain and mining — building the data models, dashboards and pipelines they run their business on.",
+    "I'm <span class='grad-text'>Pervej Hosen</span>, a Business Intelligence developer based in Dhaka, Bangladesh. I started my career in August 2022 on the commercial side of the pharmaceutical industry, in sales and distribution, which is where I learned that a report only matters if someone acts on it.",
+    "Since then I've worked remotely with teams in the US, the UAE, Germany and Australia — across circular-fashion e-commerce, prop trading, a restaurant chain and mining — building the data models, dashboards and pipelines they run their business on. Altogether, that's 6+ years of combined, hands-on experience across six roles and five industries.",
     "I'm a Microsoft Certified Power BI Data Analyst (PL-300). My toolkit centres on Power BI, DAX, SQL, Snowflake, BigQuery, Databricks and Python, and I care as much about the clarity of a dashboard as the correctness of the numbers behind it."
   ],
   // the career chart on the left of the About section (newest first)

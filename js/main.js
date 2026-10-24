@@ -58,7 +58,14 @@ $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
 })();
 
 /* ---------- about ---------- */
-$("#aboutText").innerHTML = CONFIG.about.map(p => `<p>${p}</p>`).join("");
+// years since your career start, e.g. "2022-08" → 4 in late 2026
+const careerYears = (() => {
+  const [y, mo] = (CONFIG.careerStart || "").split("-").map(Number);
+  if (!y) return "";
+  const now = new Date();
+  return Math.floor(((now.getFullYear() - y) * 12 + (now.getMonth() + 1 - (mo || 1))) / 12);
+})();
+$("#aboutText").innerHTML = CONFIG.about.map(p => `<p>${p.replace(/\{years\}/g, careerYears)}</p>`).join("");
 $("#ccRows").innerHTML = (CONFIG.careerChart || []).map((r, i, all) => {
   const width = 100 - i * (60 / Math.max(all.length - 1, 1));   // bars step down like a timeline
   return `<li class="cc-row">
