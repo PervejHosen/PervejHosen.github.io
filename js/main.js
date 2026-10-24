@@ -27,7 +27,8 @@ $("#resumeBtn").href = CONFIG.resume;
 // hide the résumé button until the PDF actually exists on the site
 if (!CONFIG.resume) $("#resumeBtn").remove();
 else fetch(CONFIG.resume, { method: "HEAD" }).then(r => { if (!r.ok) $("#resumeBtn")?.remove(); }).catch(() => {});
-if (!$("#contact")) $("#hireBtn").href = "mailto:" + L.email;   // until the Contact section exists
+// until the Contact section exists, "Hire me" and "Let's talk" open an email instead
+if (!$("#contact")) ["#hireBtn", "#navCta"].forEach(s => { if ($(s)) $(s).href = "mailto:" + L.email; });
 $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
   `<a href="${esc(linkHref(k))}" ${linkAttrs(k)} aria-label="${k}">${ICONS[k] || ""}</a>`).join("");
 

@@ -5,67 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Pervej Hosen | Portfolio</title>
   <meta name="description" content="Pervej Hosen — Sr. BI Developer and Analytics Engineer. Power BI, SQL, Snowflake, BigQuery, Databricks and Python for teams in the US, UAE, Germany and Australia.">
-  <meta name="theme-color" content="#0b1020">
+  <meta name="theme-color" content="#020817">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=2i">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=3t">
 </head>
 <body>
 
-  <div class="blobs" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
-
   <header>
     <nav class="nav">
-      <a href="#home" class="logo grad-text" id="logo"></a>
-      <button class="burger" id="burger" aria-label="Open menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-      </button>
+      <a href="#home" class="logo" id="logo"></a>
       <ul id="menu">
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
       </ul>
+      <a href="#contact" class="btn btn-primary btn-sm nav-cta" id="navCta">Let's talk</a>
+      <button class="burger" id="burger" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
     </nav>
   </header>
 
   <main>
     <!-- ================= HERO ================= -->
     <section id="home" class="hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <svg class="hero-lines" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
+        <defs><linearGradient id="hl" x1="0" x2="1"><stop offset="0" stop-color="#22d3ee" stop-opacity="0"/><stop offset=".5" stop-color="#22d3ee" stop-opacity=".55"/><stop offset="1" stop-color="#3b82f6" stop-opacity="0"/></linearGradient></defs>
+        <polyline points="0,470 120,430 240,450 360,380 480,400 600,320 720,350 840,260 960,280 1080,190 1200,210" fill="none" stroke="url(#hl)" stroke-width="2"/>
+        <polyline points="0,520 140,500 280,510 420,460 560,480 700,420 840,440 980,370 1120,380 1200,340" fill="none" stroke="url(#hl)" stroke-width="1.2" opacity=".6"/>
+      </svg>
       <div class="wrap two">
         <div class="reveal">
-          <p class="eyebrow">Welcome to my world</p>
-          <h1>HI, I'M <span class="grad-text" id="heroName"></span></h1>
-          <div class="typed-box"><span class="grad-text" id="typed"></span><span class="cursor"></span></div>
-          <div class="card objective" id="objective"></div>
-          <div class="socials" id="heroSocials"></div>
+          <p class="kicker">Business Intelligence · Analytics Engineering</p>
+          <h1>Hi, I'm <span class="hl" id="heroName"></span></h1>
+          <div class="typed-line"><span id="typed"></span><span class="cursor"></span></div>
+          <p class="objective" id="objective"></p>
           <div class="btns">
-            <a href="#contact" class="btn btn-primary" id="hireBtn">Hire Me</a>
-            <a href="#" class="btn btn-ghost" id="resumeBtn" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24"><path d="M10.6 13.4a1 1 0 0 1 0-1.4l3.5-3.5a3 3 0 1 1 4.2 4.2l-2 2a1 1 0 1 1-1.4-1.4l2-2a1 1 0 0 0-1.4-1.4L12 13.4a1 1 0 0 1-1.4 0zm2.8-2.8a1 1 0 0 1 0 1.4l-3.5 3.5a3 3 0 1 1-4.2-4.2l2-2a1 1 0 0 1 1.4 1.4l-2 2a1 1 0 0 0 1.4 1.4L12 10.6a1 1 0 0 1 1.4 0z"/></svg>
-              My Resume
-            </a>
+            <a href="#contact" class="btn btn-primary" id="hireBtn">Hire me</a>
+            <a href="#" class="btn btn-light" id="resumeBtn" target="_blank" rel="noopener">My résumé</a>
           </div>
+          <div class="socials" id="heroSocials"></div>
         </div>
         <div class="photo-wrap reveal">
-          <div class="photo-card"><div class="photo-blob" id="photo"></div></div>
+          <div class="photo-ring"><div class="photo" id="photo"></div></div>
+          <div class="badge"><b>PL-300</b><span>Microsoft certified</span></div>
         </div>
       </div>
     </section>
 
+    <!-- ================= STATS BAND ================= -->
+    <div class="band">
+      <div class="wrap facts" id="facts"></div>
+    </div>
+
     <!-- ================= ABOUT ================= -->
-    <section id="about">
-      <div class="wrap two about-grid" style="align-items:start">
-        <div class="reveal">
-          <h2 class="sec-title">About Me</h2>
-          <p class="sec-sub accent">Who I Am?</p>
-          <div class="card career-chart" id="careerChart">
+    <section id="about" class="light">
+      <div class="wrap">
+        <div class="center-head reveal">
+          <p class="kicker">Who I am</p>
+          <h2 class="sec-title">Data that people <span class="hl">act on</span>.</h2>
+        </div>
+        <div class="two about-grid">
+          <div class="career-chart reveal" id="careerChart">
             <h3 class="cc-title">Experience</h3>
             <ol class="cc-rows" id="ccRows"></ol>
           </div>
-          <div class="facts" id="facts"></div>
-        </div>
-        <div class="reveal">
-          <div class="card about-text" id="aboutText"></div>
+          <div class="about-text reveal" id="aboutText"></div>
         </div>
       </div>
     </section>
@@ -73,7 +80,7 @@
 
   <footer id="footer"></footer>
 
-  <script src="js/config.js?v=2i"></script>
-  <script src="js/main.js?v=2i"></script>
+  <script src="js/config.js?v=3t"></script>
+  <script src="js/main.js?v=3t"></script>
 </body>
 </html>
