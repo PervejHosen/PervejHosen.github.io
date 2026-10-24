@@ -21,3 +21,5 @@ I turn raw data into decisions people trust — Power BI dashboards, SQL models 
 This repository is the source of my portfolio site. Have a look at the [live site](https://pervejhosen.github.io), or [get in touch](mailto:pervejhosen2@gmail.com) if you have a dashboard to build or a reporting process to fix.
 
 <sub>Built with plain HTML, CSS and JavaScript · hosted on GitHub Pages</sub>
+
+<sub>© 2026 Pervej Hosen. All rights reserved. The code, design, text and photos in this repository may not be copied, reused or republished without written permission. See [LICENSE](LICENSE).</sub>

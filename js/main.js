@@ -172,7 +172,7 @@ $("#contactForm").addEventListener("submit", async ev => {
 });
 
 /* ---------- footer ---------- */
-$("#footer").innerHTML = `© ${new Date().getFullYear()} ${esc(CONFIG.name)} · Built with care in Dhaka`;
+$("#footer").innerHTML = `© ${new Date().getFullYear()} ${esc(CONFIG.name)}. All rights reserved. · Built in Dhaka`;
 
 /* ---------- navigation ---------- */
 const header = $("header"), menu = $("#menu");
