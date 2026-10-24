@@ -59,6 +59,13 @@ $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
 
 /* ---------- about ---------- */
 $("#aboutText").innerHTML = CONFIG.about.map(p => `<p>${p}</p>`).join("");
+$("#ccRows").innerHTML = (CONFIG.careerChart || []).map((r, i, all) => {
+  const width = 100 - i * (60 / Math.max(all.length - 1, 1));   // bars step down like a timeline
+  return `<li class="cc-row">
+    <div class="cc-who"><b>${esc(r.role)}</b><span>${esc(r.where)}</span></div>
+    <div class="cc-track"><span class="cc-fill" style="width:${width}%;transition-delay:${i * 90}ms"></span><span class="cc-label" title="${esc(r.industry)}">${esc(r.industry)}</span></div>
+  </li>`;
+}).join("");
 $("#facts").innerHTML = CONFIG.facts.map(f =>
   `<div class="card fact"><b class="grad-text">${esc(f.n)}</b><span>${esc(f.l)}</span></div>`).join("");
 
