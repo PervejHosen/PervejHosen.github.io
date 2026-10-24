@@ -29,11 +29,11 @@ const CONFIG = {
     "Since then I've worked remotely with teams in the US, the UAE, Germany and Australia — across circular-fashion e-commerce, prop trading, a restaurant chain and mining — building the data models, dashboards and pipelines they run their business on. Altogether, that's 6+ years of combined, hands-on experience across six roles and five industries.",
     "I'm a Microsoft Certified Power BI Data Analyst (PL-300). My toolkit centres on Power BI, DAX, SQL, Snowflake, BigQuery, Databricks and Python, and I care as much about the clarity of a dashboard as the correctness of the numbers behind it."
   ],
-  // the career chart in the About section (current: true adds a "Current" tag)
+  // the career chart in the About section
   careerChart: [
-    { role: "Business Intelligence Analyst", where: "Buddy & Selly · Germany", industry: "Circular fashion e-commerce", current: true },
-    { role: "BI Developer", where: "Lunar Tech · Dubai, UAE", industry: "Prop trading", current: true },
-    { role: "Sr. BI Developer", where: "Leveor · United States", industry: "Restaurant chain", current: true },
+    { role: "Business Intelligence Analyst", where: "Buddy & Selly · Germany", industry: "Circular fashion e-commerce" },
+    { role: "BI Developer", where: "Lunar Tech · Dubai, UAE", industry: "Prop trading" },
+    { role: "Sr. BI Developer", where: "Leveor · United States", industry: "Restaurant chain" },
     { role: "Data Analytics Engineer", where: "Onwards Analytics · Australia", industry: "Mining & business improvement" },
     { role: "Associate Data Analyst", where: "Transcom Ltd · Bangladesh", industry: "Pharmaceutical" },
     { role: "Assistant Officer, Sales & Distribution", where: "Transcom Ltd · Bangladesh", industry: "Pharmaceutical" }
