@@ -1,40 +1,23 @@
-# Pervej Hosen — Portfolio
+<h1 align="center">Pervej Hosen</h1>
 
-Personal portfolio of **Pervej Hosen**, Sr. BI Developer and Analytics Engineer (Power BI · SQL · Snowflake · BigQuery · Python).
+<p align="center"><b>Sr. BI Developer · Independent Consultant</b><br>
+Power BI · SQL · Snowflake · BigQuery · Databricks · Python · Microsoft PL-300 certified</p>
 
-🔗 **Live site:** https://pervejhosen.github.io
+<p align="center">
+  <a href="https://pervejhosen.github.io"><img src="assets/preview.jpg" alt="Preview of pervejhosen.github.io" width="100%"></a>
+</p>
 
-## What's inside
+<p align="center">
+  🔗 <a href="https://pervejhosen.github.io"><b>pervejhosen.github.io</b></a> &nbsp;·&nbsp;
+  <a href="https://www.linkedin.com/in/pervejhosen/">LinkedIn</a> &nbsp;·&nbsp;
+  <a href="https://www.kaggle.com/pervejhosen">Kaggle</a> &nbsp;·&nbsp;
+  <a href="mailto:pervejhosen2@gmail.com">Email</a>
+</p>
 
-| Section | What it shows |
-|---|---|
-| Home | Intro, rotating roles, links, résumé |
-| About | Background and key facts |
-| Experience | Six roles across five industries |
-| Skills | Grouped skills and a tool grid |
-| Projects | Selected analysis and dashboard work |
-| Photography | A filterable gallery with full-screen viewer |
-| Contact | Links and a contact form |
+---
 
-## Project structure
+I turn raw data into decisions people trust — Power BI dashboards, SQL models and analytics pipelines for teams in the **US, UAE, Germany and Australia**, across pharmaceutical sales, circular-fashion e-commerce, chain restaurants, prop trading and mining improvement.
 
-```
-├── index.html          page structure
-├── css/style.css       all styling
-├── js/config.js        ← ALL CONTENT (edit this to update the site)
-├── js/main.js          builds the page from config.js
-└── assets/
-    ├── profile.jpg     hero photo
-    ├── resume.pdf      résumé
-    ├── logos/          company logos (optional)
-    ├── projects/       project screenshots (optional)
-    └── photos/         photography gallery
-```
+This repository is the source of my portfolio site. Have a look at the [live site](https://pervejhosen.github.io), or [get in touch](mailto:pervejhosen2@gmail.com) if you have a dashboard to build or a reporting process to fix.
 
-## Updating the site
-
-1. Edit `js/config.js` (text, jobs, projects, photos) or drop new files into `assets/`.
-2. Preview locally with the **Live Server** extension in VS Code (right-click `index.html` → *Open with Live Server*).
-3. Commit and push — GitHub Pages republishes in about a minute.
-
-Built with plain HTML, CSS and JavaScript — no frameworks, no build step.
+<sub>Built with plain HTML, CSS and JavaScript · hosted on GitHub Pages</sub>
