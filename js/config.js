@@ -44,4 +44,39 @@ const CONFIG = {
     { n: "4", l: "Countries, remote teams" },
     { n: "PL-300", l: "Microsoft certified" }
   ],
+
+  /* ---------- skills ----------
+     Left: grouped list. Right: logo tiles.
+     icon = file name in assets/icons/ (leave it out for tools without a logo) */
+  skillsIntro: "The tools I use to take data from source systems to a decision, built up across pharma, e-commerce, prop trading, restaurants and mining.",
+  skillGroups: [
+    { title: "Visualize & report", items: ["Power BI", "Excel", "Looker Studio"] },
+    { title: "Query & model", items: ["SQL", "Microsoft SQL Server", "MySQL", "Data Modeling"] },
+    { title: "Warehouse & cloud", items: ["Snowflake", "Google BigQuery", "Databricks", "Google Cloud"] },
+    { title: "Analyze & predict", items: ["Python", "Pandas", "NumPy", "Scikit-learn", "Matplotlib", "Seaborn"] },
+    { title: "Workflow & collaboration", items: ["Git", "GitHub", "Jira", "ClickUp", "Miro", "Slack"] }
+  ],
+  tiles: [
+    { name: "Power BI", icon: "powerbi.svg" },
+    { name: "Excel", icon: "excel.svg" },
+    { name: "SQL Server", icon: "sqlserver.svg" },
+    { name: "Snowflake", icon: "snowflake.svg" },
+    { name: "BigQuery", icon: "bigquery.svg" },
+    { name: "Databricks", icon: "databricks.svg" },
+    { name: "Python", icon: "python.svg" },
+    { name: "Looker Studio", icon: "lookerstudio.svg" },
+    { name: "Google Cloud", icon: "googlecloud.svg" },
+    { name: "MySQL", icon: "mysql.svg" },
+    { name: "Pandas", icon: "pandas.svg" },
+    { name: "NumPy", icon: "numpy.svg" },
+    { name: "Scikit-learn", icon: "scikitlearn.svg" },
+    { name: "Matplotlib", icon: "matplotlib.png" },
+    { name: "Seaborn", icon: "seaborn.svg" },
+    { name: "Git", icon: "git.svg" },
+    { name: "GitHub", icon: "github.svg" },
+    { name: "Jira", icon: "jira.svg" },
+    { name: "ClickUp", icon: "clickup.svg" },
+    { name: "Miro", icon: "miro.svg" },
+    { name: "Slack", icon: "slack.svg" }
+  ],
 };

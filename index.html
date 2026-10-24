@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=3j">
+  <link rel="stylesheet" href="css/style.css?v=4t">
 </head>
 <body>
 
@@ -19,6 +19,7 @@
       <ul id="menu">
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
       </ul>
       <a href="#contact" class="btn btn-primary btn-sm nav-cta" id="navCta">Let's talk</a>
       <button class="burger" id="burger" aria-label="Open menu">
@@ -70,10 +71,25 @@
         </div>
         <div class="two about-grid">
           <div class="career-chart reveal" id="careerChart">
-            <h3 class="cc-title">Experience</h3>
+            <h3 class="cc-title">Career at a glance</h3>
             <ol class="cc-rows" id="ccRows"></ol>
           </div>
           <div class="about-text reveal" id="aboutText"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section id="skills" class="light">
+      <div class="wrap">
+        <div class="center-head reveal">
+          <p class="kicker">Toolkit</p>
+          <h2 class="sec-title">What I <span class="hl">build with</span>.</h2>
+          <p class="sec-intro" id="skillsIntro"></p>
+        </div>
+        <div class="skills-layout">
+          <div class="panel skill-groups reveal" id="skillGroups"></div>
+          <div class="panel tiles reveal" id="tiles" aria-label="Tools I use"></div>
         </div>
       </div>
     </section>
@@ -81,7 +97,8 @@
 
   <footer id="footer"></footer>
 
-  <script src="js/config.js?v=3j"></script>
-  <script src="js/main.js?v=3j"></script>
+  <script src="js/icons.js?v=4t"></script>
+  <script src="js/config.js?v=4t"></script>
+  <script src="js/main.js?v=4t"></script>
 </body>
 </html>

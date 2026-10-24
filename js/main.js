@@ -97,6 +97,19 @@ $("#ccRows").innerHTML = (CONFIG.careerChart || []).map((r, i) => `
 $("#facts").innerHTML = CONFIG.facts.map(f =>
   `<div class="card fact"><b class="grad-text">${esc(f.n)}</b><span>${esc(f.l)}</span></div>`).join("");
 
+/* ---------- skills ---------- */
+$("#skillsIntro").textContent = CONFIG.skillsIntro;
+$("#skillGroups").innerHTML = CONFIG.skillGroups.map(g => `
+  <div class="skill-group">
+    <h4>${esc(g.title)}</h4>
+    <div class="chips">${g.items.map(t => `<span class="chip">${esc(t)}</span>`).join("")}</div>
+  </div>`).join("");
+$("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
+  <div class="tile" style="transition-delay:${(i % 3) * 60 + Math.floor(i / 3) * 40}ms">
+    <img src="${(typeof ICON_DATA !== "undefined" && ICON_DATA[t.icon]) || "assets/icons/" + esc(t.icon)}" alt="" width="40" height="40">
+    <span>${esc(t.name)}</span>
+  </div>`).join("");
+
 /* ---------- footer ---------- */
 $("#footer").innerHTML = `© ${new Date().getFullYear()} ${esc(CONFIG.name)} · Built with care in Dhaka`;
 
