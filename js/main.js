@@ -16,8 +16,24 @@ const ICONS = {
   email: '<svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg>'
 };
 const L = CONFIG.links;
-const linkHref = k => k === "email" ? "mailto:" + L.email : L[k];
-const linkAttrs = k => k === "email" ? "" : 'target="_blank" rel="noopener"';
+// Email opens a Gmail "new message" tab (every link opens in a new tab) and also copies the address
+const gmailUrl = (subject = "") => "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(L.email) + (subject ? "&su=" + encodeURIComponent(subject) : "");
+const linkHref = k => k === "email" ? gmailUrl("Hello from your portfolio") : L[k];
+const linkAttrs = k => 'target="_blank" rel="noopener"' + (k === "email" ? " data-email" : "");
+
+function toast(msg) {
+  let t = $("#toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove("show"), 2600);
+}
+// any email link: copy the address too, for people who don't use Gmail
+document.addEventListener("click", e => {
+  if (!e.target.closest("[data-email]")) return;
+  navigator.clipboard?.writeText(L.email).then(() => toast("Email copied: " + L.email)).catch(() => {});
+});
 
 /* ---------- hero ---------- */
 $("#logo").textContent = CONFIG.logo;
@@ -27,8 +43,12 @@ $("#resumeBtn").href = CONFIG.resume;
 // hide the résumé button until the PDF actually exists on the site
 if (!CONFIG.resume) $("#resumeBtn").remove();
 else fetch(CONFIG.resume, { method: "HEAD" }).then(r => { if (!r.ok) $("#resumeBtn")?.remove(); }).catch(() => {});
-// until the Contact section exists, "Hire me" and "Let's talk" open an email instead
-if (!$("#contact")) ["#hireBtn", "#navCta"].forEach(s => { if ($(s)) $(s).href = "mailto:" + L.email; });
+// until the Contact section exists, "Hire me" and "Let's talk" open an email (in a new tab) instead
+if (!$("#contact")) ["#hireBtn", "#navCta"].forEach(s => {
+  const a = $(s); if (!a) return;
+  a.href = gmailUrl("Hiring enquiry"); a.target = "_blank"; a.rel = "noopener"; a.setAttribute("data-email", "");
+});
+if (CONFIG.location && $("#locLine")) $("#locLine").textContent = CONFIG.location;
 $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
   `<a href="${esc(linkHref(k))}" ${linkAttrs(k)} aria-label="${k}">${ICONS[k] || ""}</a>`).join("");
 
@@ -45,9 +65,11 @@ $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
 
 (function typing() {
   const el = $("#typed"), words = CONFIG.roles;
-  let w = 0, i = 0, deleting = false;
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = words[0]; return; }
-  (function tick() {
+  // start with the first title fully shown (no half-typed word on arrival), then cycle
+  let w = 0, i = words[0].length, deleting = false;
+  el.textContent = words[0];
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setTimeout(function tick() {
     const word = words[w];
     i += deleting ? -1 : 1;
     el.textContent = word.slice(0, i);
@@ -55,7 +77,7 @@ $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
     if (!deleting && i === word.length) { deleting = true; delay = 1700; }
     else if (deleting && i === 0) { deleting = false; w = (w + 1) % words.length; delay = 350; }
     setTimeout(tick, delay);
-  })();
+  }, 2600);
 })();
 
 /* ---------- about ---------- */
@@ -67,13 +89,11 @@ const careerYears = (() => {
   return Math.floor(((now.getFullYear() - y) * 12 + (now.getMonth() + 1 - (mo || 1))) / 12);
 })();
 $("#aboutText").innerHTML = CONFIG.about.map(p => `<p>${p.replace(/\{years\}/g, careerYears)}</p>`).join("");
-$("#ccRows").innerHTML = (CONFIG.careerChart || []).map((r, i, all) => {
-  const width = 100 - i * (60 / Math.max(all.length - 1, 1));   // bars step down like a timeline
-  return `<li class="cc-row">
-    <div class="cc-who"><b>${esc(r.role)}</b><span>${esc(r.where)}</span></div>
-    <div class="cc-track"><span class="cc-fill" style="width:${width}%;transition-delay:${i * 90}ms"></span><span class="cc-label" title="${esc(r.industry)}">${esc(r.industry)}</span></div>
-  </li>`;
-}).join("");
+$("#ccRows").innerHTML = (CONFIG.careerChart || []).map((r, i) => `
+  <li class="cc-row" style="transition-delay:${i * 80}ms">
+    <div class="cc-who"><b>${esc(r.role)}${r.current ? ' <em class="cc-now">Current</em>' : ""}</b><span>${esc(r.where)}</span></div>
+    <span class="cc-pill">${esc(r.industry)}</span>
+  </li>`).join("");
 $("#facts").innerHTML = CONFIG.facts.map(f =>
   `<div class="card fact"><b class="grad-text">${esc(f.n)}</b><span>${esc(f.l)}</span></div>`).join("");
 
