@@ -11,8 +11,8 @@ const CONFIG = {
   logo: "Pervej Hosen",
   photo: "assets/profile.jpg",        // square photo works best
   resume: "assets/resume.pdf",        // your résumé PDF
-  roles: ["Sr. BI Developer", "Power BI Developer", "Analytics Engineer", "Data Storyteller"],
-  objective: "Sr. BI Developer turning raw data into decisions people trust. I build Power BI dashboards, SQL models and analytics pipelines on Snowflake, BigQuery and Databricks for teams in the US, UAE, Germany and Australia — from pharmaceutical sales to restaurants, prop trading and mining.",
+  roles: ["Sr. BI Developer", "Independent Consultant", "Power BI Developer", "Analytics Engineer", "Data Storyteller"],
+  objective: "Sr. BI Developer turning raw data into decisions people trust. I build Power BI dashboards, SQL models and analytics pipelines on Snowflake, BigQuery and Databricks for teams in the US, UAE, Germany and Australia — from pharmaceutical sales to circular-fashion e-commerce, chain restaurants, prop trading and mining improvement.",
 
   links: {
     email: "pervejhosen2@gmail.com",
