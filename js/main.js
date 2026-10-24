@@ -110,6 +110,43 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     <span>${esc(t.name)}</span>
   </div>`).join("");
 
+/* ---------- contact ---------- */
+const LINK_LABELS = { email: "Email", linkedin: "LinkedIn", github: "GitHub", kaggle: "Kaggle" };
+$("#contactList").innerHTML = Object.keys(L).filter(k => L[k]).map(k => {
+  const value = k === "email" ? L.email : L[k].replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+  return `<a class="contact-card" href="${esc(linkHref(k))}" ${linkAttrs(k)}>
+    <span class="cc-icon">${ICONS[k] || ""}</span>
+    <span class="cc-text"><small>${LINK_LABELS[k] || k}</small><b>${esc(value)}</b></span>
+    <svg class="cc-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>`;
+}).join("");
+
+$("#contactForm").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const f = ev.target, status = $("#formStatus");
+  const data = { name: f.name.value.trim(), email: f.email.value.trim(), message: f.message.value.trim() };
+
+  if (!CONFIG.formspree) {   // no form service yet → open the visitor's email app
+    const body = `${data.message}\n\n— ${data.name} (${data.email})`;
+    window.open(gmailUrl("Portfolio enquiry from " + data.name) + "&body=" + encodeURIComponent(body), "_blank", "noopener");
+    status.textContent = "Opening a new email in a new tab…";
+    return;
+  }
+  status.textContent = "Sending…";
+  try {
+    const r = await fetch(CONFIG.formspree, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(data)
+    });
+    if (!r.ok) throw new Error(r.status);
+    f.reset();
+    status.textContent = "Thanks! Your message has been sent.";
+  } catch {
+    status.textContent = "Couldn't send right now — please email " + L.email;
+  }
+});
+
 /* ---------- footer ---------- */
 $("#footer").innerHTML = `© ${new Date().getFullYear()} ${esc(CONFIG.name)} · Built with care in Dhaka`;
 

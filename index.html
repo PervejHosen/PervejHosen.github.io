@@ -6,10 +6,18 @@
   <title>Pervej Hosen — Sr. BI Developer (Power BI · SQL · Snowflake)</title>
   <meta name="description" content="Pervej Hosen — Sr. BI Developer and Analytics Engineer. Power BI, SQL, Snowflake, BigQuery, Databricks and Python for teams in the US, UAE, Germany and Australia.">
   <meta name="theme-color" content="#020817">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://pervejhosen.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pervejhosen.github.io/">
+  <meta property="og:title" content="Pervej Hosen — Sr. BI Developer & Independent Consultant">
+  <meta property="og:description" content="Sr. BI Developer and Analytics Engineer. Power BI, SQL, Snowflake, BigQuery, Databricks, Python.">
+  <meta property="og:image" content="https://pervejhosen.github.io/assets/preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=4t">
+  <link rel="stylesheet" href="css/style.css?v=7d">
 </head>
 <body>
 
@@ -20,6 +28,7 @@
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
       <a href="#contact" class="btn btn-primary btn-sm nav-cta" id="navCta">Let's talk</a>
       <button class="burger" id="burger" aria-label="Open menu">
@@ -93,12 +102,31 @@
         </div>
       </div>
     </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact">
+      <div class="wrap two contact-grid">
+        <div class="reveal">
+          <p class="kicker">Contact</p>
+          <h2 class="sec-title">Let's work <span class="hl">together</span>.</h2>
+          <p class="contact-intro">Have a dashboard to build, a reporting process to fix, or a role in mind? Send me a message and I'll get back to you.</p>
+          <div class="contact-list" id="contactList"></div>
+        </div>
+        <form class="panel form reveal" id="contactForm">
+          <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" placeholder="Your name" required></div>
+          <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" placeholder="you@company.com" required></div>
+          <div class="field"><label for="f-msg">Message</label><textarea id="f-msg" name="message" placeholder="What are you working on?" required></textarea></div>
+          <button class="btn btn-primary" type="submit">Send message</button>
+          <p class="form-status" id="formStatus"></p>
+        </form>
+      </div>
+    </section>
   </main>
 
   <footer id="footer"></footer>
 
-  <script src="js/icons.js?v=4t"></script>
-  <script src="js/config.js?v=4t"></script>
-  <script src="js/main.js?v=4t"></script>
+  <script src="js/icons.js?v=7d"></script>
+  <script src="js/config.js?v=7d"></script>
+  <script src="js/main.js?v=7d"></script>
 </body>
 </html>

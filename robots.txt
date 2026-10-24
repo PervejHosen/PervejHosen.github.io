@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pervejhosen.github.io/sitemap.xml

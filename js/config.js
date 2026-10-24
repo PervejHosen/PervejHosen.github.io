@@ -79,4 +79,10 @@ const CONFIG = {
     { name: "Miro", icon: "miro.svg" },
     { name: "Slack", icon: "slack.svg" }
   ],
+
+  /* ---------- contact form ----------
+     Empty: "Send message" opens a pre-filled Gmail message to you in a new tab.
+     To receive messages directly: create a free form at https://formspree.io
+     and paste its endpoint here, e.g. "https://formspree.io/f/abcdwxyz" */
+  formspree: "",
 };
