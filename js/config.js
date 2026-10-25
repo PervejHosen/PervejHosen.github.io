@@ -89,8 +89,8 @@ const CONFIG = {
   education: [
     { degree: "Master of Science (MSc) in Applied Statistics and Data Science", school: "Jahangirnagar University", meta: "2022 – 2023", link: "" },
     { degree: "Bachelor of Social Science (BSS), Honours in Economics", school: "National University, Bangladesh", meta: "2016 – 2020", link: "" },
-    { degree: "Higher Secondary Certificate (HSC), Science", school: "Hajigonj Degree College", meta: "2013 – 2015 · Cumilla Board", link: "https://drive.google.com/file/d/1alieg3hpcH0jNwL-F7SgBNzPqlBBGIms/view?usp=drive_link" },
-    { degree: "Secondary School Certificate (SSC), Science", school: "Suapara G. K. High School", meta: "2008 – 2013 · Cumilla Board", link: "https://drive.google.com/file/d/1CO3v7kDyRJlWTyI3Uhh233Dvw6OURbvB/view?usp=drive_link" }
+    { degree: "Higher Secondary Certificate (HSC), Science", school: "Hajigonj Degree College", meta: "2013 – 2015 · Cumilla Board", link: "https://drive.google.com/file/d/1RTCTPaaYhSST6f4nROdf3mXLPqANkgW2/view?usp=sharing" },
+    { degree: "Secondary School Certificate (SSC), Science", school: "Suapara G. K. High School", meta: "2008 – 2013 · Cumilla Board", link: "https://drive.google.com/file/d/1cBlR7wGcQkVVgUe5d-Qrpo2kZe2p_ZU1/view?usp=sharing" }
   ],
   // optional: one shared Google Drive folder with all your certificates → shows a "View all certificates" button
   certificatesFolder: "",
