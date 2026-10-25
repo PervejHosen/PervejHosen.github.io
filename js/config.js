@@ -80,7 +80,7 @@ const CONFIG = {
     { title: "Visualize & report", items: ["Power BI", "Excel", "Looker Studio"] },
     { title: "Query & model", items: ["SQL", "Microsoft SQL Server", "MySQL", "Data Modeling"] },
     { title: "Warehouse & cloud", items: ["Snowflake", "Google BigQuery", "Databricks", "Google Cloud"] },
-    { title: "Analyze & predict", items: ["Python", "Pandas", "NumPy", "Scikit-learn", "Matplotlib", "Seaborn"] },
+    { title: "Analyze with code", items: ["Python", "Pandas"] },
     { title: "Workflow & collaboration", items: ["Git", "GitHub", "Jira", "ClickUp", "Miro", "Slack"] }
   ],
   tiles: [
@@ -95,10 +95,6 @@ const CONFIG = {
     { name: "Google Cloud", icon: "googlecloud.svg" },
     { name: "MySQL", icon: "mysql.svg" },
     { name: "Pandas", icon: "pandas.svg" },
-    { name: "NumPy", icon: "numpy.svg" },
-    { name: "Scikit-learn", icon: "scikitlearn.svg" },
-    { name: "Matplotlib", icon: "matplotlib.png" },
-    { name: "Seaborn", icon: "seaborn.svg" },
     { name: "Git", icon: "git.svg" },
     { name: "GitHub", icon: "github.svg" },
     { name: "Jira", icon: "jira.svg" },
@@ -127,8 +123,8 @@ const CONFIG = {
       title: "Data Analytics & Data Science Bootcamp",
       by: "Mentored by Md. Shabbir Hossain Bhuiyea",
       year: "2023",
-      summary: "99 live sessions and 9 hands-on projects, from statistics and Excel through SQL and cloud data warehouses to R, Python and machine learning, ending with ETL pipelines and a portfolio project.",
-      topics: ["Excel", "Power BI", "Looker Studio", "SQL", "Snowflake", "BigQuery", "Databricks", "MongoDB", "R", "Python", "Machine learning", "ETL"]
+      summary: "99 live sessions and 9 hands-on projects, from statistics and Excel through SQL and cloud data warehouses to Python and machine learning, ending with ETL pipelines and a portfolio project.",
+      topics: ["Excel", "Power BI", "Looker Studio", "SQL", "Snowflake", "BigQuery", "Databricks", "MongoDB", "Python", "Machine learning", "ETL"]
     }
   ],
 
