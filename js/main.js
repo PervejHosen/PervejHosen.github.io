@@ -134,6 +134,36 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     <span>${esc(t.name)}</span>
   </div>`).join("");
 
+/* ---------- certifications ---------- */
+(function certs() {
+  const logo = c => c.logo && typeof ICON_DATA !== "undefined" && ICON_DATA[c.logo]
+    ? `<img src="${ICON_DATA[c.logo]}" alt="" width="28" height="28" data-logo="${esc(c.logo.replace(/\..*$/, ""))}">`
+    : `<span class="cert-mono" style="background:${c.monoColor || "#0f172a"}">${esc(c.mono || c.issuer.slice(0, 2))}</span>`;
+  const arrow = '<svg class="cert-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const f = CONFIG.featuredCert, fe = $("#certFeatured");
+  if (f && fe) {
+    const active = !f.expires || new Date() <= new Date(f.expires + "T23:59:59");
+    fe.href = f.link;
+    fe.innerHTML = `
+      <span class="cert-logo big">${logo(f)}</span>
+      <span class="cert-main">
+        <small>${esc(f.code || f.issuer)}</small>
+        <b>${esc(f.title)}</b>
+        <span class="cert-meta">${[f.earned && "Earned " + f.earned, f.renewed && "Renewed " + f.renewed].filter(Boolean).map(esc).join(" · ")}</span>
+      </span>
+      <span class="cert-side">
+        ${active && f.expires ? `<span class="cert-active">Active${f.expiresLabel ? " · until " + esc(f.expiresLabel) : ""}</span>` : ""}
+        <span class="cert-verify">Verify ${arrow}</span>
+      </span>`;
+  } else if (fe) fe.remove();
+  $("#certGrid").innerHTML = (CONFIG.certifications || []).map((c, i) => `
+    <a class="cert reveal" href="${esc(c.link)}" target="_blank" rel="noopener" style="transition-delay:${(i % 3) * 70}ms">
+      <span class="cert-logo">${logo(c)}</span>
+      <span class="cert-main"><b>${esc(c.title)}</b><span class="cert-meta">${esc(c.issuer)}${c.date ? " · " + esc(c.date) : ""}</span></span>
+      ${arrow}
+    </a>`).join("");
+})();
+
 /* ---------- contact ---------- */
 const LINK_LABELS = { email: "Email", linkedin: "LinkedIn", github: "GitHub", kaggle: "Kaggle" };
 $("#contactList").innerHTML = Object.keys(L).filter(k => L[k]).map(k => {

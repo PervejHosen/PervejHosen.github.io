@@ -82,6 +82,41 @@ const CONFIG = {
     { name: "Slack", icon: "slack.svg" }
   ],
 
+  /* ---------- certifications (shown under the Skills section) ----------
+     logo: a file in the icon bundle, or leave it out and set mono (letters) + monoColor.
+     expires: if set, the "Active" tag hides itself automatically after that date. */
+  featuredCert: {
+    title: "Microsoft Certified: Power BI Data Analyst Associate",
+    code: "Exam PL-300",
+    issuer: "Microsoft", logo: "microsoft.svg",
+    earned: "Jun 2025", renewed: "Jun 2026", expires: "2027-06-17", expiresLabel: "Jun 2027",
+    link: "https://learn.microsoft.com/api/credentials/share/en-us/PervejHosen-6326/D5D08374D818624B?sharingId=1DEE14FF7052C02E"
+  },
+  certifications: [
+    { title: "Advanced DAX", issuer: "Maven Analytics", mono: "MA", monoColor: "#0f4c75", date: "Oct 2024",
+      link: "https://certificates.mavenanalytics.io/1c262e42-d7a3-44fa-ac4a-66e86975fcba#acc.go8qjNmy" },
+    { title: "Power BI Service", issuer: "Maven Analytics", mono: "MA", monoColor: "#0f4c75", date: "Oct 2024",
+      link: "https://certificates.mavenanalytics.io/ce32560c-86d2-45b8-8fac-27a0bbb57700#acc.ZrxKJ1FL" },
+    { title: "Thinking Like an Analyst", issuer: "Maven Analytics", mono: "MA", monoColor: "#0f4c75", date: "Oct 2024",
+      link: "https://certificates.mavenanalytics.io/93d2588b-5608-418f-a211-2e97a65523e9#acc.ZgqrsTSF" },
+    { title: "Analyzing and Visualizing Data in Looker", issuer: "Google Cloud · completion badge", logo: "googlecloud.svg", date: "Sep 2023",
+      link: "https://www.skills.google/public_profiles/adb1aeba-5e05-40ff-85f1-6fe856af2aee/badges/5036688" },
+    { title: "Prepare Data for Looker Dashboards and Reports", issuer: "Google Cloud · skill badge", logo: "googlecloud.svg", date: "Sep 2023",
+      link: "https://www.skills.google/public_profiles/adb1aeba-5e05-40ff-85f1-6fe856af2aee/badges/5097355" },
+    { title: "Exploring Data Transformation with Google Cloud", issuer: "Google Cloud · Coursera", logo: "googlecloud.svg", date: "Oct 2023",
+      link: "https://coursera.org/share/29480f78aba53de2fc8003d22346c3ea" },
+    { title: "Creating New BigQuery Datasets and Visualizing Insights", issuer: "Google Cloud · Coursera", logo: "googlecloud.svg", date: "Sep 2023",
+      link: "https://coursera.org/share/6a17b05973f3fc00fe158fdcc3b90a0c" },
+    { title: "Exploring and Preparing your Data with BigQuery", issuer: "Google Cloud · Coursera", logo: "googlecloud.svg", date: "Sep 2023",
+      link: "https://coursera.org/share/17c0500cfc9638f627cedb778bced0d6" },
+    { title: "Supervised Machine Learning: Regression and Classification", issuer: "DeepLearning.AI · Coursera", mono: "DL", monoColor: "#e8467c", date: "Sep 2023",
+      link: "https://coursera.org/share/232ab15c31145f8b51d67b8a7c969b80" },
+    { title: "Time Series", issuer: "Kaggle", logo: "kaggle.svg",
+      link: "https://www.kaggle.com/learn/certification/pervejhosen/time-series" }
+    // HackerRank SQL (Basic) — left out on purpose. To show it, add:
+    // { title: "SQL (Basic)", issuer: "HackerRank", mono: "HR", monoColor: "#1ba94c", link: "https://www.hackerrank.com/certificates/330cb5d307eb" }
+  ],
+
   /* ---------- contact form ----------
      Empty: "Send message" opens a pre-filled Gmail message to you in a new tab.
      To receive messages directly: create a free form at https://formspree.io
