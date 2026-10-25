@@ -136,11 +136,25 @@ const careerYears = (() => {
   return Math.floor(((now.getFullYear() - y) * 12 + (now.getMonth() + 1 - (mo || 1))) / 12);
 })();
 $("#aboutText").innerHTML = CONFIG.about.map(p => `<p>${p.replace(/\{years\}/g, careerYears)}</p>`).join("");
-$("#ccRows").innerHTML = (CONFIG.careerChart || []).map((r, i) => `
-  <li class="cc-row" style="transition-delay:${i * 80}ms">
-    <div class="cc-who"><b>${esc(r.role)}${r.current ? ' <em class="cc-now">Current</em>' : ""}</b><span>${esc(r.where)}</span></div>
+const chev = '<svg class="cc-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+$("#ccRows").innerHTML = (CONFIG.careerChart || []).map((r, i) => {
+  const hl = (r.highlights || []).filter(Boolean), open = hl.length > 0;
+  return `
+  <li class="cc-row${open ? " has-more" : ""}" style="transition-delay:${i * 80}ms"${open ? ` tabindex="0" role="button" aria-expanded="false" aria-controls="cc-more-${i}"` : ""}>
+    <div class="cc-who"><b>${esc(r.role)}${open ? chev : ""}</b><span>${esc(r.where)}</span></div>
     <span class="cc-pill">${esc(r.industry)}</span>
-  </li>`).join("");
+    ${open ? `<div class="cc-more" id="cc-more-${i}"><ul>${hl.map(h => `<li>${esc(h)}</li>`).join("")}</ul></div>` : ""}
+  </li>`;
+}).join("");
+if ($("#ccRows .has-more")) $("#careerChart .cc-title").insertAdjacentHTML("afterend", '<p class="cc-hint">Tap a role to see highlights</p>');
+$("#ccRows").addEventListener("transitionend", e => { if (e.target.classList.contains("cc-row")) e.target.style.transitionDelay = "0s"; });
+$("#ccRows").addEventListener("click", e => {
+  const row = e.target.closest(".has-more"); if (!row) return;
+  const on = row.classList.toggle("open"); row.setAttribute("aria-expanded", on);
+});
+$("#ccRows").addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("has-more")) { e.preventDefault(); e.target.click(); }
+});
 $("#facts").innerHTML = CONFIG.facts.map(f =>
   `<div class="card fact"><b class="grad-text">${esc(f.n)}</b><span>${esc(f.l)}</span></div>`).join("");
 

@@ -54,16 +54,44 @@ const CONFIG = {
   about: [
     "I'm <span class='grad-text'>Pervej Hosen</span>, a Power BI developer and analytics engineer based in Dhaka, Bangladesh. I build the data models, dashboards and pipelines that teams in the US, the UAE, Germany and Australia run their business on, across circular-fashion e-commerce, prop trading, a restaurant chain and mining.",
     "I started on the commercial side of the pharmaceutical industry, in sales and distribution. That's where I learned that a report only matters if someone acts on it, and it still shapes how I work: every dashboard starts from the decision it needs to support.",
-    "I hold an MSc in Applied Statistics and Data Science from Jahangirnagar University and I'm a Microsoft Certified Power BI Data Analyst (PL-300). My toolkit centres on Power BI, DAX, SQL, Snowflake, BigQuery, Databricks and Python, and I care as much about the clarity of a dashboard as the correctness of the numbers behind it."
+    "I hold an MSc in Applied Statistics and Data Science from Jahangirnagar University and I'm a Microsoft Certified Power BI Data Analyst (PL-300). My toolkit centers on Power BI, DAX, SQL, Snowflake, BigQuery, Databricks and Python, and I care as much about the clarity of a dashboard as the correctness of the numbers behind it."
   ],
-  // the career chart in the About section
+  // the career chart in the About section.
+  // highlights: 2-3 short lines per role. A role with highlights gets a ▸ and opens on click; empty = plain row.
   careerChart: [
-    { role: "Business Intelligence Analyst", where: "Buddy & Selly · Germany", industry: "Circular fashion e-commerce" },
-    { role: "BI Developer", where: "Lunar Tech · Dubai, UAE", industry: "Prop trading" },
-    { role: "Sr. BI Developer", where: "Leveor · United States", industry: "Restaurant chain" },
-    { role: "Data Analytics Engineer", where: "Onwards Analytics · Australia", industry: "Mining & business improvement" },
-    { role: "Associate Data Analyst", where: "Transcom Ltd · Bangladesh", industry: "Pharmaceutical" },
-    { role: "Assistant Officer, Sales & Distribution", where: "Transcom Ltd · Bangladesh", industry: "Pharmaceutical" }
+    { role: "Business Intelligence Analyst", where: "Buddy & Selly · Germany", industry: "Circular fashion e-commerce",
+      highlights: [
+        "Built the Power BI data models and KPI dashboards the Sales, Purchasing and Marketing teams used to track performance.",
+        "Automated reporting end to end across BigQuery, Power BI, Excel and Google Sheets, cutting manual effort by 40% and making data refreshes reliable.",
+        "Turned DHL logistics, inventory and purchasing data into recommendations that shaped product journeys and pricing."
+      ] },
+    { role: "BI Developer", where: "Lunar Tech · Dubai, UAE", industry: "Prop trading",
+      highlights: [
+        "Owned Power BI reporting end to end, delivering 15+ reports from requirements and data modeling through to dashboards the business used.",
+        "Designed the Snowflake data model and a shared Power BI semantic model used across departments, giving the business a single source of truth.",
+        "Took open-ended business questions and turned them into focused analysis and clear recommendations."
+      ] },
+    { role: "Sr. BI Developer", where: "Leveor · United States", industry: "Restaurant chain",
+      highlights: [
+        "Built a Snowflake medallion architecture (bronze, silver, gold) that turns raw restaurant data into clean, analysis-ready tables.",
+        "Encoded business logic in stored procedures and automated the pipelines with Integrate.io scheduling.",
+        "Delivered 15+ gold-layer data models that the company's Sigma reporting is built on."
+      ] },
+    { role: "Data Analytics Engineer", where: "Onwards Analytics · Australia", industry: "Mining & business improvement",
+      highlights: [
+        "Delivered value-chain analytics for a Tier-1 mining company, including 10+ production reports for its improvement team.",
+        "Built the ETL processes and Power BI dashboards the client used to monitor production, cost and performance.",
+        "Fixed long-queue Power BI refresh issues across 5+ reports, cutting refresh time from 35 minutes to 5.",
+        "Debugged source data models so figures stayed consistent across reports."
+      ] },
+    { role: "Associate Data Analyst", where: "Transcom Ltd · Bangladesh", industry: "Pharmaceutical",
+      highlights: [
+        "Built 15+ SSRS and analytical reports that gave stakeholders a regular view of sales and distribution.",
+        "Tuned the SQL behind the reporting, making queries 15% faster.",
+        "Administered Power BI and Qlik Sense and supported their users day to day."
+      ] },
+    { role: "Assistant Officer, Sales & Distribution", where: "Transcom Ltd · Bangladesh", industry: "Pharmaceutical",
+      highlights: [] }
   ],
   facts: [
     { n: "6+", l: "Years combined experience" },
