@@ -82,7 +82,19 @@ const CONFIG = {
     { name: "Slack", icon: "slack.svg" }
   ],
 
-  /* ---------- certifications (shown under the Skills section) ----------
+  /* ---------- education ----------
+     result: leave it "" to hide the grade for that degree. */
+  education: [
+    { degree: "MSc in Applied Statistics and Data Science", school: "Jahangirnagar University", years: "2022 – 2024", result: "CGPA 3.75 / 4.00" },
+    { degree: "BSS (Honours) in Economics", school: "National University", years: "2016 – 2020", result: "" }
+  ],
+  // the small "School" line under the degrees (set to [] to hide it)
+  schooling: [
+    { level: "HSC, Science", school: "Hajiganj Degree College", board: "Cumilla Board", result: "GPA 3.75 / 5" },
+    { level: "SSC, Science", school: "Suapara GK High School", board: "Cumilla Board", result: "GPA 5.00 / 5" }
+  ],
+
+  /* ---------- certifications (Education & Certifications section) ----------
      logo: a file in the icon bundle, or leave it out and set mono (letters) + monoColor.
      expires: if set, the "Active" tag hides itself automatically after that date. */
   featuredCert: {

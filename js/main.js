@@ -134,6 +134,24 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     <span>${esc(t.name)}</span>
   </div>`).join("");
 
+/* ---------- education ---------- */
+(function education() {
+  const cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 4 2 9l10 5 10-5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg>';
+  $("#eduGrid").innerHTML = (CONFIG.education || []).map((e, i) => `
+    <article class="edu reveal" style="transition-delay:${i * 90}ms">
+      <span class="edu-icon">${cap}</span>
+      <div class="edu-main">
+        <h4>${esc(e.degree)}</h4>
+        <p>${esc(e.school)}</p>
+        <div class="edu-meta"><span>${esc(e.years)}</span>${e.result ? `<span class="edu-grade">${esc(e.result)}</span>` : ""}</div>
+      </div>
+    </article>`).join("");
+  const sl = $("#schoolLine"), list = CONFIG.schooling || [];
+  if (!list.length) sl.remove();
+  else sl.innerHTML = `<span class="school-label">School</span>` + list.map(x =>
+    `<span class="school-item"><b>${esc(x.level)}</b> · ${esc(x.school)}, ${esc(x.board)}${x.result ? ` · ${esc(x.result)}` : ""}</span>`).join("");
+})();
+
 /* ---------- certifications ---------- */
 (function certs() {
   const logo = c => c.logo && typeof ICON_DATA !== "undefined" && ICON_DATA[c.logo]
