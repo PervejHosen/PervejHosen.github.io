@@ -23,8 +23,8 @@ const LINKS = {
     certificatesFolder: "",   // one folder with everything → shows a "View all certificates" button
     msc: "",
     bss: "",
-    hsc: "https://drive.google.com/file/d/1RTCTPaaYhSST6f4nROdf3mXLPqANkgW2/view?usp=sharing",
-    ssc: "https://drive.google.com/file/d/1cBlR7wGcQkVVgUe5d-Qrpo2kZe2p_ZU1/view?usp=sharing"
+    hsc: "",
+    ssc: ""
   },
   // Contact form → your inbox (FormSubmit, free, no account). Visitors don't log in to anything.
   // The very first message sends you an "Activate form" email: click it once, and every message after arrives.
