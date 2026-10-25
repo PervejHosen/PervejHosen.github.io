@@ -150,8 +150,8 @@ const CONFIG = {
     {
       title: "Data Analytics & Data Science Bootcamp",
       by: "Mentored by Md. Shabbir Hossain Bhuiyea",
-      year: "2023",
-      summary: "99 live sessions and 9 hands-on projects, from statistics and Excel through SQL and cloud data warehouses to Python and machine learning, ending with ETL pipelines and a portfolio project.",
+      year: "2023 · 6 months",
+      summary: "99 live sessions and 9 hands-on projects, from statistics and Excel through SQL and cloud data warehouses to Python and machine learning, ending with ETL pipelines and portfolio projects.",
       topics: ["Excel", "Power BI", "Looker Studio", "SQL", "Snowflake", "BigQuery", "Databricks", "MongoDB", "Python", "Machine learning", "ETL"]
     }
   ],
