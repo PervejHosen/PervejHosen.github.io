@@ -25,7 +25,12 @@ const LINKS = {
     bss: "",
     hsc: "https://drive.google.com/file/d/1RTCTPaaYhSST6f4nROdf3mXLPqANkgW2/view?usp=sharing",
     ssc: "https://drive.google.com/file/d/1cBlR7wGcQkVVgUe5d-Qrpo2kZe2p_ZU1/view?usp=sharing"
-  }
+  },
+  // Contact form → your inbox (FormSubmit, free, no account). Visitors don't log in to anything.
+  // The very first message sends you an "Activate form" email: click it once, and every message after arrives.
+  // FormSubmit then gives you a random code; put it here instead of your email to keep the address private,
+  // e.g. "https://formsubmit.co/ajax/a1b2c3d4e5"
+  form: "https://formsubmit.co/ajax/pervejhosen2@gmail.com"
   // Certification verify links sit with each certificate further down (they never change).
 };
 
@@ -163,8 +168,7 @@ const CONFIG = {
   ],
 
   /* ---------- contact form ----------
-     Empty: "Send message" opens a pre-filled Gmail message to you in a new tab.
-     To receive messages directly: create a free form at https://formspree.io
-     and paste its endpoint here, e.g. "https://formspree.io/f/abcdwxyz" */
-  formspree: "",
+     Messages are delivered straight to your inbox; visitors don't need to log in to anything.
+     The address is set in LINKS.form at the top of this file. */
+  formEndpoint: LINKS.form,
 };

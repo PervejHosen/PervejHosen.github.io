@@ -235,28 +235,29 @@ $("#contactList").innerHTML = Object.keys(L).filter(k => L[k]).map(k => {
 
 $("#contactForm").addEventListener("submit", async ev => {
   ev.preventDefault();
-  const f = ev.target, status = $("#formStatus");
-  const data = { name: f.name.value.trim(), email: f.email.value.trim(), message: f.message.value.trim() };
-
-  if (!CONFIG.formspree) {   // no form service yet → open the visitor's email app
-    const body = `${data.message}\n\n— ${data.name} (${data.email})`;
-    window.open(gmailUrl("Portfolio enquiry from " + data.name) + "&body=" + encodeURIComponent(body), "_blank", "noopener");
-    status.textContent = "Opening a new email in a new tab…";
-    return;
-  }
-  status.textContent = "Sending…";
+  const f = ev.target, status = $("#formStatus"), btn = f.querySelector("button[type=submit]");
+  if (f._gotcha && f._gotcha.value) return;   // spam bot filled the hidden field
+  const data = {
+    name: f.name.value.trim(), email: f.email.value.trim(), message: f.message.value.trim(),
+    _subject: "Portfolio message from " + f.name.value.trim(), _replyto: f.email.value.trim(), _template: "table", _captcha: "false"
+  };
+  status.className = "form-status"; status.textContent = "Sending…"; btn.disabled = true;
   try {
-    const r = await fetch(CONFIG.formspree, {
+    if (!CONFIG.formEndpoint) throw new Error("no endpoint");
+    const r = await fetch(CONFIG.formEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(data)
     });
-    if (!r.ok) throw new Error(r.status);
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || j.success === false || j.success === "false") throw new Error(j.message || r.status);
     f.reset();
-    status.textContent = "Thanks! Your message has been sent.";
+    status.className = "form-status ok";
+    status.textContent = "Thanks! Your message has been sent. I'll get back to you soon.";
   } catch {
-    status.textContent = "Couldn't send right now — please email " + L.email;
-  }
+    status.className = "form-status err";
+    status.innerHTML = `Couldn't send right now. Please email me at <a href="mailto:${esc(L.email)}">${esc(L.email)}</a>.`;
+  } finally { btn.disabled = false; }
 });
 
 /* ---------- footer ---------- */

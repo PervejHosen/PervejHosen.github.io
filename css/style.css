@@ -289,6 +289,11 @@ footer { background: var(--navy); color: #64748b; text-align: center; padding: 3
 .form textarea { min-height: 140px; resize: vertical; }
 .form .btn { width: 100%; padding: 15px; }
 .form-status { margin-top: 12px; text-align: center; font-size: .92rem; color: var(--muted); min-height: 1.4em; }
+.form-status.ok { color: #15803d; font-weight: 600; }
+.form-status.err { color: #b91c1c; }
+.form-status a { color: var(--accent-ink); font-weight: 600; }
+.form .btn:disabled { opacity: .7; cursor: wait; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 @media (max-width: 640px) { .form { padding: 22px; } }
 
 /* respect visitors who turn off animations — keep this last */
