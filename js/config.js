@@ -4,6 +4,31 @@
    touch index.html or main.js to update text, links, jobs or photos.
    ===================================================================== */
 
+/* =====================================================================
+   ALL YOUR LINKS IN ONE PLACE
+   Change a link here and it updates everywhere on the site.
+   Google Drive tip: to replace a file but KEEP the same link, right-click it in Drive →
+   File information → Manage versions → Upload new version. Then nothing here needs changing.
+   ===================================================================== */
+const LINKS = {
+  // contact & profiles (icons in the hero + cards in Contact)
+  social: {
+    email: "pervejhosen2@gmail.com",
+    linkedin: "https://www.linkedin.com/in/pervejhosen/",
+    github: "https://github.com/PervejHosen",
+    kaggle: "https://www.kaggle.com/pervejhosen"
+  },
+  // Google Drive certificates ("" = the card shows no "View certificate" link)
+  drive: {
+    certificatesFolder: "",   // one folder with everything → shows a "View all certificates" button
+    msc: "",
+    bss: "",
+    hsc: "https://drive.google.com/file/d/1RTCTPaaYhSST6f4nROdf3mXLPqANkgW2/view?usp=sharing",
+    ssc: "https://drive.google.com/file/d/1cBlR7wGcQkVVgUe5d-Qrpo2kZe2p_ZU1/view?usp=sharing"
+  }
+  // Certification verify links sit with each certificate further down (they never change).
+};
+
 const CONFIG = {
 
   /* ---------- basics & hero ---------- */
@@ -11,18 +36,13 @@ const CONFIG = {
   logo: "Pervej Hosen",
   // Hero photos: they change every second (click/tap to skip ahead). Square photos work best.
   // Files that don't exist yet are skipped automatically, so you can add them any time.
-  photos: ["assets/profile.jpg", "assets/profile-2.jpg", "assets/profile-3.jpg", "assets/profile-4.jpg"],
-  resume: "assets/resume.pdf",        // your résumé PDF
+  photos: ["assets/img/hero/headshot.jpg", "assets/img/hero/trek.jpg", "assets/img/hero/paragliding.jpg"],
+  resume: "assets/docs/resume.pdf",        // your résumé PDF
   roles: ["Sr. BI Developer", "Independent Consultant", "Power BI Developer", "Analytics Engineer", "Data Storyteller"],
   objective: "I turn raw data into decisions people trust — Power BI dashboards, SQL models and analytics pipelines on Snowflake, BigQuery and Databricks for teams in the US, UAE, Germany and Australia.",
   location: "Based in Dhaka (UTC+6) · Working remotely with teams worldwide",
 
-  links: {
-    email: "pervejhosen2@gmail.com",
-    linkedin: "https://www.linkedin.com/in/pervejhosen/",
-    github: "https://github.com/PervejHosen",
-    kaggle: "https://www.kaggle.com/pervejhosen"
-  },
+  links: LINKS.social,
 
   /* ---------- about ---------- */
   careerStart: "2022-08",   // {years} in the About text is counted from this month, so it updates itself
@@ -49,7 +69,7 @@ const CONFIG = {
 
   /* ---------- skills ----------
      Left: grouped list. Right: logo tiles.
-     icon = file name in assets/icons/ (leave it out for tools without a logo) */
+     icon = logo name from js/icons.js (leave it out for tools without a logo) */
   skillsIntro: "The tools I use to take data from source systems to a decision, built up across pharma, e-commerce, prop trading, restaurants and mining.",
   skillGroups: [
     { title: "Visualize & report", items: ["Power BI", "Excel", "Looker Studio"] },
@@ -84,16 +104,28 @@ const CONFIG = {
 
   /* ---------- education ----------
      One card each. meta = the small grey line (years, board, etc.).
-     link: optional Google Drive link to that certificate. It shows a "View certificate" link on the card.
+     Certificate links live in LINKS.drive at the top of this file.
      In Google Drive: right-click the file → Share → General access: "Anyone with the link" (Viewer) → Copy link. */
   education: [
-    { degree: "Master of Science (MSc) in Applied Statistics and Data Science", school: "Jahangirnagar University", meta: "2022 – 2023", link: "" },
-    { degree: "Bachelor of Social Science (BSS), Honours in Economics", school: "National University, Bangladesh", meta: "2016 – 2020", link: "" },
-    { degree: "Higher Secondary Certificate (HSC), Science", school: "Hajigonj Degree College", meta: "2013 – 2015 · Cumilla Board", link: "https://drive.google.com/file/d/1RTCTPaaYhSST6f4nROdf3mXLPqANkgW2/view?usp=sharing" },
-    { degree: "Secondary School Certificate (SSC), Science", school: "Suapara G. K. High School", meta: "2008 – 2013 · Cumilla Board", link: "https://drive.google.com/file/d/1cBlR7wGcQkVVgUe5d-Qrpo2kZe2p_ZU1/view?usp=sharing" }
+    { degree: "Master of Science (MSc) in Applied Statistics and Data Science", school: "Jahangirnagar University", meta: "2022 – 2023", link: LINKS.drive.msc },
+    { degree: "Bachelor of Social Science (BSS), Honours in Economics", school: "National University, Bangladesh", meta: "2016 – 2020", link: LINKS.drive.bss },
+    { degree: "Higher Secondary Certificate (HSC), Science", school: "Hajigonj Degree College", meta: "2013 – 2015 · Cumilla Board", link: LINKS.drive.hsc },
+    { degree: "Secondary School Certificate (SSC), Science", school: "Suapara G. K. High School", meta: "2008 – 2013 · Cumilla Board", link: LINKS.drive.ssc }
   ],
   // optional: one shared Google Drive folder with all your certificates → shows a "View all certificates" button
-  certificatesFolder: "",
+  certificatesFolder: LINKS.drive.certificatesFolder,
+
+  /* ---------- training (shown under Certifications) ----------
+     Programs without an individual credential. No link needed. */
+  training: [
+    {
+      title: "Data Analytics & Data Science Bootcamp",
+      by: "Mentored by Md. Shabbir Hossain Bhuiyea",
+      year: "2023",
+      summary: "99 live sessions and 9 hands-on projects, from statistics and Excel through SQL and cloud data warehouses to R, Python and machine learning, ending with ETL pipelines and a portfolio project.",
+      topics: ["Excel", "Power BI", "Looker Studio", "SQL", "Snowflake", "BigQuery", "Databricks", "MongoDB", "R", "Python", "Machine learning", "ETL"]
+    }
+  ],
 
   /* ---------- certifications (Education & Certifications section) ----------
      logo: a file in the icon bundle, or leave it out and set mono (letters) + monoColor.

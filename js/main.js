@@ -153,7 +153,7 @@ $("#skillGroups").innerHTML = CONFIG.skillGroups.map(g => `
   </div>`).join("");
 $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   <div class="tile" style="transition-delay:${(i % 3) * 60 + Math.floor(i / 3) * 40}ms">
-    <img src="${(typeof ICON_DATA !== "undefined" && ICON_DATA[t.icon]) || "assets/icons/" + esc(t.icon)}" alt="" width="40" height="40">
+    <img src="${(typeof ICON_DATA !== "undefined" && ICON_DATA[t.icon]) || "assets/img/icons/" + esc(t.icon)}" alt="" width="40" height="40">
     <span>${esc(t.name)}</span>
   </div>`).join("");
 
@@ -170,6 +170,24 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
         <p>${esc(e.school)}</p>
         ${e.meta ? `<div class="edu-meta"><span>${esc(e.meta)}</span></div>` : ""}
         ${e.link ? `<a class="edu-link" href="${esc(e.link)}" target="_blank" rel="noopener">View certificate <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : ""}
+      </div>
+    </article>`).join("");
+})();
+
+/* ---------- training ---------- */
+(function training() {
+  const box = $("#trainGrid"), list = CONFIG.training || [];
+  if (!box) return;
+  if (!list.length) { box.remove(); $("#trainTitle")?.remove(); return; }
+  const icon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v11H3zM8 20h8M12 16v4M7 12l3-3 2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  box.innerHTML = list.map(t => `
+    <article class="train reveal">
+      <span class="train-icon">${icon}</span>
+      <div class="train-main">
+        <h4>${esc(t.title)}</h4>
+        <p class="cert-meta">${[t.by, t.year].filter(Boolean).map(esc).join(" · ")}</p>
+        ${t.summary ? `<p class="train-sum">${esc(t.summary)}</p>` : ""}
+        ${t.topics ? `<div class="train-tags">${t.topics.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : ""}
       </div>
     </article>`).join("");
 })();

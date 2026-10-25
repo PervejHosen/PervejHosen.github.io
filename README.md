@@ -4,7 +4,7 @@
 Power BI · SQL · Snowflake · BigQuery · Databricks · Python · Microsoft PL-300 certified</p>
 
 <p align="center">
-  <a href="https://pervejhosen.github.io"><img src="assets/preview.jpg" alt="Preview of pervejhosen.github.io" width="100%"></a>
+  <a href="https://pervejhosen.github.io"><img src="assets/img/social/preview.jpg" alt="Preview of pervejhosen.github.io" width="100%"></a>
 </p>
 
 <p align="center">
