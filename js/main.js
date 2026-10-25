@@ -243,11 +243,15 @@ $("#contactForm").addEventListener("submit", async ev => {
   };
   status.className = "form-status"; status.textContent = "Sending…"; btn.disabled = true;
   try {
-    if (!CONFIG.formEndpoint) throw new Error("no endpoint");
-    const r = await fetch(CONFIG.formEndpoint, {
+    const useKey = !!CONFIG.formKey;
+    if (!useKey && !CONFIG.formEndpoint) throw new Error("no endpoint");
+    const payload = useKey
+      ? { access_key: CONFIG.formKey, subject: data._subject, from_name: data.name, name: data.name, email: data.email, message: data.message }
+      : data;
+    const r = await fetch(useKey ? "https://api.web3forms.com/submit" : CONFIG.formEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(data)
+      body: JSON.stringify(payload)
     });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || j.success === false || j.success === "false") throw new Error(j.message || r.status);

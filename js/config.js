@@ -26,10 +26,10 @@ const LINKS = {
     hsc: "",
     ssc: ""
   },
-  // Contact form → your inbox (FormSubmit, free, no account). Visitors don't log in to anything.
-  // The very first message sends you an "Activate form" email: click it once, and every message after arrives.
-  // FormSubmit then gives you a random code; put it here instead of your email to keep the address private,
-  // e.g. "https://formsubmit.co/ajax/a1b2c3d4e5"
+  // Contact form → your inbox. Visitors don't log in to anything.
+  // Paste your free Web3Forms access key here (get it at https://web3forms.com: enter your email, the key arrives by email).
+  formKey: "f0d9430b-f502-4d22-b526-34838329b1f4",
+  // Backup used only while formKey is empty (FormSubmit; needs a one-time "Activate form" click in your email).
   form: "https://formsubmit.co/ajax/pervejhosen2@gmail.com"
   // Certification verify links sit with each certificate further down (they never change).
 };
@@ -170,5 +170,6 @@ const CONFIG = {
   /* ---------- contact form ----------
      Messages are delivered straight to your inbox; visitors don't need to log in to anything.
      The address is set in LINKS.form at the top of this file. */
+  formKey: LINKS.formKey,
   formEndpoint: LINKS.form,
 };
