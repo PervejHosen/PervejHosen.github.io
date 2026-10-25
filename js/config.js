@@ -43,7 +43,7 @@ const CONFIG = {
   // Files that don't exist yet are skipped automatically, so you can add them any time.
   photos: ["assets/img/hero/headshot.jpg", "assets/img/hero/trek.jpg", "assets/img/hero/paragliding.jpg"],
   resume: "assets/docs/resume.pdf",        // your résumé PDF
-  roles: ["Sr. BI Developer", "Independent Consultant", "Power BI Developer", "Analytics Engineer", "Data Storyteller"],
+  roles: ["Sr. Power BI Developer", "Analytics Engineer", "Data Analyst", "Independent Consultant", "Data Storyteller"],
   objective: "I turn raw data into decisions people trust — Power BI dashboards, SQL models and analytics pipelines on Snowflake, BigQuery and Databricks for teams in the US, UAE, Germany and Australia.",
   location: "Based in Dhaka (UTC+6) · Working remotely with teams worldwide",
 
@@ -52,9 +52,9 @@ const CONFIG = {
   /* ---------- about ---------- */
   careerStart: "2022-08",   // {years} in the About text is counted from this month, so it updates itself
   about: [
-    "I'm <span class='grad-text'>Pervej Hosen</span>, a Business Intelligence developer based in Dhaka, Bangladesh. I started my career in August 2022 on the commercial side of the pharmaceutical industry, in sales and distribution, which is where I learned that a report only matters if someone acts on it.",
-    "Since then I've worked remotely with teams in the US, the UAE, Germany and Australia, in circular-fashion e-commerce, prop trading, a restaurant chain and mining. I build the data models, dashboards and pipelines they run their business on. Altogether, that's 6+ years of combined, hands-on experience across six roles and five industries.",
-    "I'm a Microsoft Certified Power BI Data Analyst (PL-300). My toolkit centres on Power BI, DAX, SQL, Snowflake, BigQuery, Databricks and Python, and I care as much about the clarity of a dashboard as the correctness of the numbers behind it."
+    "I'm <span class='grad-text'>Pervej Hosen</span>, a Power BI developer and analytics engineer based in Dhaka, Bangladesh. I build the data models, dashboards and pipelines that teams in the US, the UAE, Germany and Australia run their business on, across circular-fashion e-commerce, prop trading, a restaurant chain and mining.",
+    "I started on the commercial side of the pharmaceutical industry, in sales and distribution. That's where I learned that a report only matters if someone acts on it, and it still shapes how I work: every dashboard starts from the decision it needs to support.",
+    "I hold an MSc in Applied Statistics and Data Science from Jahangirnagar University and I'm a Microsoft Certified Power BI Data Analyst (PL-300). My toolkit centres on Power BI, DAX, SQL, Snowflake, BigQuery, Databricks and Python, and I care as much about the clarity of a dashboard as the correctness of the numbers behind it."
   ],
   // the career chart in the About section
   careerChart: [
