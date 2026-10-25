@@ -160,6 +160,8 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
 /* ---------- education ---------- */
 (function education() {
   const cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 4 2 9l10 5 10-5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg>';
+  const folder = $("#certFolder");
+  if (CONFIG.certificatesFolder) folder.href = CONFIG.certificatesFolder; else folder.remove();
   $("#eduGrid").innerHTML = (CONFIG.education || []).map((e, i) => `
     <article class="edu reveal" style="transition-delay:${i * 90}ms">
       <span class="edu-icon">${cap}</span>
@@ -167,6 +169,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
         <h4>${esc(e.degree)}</h4>
         <p>${esc(e.school)}</p>
         ${e.meta ? `<div class="edu-meta"><span>${esc(e.meta)}</span></div>` : ""}
+        ${e.link ? `<a class="edu-link" href="${esc(e.link)}" target="_blank" rel="noopener">View certificate <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : ""}
       </div>
     </article>`).join("");
 })();

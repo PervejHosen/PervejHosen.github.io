@@ -240,6 +240,11 @@ footer { background: var(--navy); color: #64748b; text-align: center; padding: 3
 }
 
 /* education */
+.sub-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.sub-head .sub-title { margin: 0; }
+.edu-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; font-size: .88rem; font-weight: 600; color: var(--accent-ink); }
+.edu-link svg { width: 14px; height: 14px; transition: transform .2s; }
+.edu-link:hover svg { transform: translate(2px, -2px); }
 .edu-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .edu { display: flex; gap: 16px; align-items: flex-start; padding: 22px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
 .edu-icon { flex: 0 0 46px; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; color: #fff; background: var(--grad); box-shadow: 0 10px 24px -12px rgba(34, 211, 238, .8); }

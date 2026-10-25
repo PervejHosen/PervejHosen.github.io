@@ -83,13 +83,17 @@ const CONFIG = {
   ],
 
   /* ---------- education ----------
-     One card each. meta = the small grey line (years, board, etc.). */
+     One card each. meta = the small grey line (years, board, etc.).
+     link: optional Google Drive link to that certificate. It shows a "View certificate" link on the card.
+     In Google Drive: right-click the file → Share → General access: "Anyone with the link" (Viewer) → Copy link. */
   education: [
-    { degree: "MSc in Applied Statistics and Data Science", school: "Jahangirnagar University", meta: "2022 – 2024" },
-    { degree: "BSS (Honours) in Economics", school: "National University", meta: "2016 – 2020" },
-    { degree: "HSC, Science", school: "Hajiganj Degree College", meta: "Cumilla Board" },
-    { degree: "SSC, Science", school: "Suapara GK High School", meta: "Cumilla Board" }
+    { degree: "Master of Science (MSc) in Applied Statistics and Data Science", school: "Jahangirnagar University", meta: "2022 – 2023", link: "" },
+    { degree: "Bachelor of Social Science (BSS), Honours in Economics", school: "National University, Bangladesh", meta: "2016 – 2020", link: "" },
+    { degree: "Higher Secondary Certificate (HSC), Science", school: "Hajigonj Degree College", meta: "2013 – 2015 · Cumilla Board", link: "https://drive.google.com/file/d/1alieg3hpcH0jNwL-F7SgBNzPqlBBGIms/view?usp=drive_link" },
+    { degree: "Secondary School Certificate (SSC), Science", school: "Suapara G. K. High School", meta: "2008 – 2013 · Cumilla Board", link: "https://drive.google.com/file/d/1CO3v7kDyRJlWTyI3Uhh233Dvw6OURbvB/view?usp=drive_link" }
   ],
+  // optional: one shared Google Drive folder with all your certificates → shows a "View all certificates" button
+  certificatesFolder: "",
 
   /* ---------- certifications (Education & Certifications section) ----------
      logo: a file in the icon bundle, or leave it out and set mono (letters) + monoColor.
