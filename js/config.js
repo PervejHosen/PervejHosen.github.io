@@ -9,7 +9,7 @@ const CONFIG = {
   /* ---------- basics & hero ---------- */
   name: "Pervej Hosen",
   logo: "Pervej Hosen",
-  // Hero photos: click/tap the photo to show the next one. Square photos work best.
+  // Hero photos: they change every second (click/tap to skip ahead). Square photos work best.
   // Files that don't exist yet are skipped automatically, so you can add them any time.
   photos: ["assets/profile.jpg", "assets/profile-2.jpg", "assets/profile-3.jpg", "assets/profile-4.jpg"],
   resume: "assets/resume.pdf",        // your résumé PDF
@@ -83,15 +83,12 @@ const CONFIG = {
   ],
 
   /* ---------- education ----------
-     result: leave it "" to hide the grade for that degree. */
+     One card each. meta = the small grey line (years, board, etc.). */
   education: [
-    { degree: "MSc in Applied Statistics and Data Science", school: "Jahangirnagar University", years: "2022 – 2024", result: "CGPA 3.75 / 4.00" },
-    { degree: "BSS (Honours) in Economics", school: "National University", years: "2016 – 2020", result: "" }
-  ],
-  // the small "School" line under the degrees (set to [] to hide it)
-  schooling: [
-    { level: "HSC, Science", school: "Hajiganj Degree College", board: "Cumilla Board", result: "GPA 3.75 / 5" },
-    { level: "SSC, Science", school: "Suapara GK High School", board: "Cumilla Board", result: "GPA 5.00 / 5" }
+    { degree: "MSc in Applied Statistics and Data Science", school: "Jahangirnagar University", meta: "2022 – 2024" },
+    { degree: "BSS (Honours) in Economics", school: "National University", meta: "2016 – 2020" },
+    { degree: "HSC, Science", school: "Hajiganj Degree College", meta: "Cumilla Board" },
+    { degree: "SSC, Science", school: "Suapara GK High School", meta: "Cumilla Board" }
   ],
 
   /* ---------- certifications (Education & Certifications section) ----------

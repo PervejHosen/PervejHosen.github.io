@@ -49,8 +49,21 @@ if (!$("#contact")) ["#hireBtn", "#navCta"].forEach(s => {
   a.href = gmailUrl("Hiring enquiry"); a.target = "_blank"; a.rel = "noopener"; a.setAttribute("data-email", "");
 });
 if (CONFIG.location && $("#locLine")) $("#locLine").textContent = CONFIG.location;
-$("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
-  `<a href="${esc(linkHref(k))}" ${linkAttrs(k)} aria-label="${k}">${ICONS[k] || ""}</a>`).join("");
+$("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k => k === "email"
+  // the email icon here only copies the address (no new tab, no mail app)
+  ? `<button type="button" class="copy-email" aria-label="Copy email address" title="Copy ${esc(L.email)}">${ICONS.email}</button>`
+  : `<a href="${esc(linkHref(k))}" ${linkAttrs(k)} aria-label="${k}">${ICONS[k] || ""}</a>`).join("");
+$("#heroSocials").addEventListener("click", e => {
+  if (!e.target.closest(".copy-email")) return;
+  const done = () => toast("Email copied: " + L.email);
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(L.email).then(done).catch(() => toast(L.email));
+  else {   // older browsers
+    const t = document.createElement("textarea"); t.value = L.email; t.style.position = "fixed"; t.style.opacity = "0";
+    document.body.appendChild(t); t.select();
+    try { document.execCommand("copy"); done(); } catch { toast(L.email); }
+    t.remove();
+  }
+});
 
 (function photos() {
   const el = $("#photo"), dots = $("#photoDots");
@@ -80,10 +93,20 @@ $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k =>
       ok[cur].classList.remove("on"); dots.children[cur].classList.remove("on");
       cur = (cur + 1) % ok.length;
       ok[cur].classList.add("on"); dots.children[cur].classList.add("on");
-      ring.classList.remove("bump"); void ring.offsetWidth; ring.classList.add("bump");
+      
     };
-    ring.addEventListener("click", next);
-    ring.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); next(); } });
+    // change by itself every few seconds; a click jumps ahead and restarts the timer
+    const EVERY = 1000;   // milliseconds between photos
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let timer = null, hovering = false;
+    const start = () => { if (!still && !hovering && !document.hidden) { clearInterval(timer); timer = setInterval(next, EVERY); } };
+    const stop = () => { clearInterval(timer); timer = null; };
+    ring.addEventListener("click", () => { next(); start(); });
+    ring.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); next(); start(); } });
+    ring.addEventListener("mouseenter", () => { hovering = true; stop(); });     // hold still while someone looks
+    ring.addEventListener("mouseleave", () => { hovering = false; start(); });
+    document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
+    start();
   });
 })();
 
@@ -143,13 +166,9 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
       <div class="edu-main">
         <h4>${esc(e.degree)}</h4>
         <p>${esc(e.school)}</p>
-        <div class="edu-meta"><span>${esc(e.years)}</span>${e.result ? `<span class="edu-grade">${esc(e.result)}</span>` : ""}</div>
+        ${e.meta ? `<div class="edu-meta"><span>${esc(e.meta)}</span></div>` : ""}
       </div>
     </article>`).join("");
-  const sl = $("#schoolLine"), list = CONFIG.schooling || [];
-  if (!list.length) sl.remove();
-  else sl.innerHTML = `<span class="school-label">School</span>` + list.map(x =>
-    `<span class="school-item"><b>${esc(x.level)}</b> · ${esc(x.school)}, ${esc(x.board)}${x.result ? ` · ${esc(x.result)}` : ""}</span>`).join("");
 })();
 
 /* ---------- certifications ---------- */
