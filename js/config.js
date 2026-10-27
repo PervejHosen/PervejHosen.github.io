@@ -192,6 +192,26 @@ const CONFIG = {
     // { title: "SQL (Basic)", issuer: "HackerRank", mono: "HR", monoColor: "#1ba94c", link: "https://www.hackerrank.com/certificates/330cb5d307eb" }
   ],
 
+  /* ---------- photography ----------
+     Web-sized photos live in assets/img/photography/ (about 1600px on the long side).
+     Filter buttons are created from the categories you use. */
+  photographySubtitle: "Away from dashboards, I chase mountains. These are from my trek to Annapurna Base Camp in Nepal, plus a few frames from Pokhara and Kathmandu.",
+  photographyMore: "",   // optional: your Instagram / Flickr / 500px link
+  gallery: [
+    { src: "assets/img/photography/01.jpg", title: "Morning over the valley", place: "Annapurna region, Nepal", category: "Mountains" },
+    { src: "assets/img/photography/02.jpg", title: "Into the Sanctuary", place: "Annapurna Sanctuary, Nepal", category: "Trek" },
+    { src: "assets/img/photography/03.jpg", title: "Above the hills", place: "Pokhara, Nepal", category: "Adventure" },
+    { src: "assets/img/photography/04.jpg", title: "Facing Machapuchare", place: "Annapurna Base Camp, Nepal", category: "Mountains" },
+    { src: "assets/img/photography/05.jpg", title: "Frozen silence", place: "Annapurna Base Camp, Nepal", category: "Mountains" },
+    { src: "assets/img/photography/06.jpg", title: "Storm over the ridge", place: "Annapurna Sanctuary, Nepal", category: "Mountains" },
+    { src: "assets/img/photography/07.jpg", title: "Halfway up", place: "Annapurna Sanctuary, Nepal", category: "Trek" },
+    { src: "assets/img/photography/08.jpg", title: "Bridge over the terraces", place: "Annapurna region, Nepal", category: "Trek" },
+    { src: "assets/img/photography/09.jpg", title: "4,130 metres", place: "Annapurna Base Camp, Nepal", category: "Adventure" },
+    { src: "assets/img/photography/10.jpg", title: "Annapurna South", place: "Annapurna region, Nepal", category: "Mountains" },
+    { src: "assets/img/photography/11.jpg", title: "Dusk on the lake", place: "Pokhara, Nepal", category: "Travel" },
+    { src: "assets/img/photography/12.jpg", title: "Pagoda square", place: "Kathmandu, Nepal", category: "Travel" }
+  ],
+
   /* ---------- contact form ----------
      Messages are delivered straight to your inbox; visitors don't need to log in to anything.
      The address is set in LINKS.form at the top of this file. */

@@ -228,6 +228,100 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     </a>`).join("");
 })();
 
+/* ---------- photography ---------- */
+(function photography() {
+  const photos = CONFIG.gallery || [];
+  if (!photos.length) {
+    $("#photography").remove();
+    document.querySelector('a[href="#photography"]')?.parentElement.remove();
+    return;
+  }
+  $("#phSub").textContent = CONFIG.photographySubtitle;
+  if (CONFIG.photographyMore) $("#phMore").href = CONFIG.photographyMore;
+  else $("#phMoreWrap").remove();
+
+  // filter buttons from the categories you used
+  const cats = ["All", ...new Set(photos.map(p => p.category).filter(Boolean))];
+  $("#phFilters").innerHTML = cats.length > 2
+    ? cats.map((c, i) => `<button class="ph-filter${i ? "" : " on"}" data-cat="${esc(c)}">${esc(c)}</button>`).join("")
+    : "";
+
+  const RATIOS = ["4/5", "3/2", "1/1", "2/3", "4/3", "3/4"];
+  const camIcon = '<svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>';
+  const placeholder = (p, i) => {
+    const [a, b] = PALETTE[i % PALETTE.length];
+    return `<div class="ph-ph" style="aspect-ratio:${RATIOS[i % RATIOS.length]};background:linear-gradient(150deg,${a}55,${b}33 55%,#121a33)"><div>${camIcon}${esc(p.title || "Photo")}</div></div>`;
+  };
+  const caption = p => esc([p.place, p.category].filter(Boolean).join(" · "));
+
+  const g = $("#gallery");
+  g.innerHTML = photos.map((p, i) => `
+    <figure class="ph reveal" tabindex="0" data-i="${i}" data-cat="${esc(p.category)}">
+      <img src="${esc(p.src)}" alt="${esc(p.title || "Photograph")}${p.place ? " — " + esc(p.place) : ""}" loading="lazy">
+      <figcaption><b>${esc(p.title)}</b><span>${caption(p)}</span></figcaption>
+    </figure>`).join("");
+
+  // show a placeholder for any photo file that isn't uploaded yet
+  g.querySelectorAll(".ph img").forEach(img => img.addEventListener("error", () => {
+    const fig = img.closest(".ph");
+    fig.dataset.missing = "1";
+    img.outerHTML = placeholder(photos[+fig.dataset.i], +fig.dataset.i);
+  }));
+
+  $("#phFilters").addEventListener("click", e => {
+    const btn = e.target.closest(".ph-filter");
+    if (!btn) return;
+    document.querySelectorAll(".ph-filter").forEach(x => x.classList.toggle("on", x === btn));
+    g.querySelectorAll(".ph").forEach(f =>
+      f.classList.toggle("hide", btn.dataset.cat !== "All" && f.dataset.cat !== btn.dataset.cat));
+  });
+
+  // full-screen viewer
+  const lb = $("#lightbox");
+  let cur = 0, list = [];
+  const show = () => {
+    const p = photos[list[cur]];
+    $("#lbImg").src = p.src;
+    $("#lbImg").alt = p.title || "Photograph";
+    $("#lbCap").innerHTML = `<b>${esc(p.title)}</b><span>${caption(p)}</span>`;
+    $("#lbCount").textContent = `${cur + 1} / ${list.length}`;
+  };
+  const open = i => {
+    list = [...g.querySelectorAll(".ph:not(.hide):not([data-missing])")].map(f => +f.dataset.i);
+    cur = list.indexOf(i);
+    if (cur < 0) return;
+    show();
+    lb.classList.add("open");
+    document.body.style.overflow = "hidden";
+  };
+  const close = () => { lb.classList.remove("open"); document.body.style.overflow = ""; };
+  const step = d => { cur = (cur + d + list.length) % list.length; show(); };
+
+  g.addEventListener("click", e => { const f = e.target.closest(".ph"); if (f) open(+f.dataset.i); });
+  g.addEventListener("keydown", e => {
+    const f = e.target.closest(".ph");
+    if (f && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); open(+f.dataset.i); }
+  });
+  $("#lbClose").onclick = close;
+  $("#lbPrev").onclick = () => step(-1);
+  $("#lbNext").onclick = () => step(1);
+  lb.addEventListener("click", e => { if (e.target === lb) close(); });
+  addEventListener("keydown", e => {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape") close();
+    else if (e.key === "ArrowLeft") step(-1);
+    else if (e.key === "ArrowRight") step(1);
+  });
+  let x0 = null;   // swipe on phones
+  lb.addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true });
+  lb.addEventListener("touchend", e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+    x0 = null;
+  });
+})();
+
 /* ---------- contact ---------- */
 const LINK_LABELS = { email: "Email", linkedin: "LinkedIn", github: "GitHub", kaggle: "Kaggle" };
 $("#contactList").innerHTML = Object.keys(L).filter(k => L[k]).map(k => {

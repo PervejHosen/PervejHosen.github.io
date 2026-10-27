@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=8n">
+  <link rel="stylesheet" href="css/style.css?v=9a">
 </head>
 <body>
 
@@ -29,6 +29,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#credentials">Credentials</a></li>
+        <li><a href="#photography">Photography</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
       <button class="burger" id="burger" aria-label="Open menu">
@@ -123,6 +124,20 @@
       </div>
     </section>
 
+    <!-- ================= PHOTOGRAPHY ================= -->
+    <section id="photography">
+      <div class="wrap">
+        <div class="center-head reveal">
+          <p class="kicker">Off the clock</p>
+          <h2 class="sec-title">Through my <span class="hl">lens</span>.</h2>
+          <p class="sec-intro" id="phSub"></p>
+        </div>
+        <div class="ph-filters reveal" id="phFilters"></div>
+        <div class="gallery" id="gallery"></div>
+        <div class="more-wrap reveal" id="phMoreWrap"><a class="btn btn-outline" id="phMore" target="_blank" rel="noopener">See more photos</a></div>
+      </div>
+    </section>
+
     <!-- ================= CONTACT ================= -->
     <section id="contact" class="light">
       <div class="wrap two contact-grid">
@@ -146,8 +161,16 @@
 
   <footer id="footer"></footer>
 
-  <script src="js/icons.js?v=8n"></script>
-  <script src="js/config.js?v=8n"></script>
-  <script src="js/main.js?v=8n"></script>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <span class="lb-count" id="lbCount"></span>
+    <button class="lb-btn lb-close" id="lbClose" aria-label="Close">&times;</button>
+    <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous photo">&#8249;</button>
+    <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+    <button class="lb-btn lb-next" id="lbNext" aria-label="Next photo">&#8250;</button>
+  </div>
+
+  <script src="js/icons.js?v=9a"></script>
+  <script src="js/config.js?v=9a"></script>
+  <script src="js/main.js?v=9a"></script>
 </body>
 </html>
