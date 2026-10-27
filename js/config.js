@@ -105,7 +105,7 @@ const CONFIG = {
      icon = logo name from js/icons.js (leave it out for tools without a logo) */
   skillsIntro: "The tools I use to take data from source systems to a decision, built up across pharma, e-commerce, prop trading, restaurants and mining.",
   skillGroups: [
-    { title: "Visualize & report", items: ["Power BI", "Excel", "Looker Studio"] },
+    { title: "Visualize & report", items: ["Power BI", "Excel", "Looker Studio", "Sigma"] },
     { title: "Query & model", items: ["SQL", "Microsoft SQL Server", "MySQL", "Data Modeling"] },
     { title: "Warehouse & cloud", items: ["Snowflake", "Google BigQuery", "Databricks", "Google Cloud"] },
     { title: "Analyze with code", items: ["Python", "Pandas"] },
@@ -120,6 +120,7 @@ const CONFIG = {
     { name: "Databricks", icon: "databricks.svg" },
     { name: "Python", icon: "python.svg" },
     { name: "Looker Studio", icon: "lookerstudio.svg" },
+    { name: "Sigma", icon: "sigma.svg" },
     { name: "Google Cloud", icon: "googlecloud.svg" },
     { name: "MySQL", icon: "mysql.svg" },
     { name: "Pandas", icon: "pandas.svg" },

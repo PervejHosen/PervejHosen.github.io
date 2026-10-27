@@ -16,10 +16,6 @@ const ICONS = {
   email: '<svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg>'
 };
 const L = CONFIG.links;
-// Email opens a Gmail "new message" tab (every link opens in a new tab) and also copies the address
-const gmailUrl = (subject = "") => "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(L.email) + (subject ? "&su=" + encodeURIComponent(subject) : "");
-const linkHref = k => k === "email" ? gmailUrl("Hello from your portfolio") : L[k];
-const linkAttrs = k => 'target="_blank" rel="noopener"' + (k === "email" ? " data-email" : "");
 
 function toast(msg) {
   let t = $("#toast");
@@ -29,11 +25,6 @@ function toast(msg) {
   clearTimeout(t._h);
   t._h = setTimeout(() => t.classList.remove("show"), 2600);
 }
-// any email link: copy the address too, for people who don't use Gmail
-document.addEventListener("click", e => {
-  if (!e.target.closest("[data-email]")) return;
-  navigator.clipboard?.writeText(L.email).then(() => toast("Email copied: " + L.email)).catch(() => {});
-});
 
 /* ---------- hero ---------- */
 $("#logo").textContent = CONFIG.logo;
@@ -46,15 +37,14 @@ else fetch(CONFIG.resume, { method: "HEAD" }).then(r => { if (!r.ok) $("#resumeB
 // until the Contact section exists, "Hire me" and "Let's talk" open an email (in a new tab) instead
 if (!$("#contact")) ["#hireBtn", "#navCta"].forEach(s => {
   const a = $(s); if (!a) return;
-  a.href = gmailUrl("Hiring enquiry"); a.target = "_blank"; a.rel = "noopener"; a.setAttribute("data-email", "");
+  a.href = "#"; a.classList.add("copy-email"); a.addEventListener("click", e => e.preventDefault());
 });
 if (CONFIG.location && $("#locLine")) $("#locLine").textContent = CONFIG.location;
 $("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k => k === "email"
   // the email icon here only copies the address (no new tab, no mail app)
   ? `<button type="button" class="copy-email" aria-label="Copy email address" title="Copy ${esc(L.email)}">${ICONS.email}</button>`
-  : `<a href="${esc(linkHref(k))}" ${linkAttrs(k)} aria-label="${k}">${ICONS[k] || ""}</a>`).join("");
-$("#heroSocials").addEventListener("click", e => {
-  if (!e.target.closest(".copy-email")) return;
+  : `<a href="${esc(L[k])}" target="_blank" rel="noopener" aria-label="${k}">${ICONS[k] || ""}</a>`).join("");
+function copyEmail() {
   const done = () => toast("Email copied: " + L.email);
   if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(L.email).then(done).catch(() => toast(L.email));
   else {   // older browsers
@@ -63,7 +53,9 @@ $("#heroSocials").addEventListener("click", e => {
     try { document.execCommand("copy"); done(); } catch { toast(L.email); }
     t.remove();
   }
-});
+}
+// every email button on the page only copies the address (no new tab, no mail app, no login)
+document.addEventListener("click", e => { if (e.target.closest(".copy-email")) copyEmail(); });
 
 (function photos() {
   const el = $("#photo"), dots = $("#photoDots");
@@ -240,9 +232,12 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
 const LINK_LABELS = { email: "Email", linkedin: "LinkedIn", github: "GitHub", kaggle: "Kaggle" };
 $("#contactList").innerHTML = Object.keys(L).filter(k => L[k]).map(k => {
   const value = k === "email" ? L.email : L[k].replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-  return `<a class="contact-card" href="${esc(linkHref(k))}" ${linkAttrs(k)}>
-    <span class="cc-icon">${ICONS[k] || ""}</span>
-    <span class="cc-text"><small>${LINK_LABELS[k] || k}</small><b>${esc(value)}</b></span>
+  const inner = `<span class="cc-icon">${ICONS[k] || ""}</span>
+    <span class="cc-text"><small>${LINK_LABELS[k] || k}</small><b>${esc(value)}</b></span>`;
+  if (k === "email") return `<button type="button" class="contact-card copy-email" title="Copy email address">${inner}
+    <svg class="cc-arrow cc-copy" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>`;
+  return `<a class="contact-card" href="${esc(L[k])}" target="_blank" rel="noopener">${inner}
     <svg class="cc-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </a>`;
 }).join("");
