@@ -286,7 +286,11 @@ footer { background: var(--navy); color: #64748b; text-align: center; padding: 3
 .ph-filter:hover { border-color: var(--cyan); }
 .ph-filter.on { background: var(--grad); border-color: transparent; color: #fff; }
 #photography { border-top: 1px solid var(--border); }   /* follows another dark section */
-.gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.gallery { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; } }
+.ph figcaption { padding: 34px 12px 10px; }
+.ph figcaption b { font-size: .9rem; }
+.ph figcaption span { font-size: .76rem; }
 .ph { margin: 0; position: relative; border-radius: 14px; overflow: hidden; cursor: zoom-in; border: 1px solid var(--border); background: var(--surface-2); transition: transform .3s, box-shadow .3s; }
 .ph:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -24px rgba(15, 23, 42, .45); }
 .ph img, .ph .ph-ph { width: 100%; display: block; transition: transform .6s ease; }

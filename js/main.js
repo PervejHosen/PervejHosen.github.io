@@ -268,12 +268,30 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     img.outerHTML = placeholder(photos[+fig.dataset.i], +fig.dataset.i);
   }));
 
+  // show the first few; the rest appear with "Show all" (or when a filter is picked)
+  // phones and tablets show the first few; wide screens show everything
+  const LIMIT = matchMedia("(max-width: 900px)").matches ? (CONFIG.galleryShow || photos.length) : photos.length;
+  let expanded = photos.length <= LIMIT, cat = "All";
+  const allBtn = document.createElement("div");
+  allBtn.className = "more-wrap";
+  allBtn.innerHTML = `<button class="btn btn-outline" type="button">Show all ${photos.length} photos</button>`;
+  g.after(allBtn);
+  const apply = () => {
+    g.querySelectorAll(".ph").forEach(f => {
+      const out = cat !== "All" ? f.dataset.cat !== cat : (!expanded && +f.dataset.i >= LIMIT);
+      f.classList.toggle("hide", out);
+      if (!out) f.classList.add("in");
+    });
+    allBtn.hidden = expanded || cat !== "All";
+  };
+  allBtn.querySelector("button").addEventListener("click", () => { expanded = true; apply(); });
+  apply();
+
   $("#phFilters").addEventListener("click", e => {
     const btn = e.target.closest(".ph-filter");
     if (!btn) return;
     document.querySelectorAll(".ph-filter").forEach(x => x.classList.toggle("on", x === btn));
-    g.querySelectorAll(".ph").forEach(f =>
-      f.classList.toggle("hide", btn.dataset.cat !== "All" && f.dataset.cat !== btn.dataset.cat));
+    cat = btn.dataset.cat; apply();
   });
 
   // full-screen viewer

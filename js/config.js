@@ -195,21 +195,35 @@ const CONFIG = {
   /* ---------- photography ----------
      Web-sized photos live in assets/img/photography/ (about 1600px on the long side).
      Filter buttons are created from the categories you use. */
-  photographySubtitle: "Away from dashboards, I chase mountains. These are from my trek to Annapurna Base Camp in Nepal, plus a few frames from Pokhara and Kathmandu.",
+  photographySubtitle: "Away from dashboards, I chase mountains and light. Frames from my trek to Annapurna Base Camp in Nepal, and from home in Bangladesh.",
   photographyMore: "",   // optional: your Instagram / Flickr / 500px link
+  galleryShow: 12,       // on phones/tablets: how many photos show before the "Show all" button
   gallery: [
     { src: "assets/img/photography/01.jpg", title: "Morning over the valley", place: "Annapurna region, Nepal", category: "Mountains" },
     { src: "assets/img/photography/02.jpg", title: "Into the Sanctuary", place: "Annapurna Sanctuary, Nepal", category: "Trek" },
-    { src: "assets/img/photography/03.jpg", title: "Above the hills", place: "Pokhara, Nepal", category: "Adventure" },
+    { src: "assets/img/photography/25.jpg", title: "Trail companion", place: "Annapurna region, Nepal", category: "Trek" },
+    { src: "assets/img/photography/03.jpg", title: "Above the hills", place: "Pokhara, Nepal", category: "Travel" },
     { src: "assets/img/photography/04.jpg", title: "Facing Machapuchare", place: "Annapurna Base Camp, Nepal", category: "Mountains" },
     { src: "assets/img/photography/05.jpg", title: "Frozen silence", place: "Annapurna Base Camp, Nepal", category: "Mountains" },
     { src: "assets/img/photography/06.jpg", title: "Storm over the ridge", place: "Annapurna Sanctuary, Nepal", category: "Mountains" },
     { src: "assets/img/photography/07.jpg", title: "Halfway up", place: "Annapurna Sanctuary, Nepal", category: "Trek" },
     { src: "assets/img/photography/08.jpg", title: "Bridge over the terraces", place: "Annapurna region, Nepal", category: "Trek" },
-    { src: "assets/img/photography/09.jpg", title: "4,130 metres", place: "Annapurna Base Camp, Nepal", category: "Adventure" },
+    { src: "assets/img/photography/09.jpg", title: "4,130 metres", place: "Annapurna Base Camp, Nepal", category: "Trek" },
     { src: "assets/img/photography/10.jpg", title: "Annapurna South", place: "Annapurna region, Nepal", category: "Mountains" },
     { src: "assets/img/photography/11.jpg", title: "Dusk on the lake", place: "Pokhara, Nepal", category: "Travel" },
-    { src: "assets/img/photography/12.jpg", title: "Pagoda square", place: "Kathmandu, Nepal", category: "Travel" }
+    { src: "assets/img/photography/12.jpg", title: "Pagoda square", place: "Kathmandu, Nepal", category: "Travel" },
+    { src: "assets/img/photography/14.jpg", title: "Krishnachura season", place: "Jahangirnagar University", category: "Campus" },
+    { src: "assets/img/photography/15.jpg", title: "Under a monsoon sky", place: "Jahangirnagar University", category: "Campus" },
+    { src: "assets/img/photography/16.jpg", title: "The green path", place: "Jahangirnagar University", category: "Campus" },
+    { src: "assets/img/photography/17.jpg", title: "A quiet afternoon", place: "Jahangirnagar University", category: "Campus" },
+    { src: "assets/img/photography/18.jpg", title: "Cart ride through the fields", place: "Jahangirnagar University", category: "Campus" },
+    { src: "assets/img/photography/19.jpg", title: "Cosmos", place: "Bangladesh", category: "Nature" },
+    { src: "assets/img/photography/20.jpg", title: "Wildflower", place: "Bangladesh", category: "Nature" },
+    { src: "assets/img/photography/21.jpg", title: "Frangipani", place: "Bangladesh", category: "Nature" },
+    { src: "assets/img/photography/22.jpg", title: "A handful of color", place: "Bangladesh", category: "Nature" },
+    { src: "assets/img/photography/13.jpg", title: "Thesis day", place: "Jahangirnagar University", category: "Moments" },
+    { src: "assets/img/photography/23.jpg", title: "Red and green", place: "Dhaka, Bangladesh", category: "Moments" },
+    { src: "assets/img/photography/24.jpg", title: "Team offsite", place: "Transcom, Bangladesh", category: "Moments" }
   ],
 
   /* ---------- contact form ----------
