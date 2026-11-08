@@ -192,33 +192,40 @@ const CONFIG = {
     // { title: "SQL (Basic)", issuer: "HackerRank", mono: "HR", monoColor: "#1ba94c", link: "https://www.hackerrank.com/certificates/330cb5d307eb" }
   ],
 
-  /* ---------- projects (Power BI) ----------
-     Each card's preview cycles through its screenshots; a click opens the live report in a new tab.
-     Screenshots live in assets/img/projects/. Set hidden: true to keep a card off the site. */
+  /* ---------- projects ----------
+     Each card's preview cycles through its screenshots; a click opens the report in a new tab.
+     Screenshots live in assets/img/projects/. Set hidden: true to keep a card off the site.
+     types: the expertise filters a project appears under (one or more of projectFilters). */
   projectsSubtitle: "Interactive reports and case studies. Click any card to explore it.",
   projectsShow: 6,   // cards shown before the "Show all" button
+  projectFilters: ["Dashboards & Reporting", "Data Pipelines & Modeling", "Analysis & Insights", "Forecasting & ML"],
   projects: [
-    { type: "SQL & Engineering", title: "Customer Segmentation & Retention", badge: "Case study · SQL",
+    { types: ["Forecasting & ML", "Data Pipelines & Modeling", "Analysis & Insights"], title: "Store Sales Forecasting", badge: "Case study · Python",
+      desc: "Six-week daily sales forecasts for 1,115 drugstores. Four methods backtested on rolling windows, from last-year copies to a LightGBM model with prediction ranges. Result: 40% less error than a planner's weekday average.",
+      tags: ["Python", "LightGBM", "SQL", "Backtesting"],
+      link: "projects/store-sales-forecasting/", cta: "Read the case study",
+      images: ["assets/img/projects/forecast-1.jpg", "assets/img/projects/forecast-2.jpg", "assets/img/projects/forecast-3.jpg", "assets/img/projects/forecast-4.jpg"] },
+    { types: ["Data Pipelines & Modeling", "Analysis & Insights"], title: "Customer Segmentation & Retention", badge: "Case study · SQL",
       desc: "RFM segmentation of 541,909 real retail transactions in a bronze, silver and gold SQL pipeline, with quarterly segment migration and cohort retention. Finding: 31% of customers drive 77% of sales.",
       tags: ["SQL", "DuckDB", "RFM", "Cohort analysis"],
       link: "projects/customer-segmentation/", cta: "Read the case study",
       images: ["assets/img/projects/rfm-1.jpg", "assets/img/projects/rfm-2.jpg", "assets/img/projects/rfm-3.jpg", "assets/img/projects/rfm-4.jpg"] },
-    { type: "Power BI", title: "HR Analytics", pages: 9,
+    { types: ["Dashboards & Reporting"], title: "HR Analytics", pages: 9,
       desc: "A 9-page people analytics report on 1,471 employees: headcount, 16.1% attrition by department, tenure, salary and age, hiring trends, demographics, a 9-box talent grid, increments, satisfaction and leave.",
       tags: ["Power BI", "DAX", "Data modeling", "Bookmarks"],
       link: "https://app.powerbi.com/view?r=eyJrIjoiNzA2MWRjMGYtZjEwMi00ZDZkLTlhNzctZDAzYjdiNjQwYmVmIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D&pageName=71e644495a32422b4620",
       images: ["assets/img/projects/hr-1.jpg", "assets/img/projects/hr-2.jpg", "assets/img/projects/hr-3.jpg"] },
-    { type: "Power BI", title: "Financial Reporting", pages: 8,
+    { types: ["Dashboards & Reporting"], title: "Financial Reporting", pages: 8,
       desc: "A full financial statement pack: income statement with this-year vs last-year variance, quarterly details, balance sheet, cash flow, aged accounts and a turnover summary with top customers and rolling averages.",
       tags: ["Power BI", "DAX", "Time intelligence", "Variance analysis"],
       link: "https://app.powerbi.com/view?r=eyJrIjoiYjdlMzFkYTAtYmE5ZS00NWM0LTljOTgtMGQzYmM1NmExMDZjIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D&pageName=ReportSection3fa42bc07b3997a90cb8",
       images: ["assets/img/projects/finance-1.jpg", "assets/img/projects/finance-2.jpg", "assets/img/projects/finance-3.jpg"] },
-    { type: "Power BI", title: "Healthcare Analytics", pages: 9,
+    { types: ["Dashboards & Reporting"], title: "Healthcare Analytics", pages: 9,
       desc: "Hospital management across facilities: bed occupancy, ICU and ventilator capacity, staffing ratios, supply stock, treatment cost trends with period toggles, patient demographics and doctor scorecards.",
       tags: ["Power BI", "DAX", "Field parameters", "Drill-down"],
       link: "https://app.powerbi.com/view?r=eyJrIjoiOGQ5YzczNTYtYzA5Mi00MzM0LWFkODYtNjVhZWU2YmY0MGZiIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D&pageName=b131badceef62d8977ae",
       images: ["assets/img/projects/healthcare-1.jpg", "assets/img/projects/healthcare-2.jpg", "assets/img/projects/healthcare-3.jpg", "assets/img/projects/healthcare-4.jpg"] },
-    { type: "Power BI", title: "Customer Service Report", pages: 5, hidden: true,   // waiting for confirmation that the data can be public
+    { types: ["Dashboards & Reporting"], title: "Customer Service Report", pages: 5, hidden: true,   // waiting for confirmation that the data can be public
       desc: "Weekly service monitoring across mail, calls and chatbot: ticket volumes, average handle time, 24-hour SLA, backlog and response times, with a governance and glossary page.",
       tags: ["Power BI", "DAX", "KPI design", "Governance"],
       link: "https://app.powerbi.com/view?r=eyJrIjoiMjgwNmEzY2MtNGNkMi00MmE2LWFkNzYtMDI1OWQzMzljNzRhIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D&pageName=76f4b32882ac8cff0f8d",

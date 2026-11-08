@@ -228,7 +228,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     </a>`).join("");
 })();
 
-/* ---------- projects (Power BI) ---------- */
+/* ---------- projects ---------- */
 (function projects() {
   const list = (CONFIG.projects || []).filter(p => !p.hidden);
   if (!list.length) {
@@ -239,8 +239,10 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   $("#projSub").textContent = CONFIG.projectsSubtitle || "";
   const ext = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const SHOW = CONFIG.projectsShow || 6;
+  // a project can sit in several expertise categories (types: [...]); older entries use type: "..."
+  const catsOf = p => p.types || (p.type ? [p.type] : []);
   $("#projGrid").innerHTML = list.map((p, i) => `
-    <article class="card proj reveal" data-type="${esc(p.type || "")}" data-i="${i}" style="transition-delay:${(i % 3) * 90}ms">
+    <article class="card proj reveal" data-types="${esc(catsOf(p).join("|"))}" data-i="${i}" style="transition-delay:${(i % 3) * 90}ms">
       <div class="thumb">
         ${(p.images || []).map((src, k) => `<img src="${esc(src)}" alt="${esc(p.title)}, preview ${k + 1}" loading="lazy" class="${k ? "" : "on"}">`).join("")}
         <span class="proj-badge"><i></i>${p.badge ? esc(p.badge) : "Live" + (p.pages ? " · " + p.pages + " pages" : "")}</span>
@@ -258,7 +260,10 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     </article>`).join("");
 
   // filter buttons (only when there are 2+ project types) and a "Show all" after the first few
-  const types = [...new Set(list.map(p => p.type).filter(Boolean))];
+  // filters follow the order in CONFIG.projectFilters; a category only shows when a project uses it
+  const used = new Set(list.flatMap(catsOf));
+  const types = [...(CONFIG.projectFilters || []).filter(t => used.has(t)),
+                 ...[...used].filter(t => !(CONFIG.projectFilters || []).includes(t))];
   const filters = $("#projFilters");
   if (types.length > 1) filters.innerHTML = ["All", ...types].map((t, i) => `<button type="button" class="ph-filter${i ? "" : " on"}" data-type="${esc(t)}">${esc(t)}</button>`).join("");
   else filters.remove();
@@ -267,7 +272,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   const apply = () => {
     let shown = 0;
     document.querySelectorAll("#projGrid .proj").forEach(c => {
-      const match = type === "All" || c.dataset.type === type;
+      const match = type === "All" || c.dataset.types.split("|").includes(type);
       const vis = match && (expanded || type !== "All" || shown < SHOW);
       if (vis) shown++;
       c.hidden = !vis;
