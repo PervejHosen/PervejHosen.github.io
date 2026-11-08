@@ -280,6 +280,28 @@ footer { background: var(--navy); color: #64748b; text-align: center; padding: 3
 @media (max-width: 900px) { .edu-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 640px) { .edu { padding: 18px; } }
 
+/* ---------- projects (Power BI) ---------- */
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.proj { overflow: hidden; display: flex; flex-direction: column; color: inherit; transition: transform .3s, border-color .3s, box-shadow .3s; }
+.proj:hover { transform: translateY(-6px); border-color: rgba(34, 211, 238, .55); box-shadow: 0 26px 50px -28px rgba(8, 145, 178, .55); }
+.thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #e8eef4; border-bottom: 1px solid var(--border); }
+.thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; opacity: 0; transition: opacity .8s ease, transform .6s ease; }
+.thumb img.on { opacity: 1; }
+.proj:hover .thumb img { transform: scale(1.04); }
+.proj-badge { position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; background: rgba(2, 8, 23, .82); color: #fff; font-size: .72rem; font-weight: 700; letter-spacing: .04em; border-radius: 999px; padding: 4px 10px; }
+.proj-badge i { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, .25); }
+.proj-dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; background: rgba(2, 8, 23, .55); padding: 4px 7px; border-radius: 999px; }
+.proj-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, .45); transition: background .3s, width .3s; }
+.proj-dots i.on { background: #fff; width: 14px; border-radius: 4px; }
+.proj-body { padding: 20px 22px 22px; display: flex; flex-direction: column; flex: 1; }
+.proj h3 { font-size: 1.15rem; font-weight: 700; line-height: 1.3; color: var(--text); }
+.proj p { color: var(--muted); font-size: .93rem; line-height: 1.6; margin: 8px 0 16px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.tag { font-size: .7rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--accent-ink); background: rgba(34, 211, 238, .1); border: 1px solid rgba(34, 211, 238, .25); border-radius: 999px; padding: 3px 10px; }
+.proj-link { margin-top: 16px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: .92rem; color: var(--accent-ink); }
+.proj-link svg { width: 16px; height: 16px; transition: transform .2s; }
+.proj:hover .proj-link svg { transform: translate(2px, -2px); }
+
 /* ---------- photography ---------- */
 .ph-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: -24px 0 36px; }
 .ph-filter { background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 8px 18px; font-family: inherit; font-size: .92rem; font-weight: 600; cursor: pointer; transition: all .2s; }

@@ -228,6 +228,49 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     </a>`).join("");
 })();
 
+/* ---------- projects (Power BI) ---------- */
+(function projects() {
+  const list = (CONFIG.projects || []).filter(p => !p.hidden);
+  if (!list.length) {
+    $("#projects").remove();
+    document.querySelector('a[href="#projects"]')?.parentElement.remove();
+    return;
+  }
+  $("#projSub").textContent = CONFIG.projectsSubtitle || "";
+  const ext = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  $("#projGrid").innerHTML = list.map((p, i) => `
+    <a class="card proj reveal" href="${esc(p.link)}" target="_blank" rel="noopener" style="transition-delay:${i * 90}ms" aria-label="Open the ${esc(p.title)} report (opens in a new tab)">
+      <div class="thumb">
+        ${(p.images || []).map((src, k) => `<img src="${esc(src)}" alt="${esc(p.title)}, report page ${k + 1}" loading="lazy" class="${k ? "" : "on"}">`).join("")}
+        <span class="proj-badge"><i></i>Live${p.pages ? " · " + p.pages + " pages" : ""}</span>
+        ${(p.images || []).length > 1 ? `<span class="proj-dots">${p.images.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</span>` : ""}
+      </div>
+      <div class="proj-body">
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.desc)}</p>
+        <div class="tags">${(p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+        <span class="proj-link">Open live report ${ext}</span>
+      </div>
+    </a>`).join("");
+
+  // each preview cycles through its report pages, like the hero photo
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!still) document.querySelectorAll("#projGrid .proj").forEach((card, i) => {
+    const imgs = [...card.querySelectorAll(".thumb img")], dots = [...card.querySelectorAll(".proj-dots i")];
+    if (imgs.length < 2) return;
+    let n = 0, paused = false;
+    card.addEventListener("mouseenter", () => paused = true);
+    card.addEventListener("mouseleave", () => paused = false);
+    setTimeout(() => setInterval(() => {
+      if (paused || document.hidden) return;
+      imgs[n].classList.remove("on"); dots[n]?.classList.remove("on");
+      n = (n + 1) % imgs.length;
+      imgs[n].classList.add("on"); dots[n]?.classList.add("on");
+    }, 2800), i * 700);
+  });
+  $("#ghMore").href = L.github;
+})();
+
 /* ---------- photography ---------- */
 (function photography() {
   const photos = CONFIG.gallery || [];
