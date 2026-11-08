@@ -238,22 +238,55 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   }
   $("#projSub").textContent = CONFIG.projectsSubtitle || "";
   const ext = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const SHOW = CONFIG.projectsShow || 6;
   $("#projGrid").innerHTML = list.map((p, i) => `
-    <a class="card proj reveal" href="${esc(p.link)}" target="_blank" rel="noopener" style="transition-delay:${i * 90}ms" aria-label="${esc(p.title)} (opens in a new tab)">
+    <article class="card proj reveal" data-type="${esc(p.type || "")}" data-i="${i}" style="transition-delay:${(i % 3) * 90}ms">
       <div class="thumb">
-        ${(p.images || []).map((src, k) => `<img src="${esc(src)}" alt="${esc(p.title)}, report page ${k + 1}" loading="lazy" class="${k ? "" : "on"}">`).join("")}
+        ${(p.images || []).map((src, k) => `<img src="${esc(src)}" alt="${esc(p.title)}, preview ${k + 1}" loading="lazy" class="${k ? "" : "on"}">`).join("")}
         <span class="proj-badge"><i></i>${p.badge ? esc(p.badge) : "Live" + (p.pages ? " · " + p.pages + " pages" : "")}</span>
         ${(p.images || []).length > 1 ? `<span class="proj-dots">${p.images.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</span>` : ""}
       </div>
       <div class="proj-body">
-        <h3>${esc(p.title)}</h3>
+        <h3><a class="proj-main" href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.title)}</a></h3>
         <p>${esc(p.desc)}</p>
         <div class="tags">${(p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
-        <span class="proj-link">${esc(p.cta || "Open live report")} ${ext}</span>
+        <div class="proj-links">
+          <span class="proj-link">${esc(p.cta || "Open live report")} ${ext}</span>
+          ${p.extra ? `<a class="proj-link proj-extra" href="${esc(p.extra.link)}" target="_blank" rel="noopener">${esc(p.extra.label)} ${ext}</a>` : ""}
+        </div>
       </div>
-    </a>`).join("");
+    </article>`).join("");
 
-  // each preview cycles through its report pages, like the hero photo
+  // filter buttons (only when there are 2+ project types) and a "Show all" after the first few
+  const types = [...new Set(list.map(p => p.type).filter(Boolean))];
+  const filters = $("#projFilters");
+  if (types.length > 1) filters.innerHTML = ["All", ...types].map((t, i) => `<button type="button" class="ph-filter${i ? "" : " on"}" data-type="${esc(t)}">${esc(t)}</button>`).join("");
+  else filters.remove();
+  const moreWrap = $("#projMoreWrap");
+  let type = "All", expanded = list.length <= SHOW;
+  const apply = () => {
+    let shown = 0;
+    document.querySelectorAll("#projGrid .proj").forEach(c => {
+      const match = type === "All" || c.dataset.type === type;
+      const vis = match && (expanded || type !== "All" || shown < SHOW);
+      if (vis) shown++;
+      c.hidden = !vis;
+      if (vis) c.classList.add("in");
+    });
+    if (moreWrap) moreWrap.hidden = expanded || type !== "All";
+  };
+  filters?.addEventListener("click", e => {
+    const b = e.target.closest(".ph-filter"); if (!b) return;
+    filters.querySelectorAll(".ph-filter").forEach(x => x.classList.toggle("on", x === b));
+    type = b.dataset.type; apply();
+  });
+  if (moreWrap) {
+    moreWrap.querySelector("button").textContent = `Show all ${list.length} projects`;
+    moreWrap.querySelector("button").addEventListener("click", () => { expanded = true; apply(); });
+  }
+  apply();
+
+  // each preview cycles through its pages, like the hero photo
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!still) document.querySelectorAll("#projGrid .proj").forEach((card, i) => {
     const imgs = [...card.querySelectorAll(".thumb img")], dots = [...card.querySelectorAll(".proj-dots i")];
@@ -262,7 +295,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     card.addEventListener("mouseenter", () => paused = true);
     card.addEventListener("mouseleave", () => paused = false);
     setTimeout(() => setInterval(() => {
-      if (paused || document.hidden) return;
+      if (paused || document.hidden || card.hidden) return;
       imgs[n].classList.remove("on"); dots[n]?.classList.remove("on");
       n = (n + 1) % imgs.length;
       imgs[n].classList.add("on"); dots[n]?.classList.add("on");
