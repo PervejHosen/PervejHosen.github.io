@@ -239,17 +239,17 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   $("#projSub").textContent = CONFIG.projectsSubtitle || "";
   const ext = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   $("#projGrid").innerHTML = list.map((p, i) => `
-    <a class="card proj reveal" href="${esc(p.link)}" target="_blank" rel="noopener" style="transition-delay:${i * 90}ms" aria-label="Open the ${esc(p.title)} report (opens in a new tab)">
+    <a class="card proj reveal" href="${esc(p.link)}" target="_blank" rel="noopener" style="transition-delay:${i * 90}ms" aria-label="${esc(p.title)} (opens in a new tab)">
       <div class="thumb">
         ${(p.images || []).map((src, k) => `<img src="${esc(src)}" alt="${esc(p.title)}, report page ${k + 1}" loading="lazy" class="${k ? "" : "on"}">`).join("")}
-        <span class="proj-badge"><i></i>Live${p.pages ? " · " + p.pages + " pages" : ""}</span>
+        <span class="proj-badge"><i></i>${p.badge ? esc(p.badge) : "Live" + (p.pages ? " · " + p.pages + " pages" : "")}</span>
         ${(p.images || []).length > 1 ? `<span class="proj-dots">${p.images.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</span>` : ""}
       </div>
       <div class="proj-body">
         <h3>${esc(p.title)}</h3>
         <p>${esc(p.desc)}</p>
         <div class="tags">${(p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
-        <span class="proj-link">Open live report ${ext}</span>
+        <span class="proj-link">${esc(p.cta || "Open live report")} ${ext}</span>
       </div>
     </a>`).join("");
 

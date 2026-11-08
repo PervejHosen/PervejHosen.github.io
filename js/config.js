@@ -195,8 +195,13 @@ const CONFIG = {
   /* ---------- projects (Power BI) ----------
      Each card's preview cycles through its screenshots; a click opens the live report in a new tab.
      Screenshots live in assets/img/projects/. Set hidden: true to keep a card off the site. */
-  projectsSubtitle: "Interactive Power BI reports. Click any card to explore the live report.",
+  projectsSubtitle: "Interactive reports and case studies. Click any card to explore it.",
   projects: [
+    { title: "Customer Segmentation & Retention", badge: "Case study · SQL",
+      desc: "RFM segmentation of 541,909 real retail transactions in a bronze, silver and gold SQL pipeline, with quarterly segment migration and cohort retention. Finding: 31% of customers drive 77% of sales.",
+      tags: ["SQL", "DuckDB", "RFM", "Cohort analysis"],
+      link: "projects/customer-segmentation/", cta: "Read the case study",
+      images: ["assets/img/projects/rfm-1.jpg", "assets/img/projects/rfm-2.jpg", "assets/img/projects/rfm-3.jpg", "assets/img/projects/rfm-4.jpg"] },
     { title: "HR Analytics", pages: 9,
       desc: "A 9-page people analytics report on 1,471 employees: headcount, 16.1% attrition by department, tenure, salary and age, hiring trends, demographics, a 9-box talent grid, increments, satisfaction and leave.",
       tags: ["Power BI", "DAX", "Data modeling", "Bookmarks"],

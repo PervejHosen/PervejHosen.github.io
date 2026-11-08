@@ -281,7 +281,8 @@ footer { background: var(--navy); color: #64748b; text-align: center; padding: 3
 @media (max-width: 640px) { .edu { padding: 18px; } }
 
 /* ---------- projects (Power BI) ---------- */
-.proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.proj-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+@media (max-width: 760px) { .proj-grid { grid-template-columns: minmax(0, 1fr); } }
 .proj { overflow: hidden; display: flex; flex-direction: column; color: inherit; transition: transform .3s, border-color .3s, box-shadow .3s; }
 .proj:hover { transform: translateY(-6px); border-color: rgba(34, 211, 238, .55); box-shadow: 0 26px 50px -28px rgba(8, 145, 178, .55); }
 .thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #e8eef4; border-bottom: 1px solid var(--border); }
