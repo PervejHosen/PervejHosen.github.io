@@ -250,7 +250,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
       </div>
       <div class="proj-body">
         <h3><a class="proj-main" href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.title)}</a></h3>
-        <p>${esc(p.desc)}</p>
+        <p title="${esc(p.desc)}">${esc(p.desc)}</p>
         <div class="tags">${(p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
         <div class="proj-links">
           <span class="proj-link">${esc(p.cta || "Open live report")} ${ext}</span>
