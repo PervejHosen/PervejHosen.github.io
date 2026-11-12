@@ -226,6 +226,16 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
       <span class="cert-main"><b>${esc(c.title)}</b><span class="cert-meta">${esc(c.issuer)}${c.date ? " · " + esc(c.date) : ""}</span></span>
       ${arrow}
     </a>`).join("");
+  // phones: show the first few certificates, the rest behind a button (CSS hides them below 640px)
+  const certs = (CONFIG.certifications || []).length, shown = 3;
+  if (certs > shown) {
+    const more = document.createElement("div");
+    more.className = "more-wrap cert-more";
+    const total = certs + ($("#certFeatured") ? 1 : 0);
+    more.innerHTML = `<button class="btn btn-outline" type="button">Show all ${total} certifications</button>`;
+    $("#certGrid").after(more);
+    more.querySelector("button").addEventListener("click", () => { $("#certGrid").classList.add("open"); more.remove(); });
+  }
 })();
 
 /* ---------- projects ---------- */
