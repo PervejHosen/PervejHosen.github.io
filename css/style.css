@@ -436,3 +436,7 @@ button.contact-card { width: 100%; font: inherit; text-align: left; color: inher
 .contact-card .cc-icon svg { fill: var(--green); }
 .form input:focus, .form textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29, 74, 53, .15); }
 .nav-cta { border-radius: 999px; }
+/* softer chart lines behind the hero text on smaller screens */
+@media (max-width: 900px) { .hero-lines { opacity: .35; } .hero-grid { opacity: .6; } }
+/* "live" dot on project badges in a green that sits with the palette */
+.proj-badge i { background: #8FD1A8; box-shadow: 0 0 0 3px rgba(143, 209, 168, .25); }
