@@ -16,7 +16,7 @@ const LINKS = {
     email: "hello@pervejhosen.com",
     linkedin: "https://www.linkedin.com/in/pervejhosen/",
     github: "https://github.com/PervejHosen",
-    kaggle: "https://www.kaggle.com/pervejhosen"
+    newsletter: "https://datapeopleacton.substack.com"   // shows as a card in Contact (not in the hero icons)
   },
   // Google Drive certificates ("" = the card shows no "View certificate" link)
   drive: {
@@ -41,7 +41,7 @@ const CONFIG = {
   logo: "Pervej Hosen",
   // Hero photos: they change every second (click/tap to skip ahead). Square photos work best.
   // Files that don't exist yet are skipped automatically, so you can add them any time.
-  photos: ["assets/img/hero/headshot.jpg", "assets/img/hero/trek.jpg", "assets/img/hero/paragliding.jpg"],
+  photos: ["assets/img/hero/trek-2.jpg", "assets/img/hero/trek.jpg", "assets/img/hero/trek-3.jpg", "assets/img/hero/trek-4.jpg", "assets/img/hero/trek-5.jpg", "assets/img/hero/paragliding.jpg"],
   resume: "assets/docs/resume.pdf",        // your résumé PDF
   roles: ["Sr. Power BI Developer", "Analytics Engineer", "Data Analyst", "Independent Consultant", "Data Storyteller"],
   objective: "I turn raw data into decisions people trust: Power BI dashboards, SQL models and analytics pipelines on Snowflake, BigQuery and Databricks for teams in the US, UAE, Germany and Australia.",
@@ -191,6 +191,14 @@ const CONFIG = {
     // HackerRank SQL (Basic) — left out on purpose. To show it, add:
     // { title: "SQL (Basic)", issuer: "HackerRank", mono: "HR", monoColor: "#1ba94c", link: "https://www.hackerrank.com/certificates/330cb5d307eb" }
   ],
+
+  /* ---------- newsletter band (between Services and Contact) ---------- */
+  newsletter: {
+    name: "Data People Act On",
+    blurb: "Every two weeks: one data insight for leaders and one practical Power BI and analytics tip for builders. Free.",
+    cta: "Subscribe on Substack",
+    url: "https://datapeopleacton.substack.com/subscribe"
+  },
 
   /* ---------- services ----------
      Cards in the Services section. "cta" is the button text; it jumps to the contact form

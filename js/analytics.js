@@ -39,6 +39,7 @@
     if (el.id === "resumeBtn") return window.track("resume_open");
     if (el.id === "hireBtn") return window.track("get_in_touch_click");
     if (el.id === "servicesBtn") return window.track("services_click");
+    if (el.id === "newsletterBtn" || /substack\.com/.test(el.getAttribute("href") || "")) return window.track("newsletter_click", { place: el.id === "newsletterBtn" ? "band" : el.id === "heroNewsletterBtn" ? "hero" : "contact" });
     if (el.classList.contains("svc-cta")) return window.track("service_enquiry", { service: el.dataset.service || "" });
     if (el.classList.contains("copy-email")) return window.track("email_copy");
     const card = el.closest(".proj");

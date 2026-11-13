@@ -13,7 +13,8 @@ const ICONS = {
   linkedin: '<svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>',
   github: '<svg viewBox="0 0 24 24"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.6.2 2.9.1 3.2.8.8 1.3 1.9 1.3 3.1 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.1.9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3"/></svg>',
   kaggle: '<svg viewBox="0 0 24 24"><path d="M18.83 23.85c-.02.1-.12.15-.29.15h-3.08a.6.6 0 0 1-.52-.29l-5.08-6.46-1.42 1.35v5.03c0 .25-.12.37-.37.37H5.68c-.25 0-.37-.12-.37-.37V.37c0-.25.12-.37.37-.37h2.39c.25 0 .37.12.37.37V14.6l6.1-6.17a.6.6 0 0 1 .45-.21h3.18c.14 0 .23.06.27.17.05.13.04.22-.03.3l-6.45 6.24 6.74 8.53c.1.12.12.25.13.39z"/></svg>',
-  email: '<svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg>'
+  email: '<svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg>',
+  newsletter: '<svg viewBox="0 0 24 24"><path d="M22.54 8.24H1.46V5.41h21.08v2.83zM1.46 10.81V24L12 18.11 22.54 24V10.81H1.46zM22.54 0H1.46v2.84h21.08V0z"/></svg>'
 };
 const L = CONFIG.links;
 
@@ -30,17 +31,21 @@ function toast(msg) {
 $("#logo").textContent = CONFIG.logo;
 $("#heroName").textContent = CONFIG.name;
 $("#objective").textContent = CONFIG.objective;
-$("#resumeBtn").href = CONFIG.resume;
+// optional résumé button (only if index.html still has #resumeBtn)
+if ($("#resumeBtn")) $("#resumeBtn").href = CONFIG.resume;
 // hide the résumé button until the PDF actually exists on the site
-if (!CONFIG.resume) $("#resumeBtn").remove();
-else fetch(CONFIG.resume, { method: "HEAD" }).then(r => { if (!r.ok) $("#resumeBtn")?.remove(); }).catch(() => {});
+if (!CONFIG.resume) $("#resumeBtn")?.remove();
+// hero "Newsletter" button points at the Substack subscribe page
+if ($("#heroNewsletterBtn") && CONFIG.newsletter && CONFIG.newsletter.url) $("#heroNewsletterBtn").href = CONFIG.newsletter.url;
+else $("#heroNewsletterBtn")?.remove();
+if (CONFIG.resume && $("#resumeBtn")) fetch(CONFIG.resume, { method: "HEAD" }).then(r => { if (!r.ok) $("#resumeBtn")?.remove(); }).catch(() => {});
 // until the Contact section exists, "Hire me" and "Let's talk" open an email (in a new tab) instead
 if (!$("#contact")) ["#hireBtn", "#navCta"].forEach(s => {
   const a = $(s); if (!a) return;
   a.href = "#"; a.classList.add("copy-email"); a.addEventListener("click", e => e.preventDefault());
 });
 if (CONFIG.location && $("#locLine")) $("#locLine").textContent = CONFIG.location;
-$("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k]).map(k => k === "email"
+$("#heroSocials").innerHTML = Object.keys(L).filter(k => L[k] && k !== "newsletter").map(k => k === "email"
   // the email icon here only copies the address (no new tab, no mail app)
   ? `<button type="button" class="copy-email" aria-label="Copy email address" title="Copy ${esc(L.email)}">${ICONS.email}</button>`
   : `<a href="${esc(L[k])}" target="_blank" rel="noopener" aria-label="${k}">${ICONS[k] || ""}</a>`).join("");
@@ -467,8 +472,23 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   });
 })();
 
+/* ---------- newsletter band ---------- */
+(function newsletter() {
+  const n = CONFIG.newsletter, box = $("#newsletter");
+  if (!box) return;
+  if (!n || !n.url) { box.remove(); return; }
+  box.innerHTML = `<div class="wrap nl-inner reveal">
+      <div class="nl-text">
+        <p class="kicker">Newsletter</p>
+        <h3>${esc(n.name)}</h3>
+        <p>${esc(n.blurb)}</p>
+      </div>
+      <a class="btn btn-primary nl-btn" id="newsletterBtn" href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.cta || "Subscribe")} <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>`;
+})();
+
 /* ---------- contact ---------- */
-const LINK_LABELS = { email: "Email", linkedin: "LinkedIn", github: "GitHub", kaggle: "Kaggle" };
+const LINK_LABELS = { email: "Email", linkedin: "LinkedIn", github: "GitHub", kaggle: "Kaggle", newsletter: "Newsletter" };
 $("#contactList").innerHTML = Object.keys(L).filter(k => L[k]).map(k => {
   const value = k === "email" ? L.email : L[k].replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
   const inner = `<span class="cc-icon">${ICONS[k] || ""}</span>

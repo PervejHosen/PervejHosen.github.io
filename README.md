@@ -10,7 +10,6 @@ Power BI · SQL · Snowflake · BigQuery · Databricks · Python · Microsoft PL
 <p align="center">
   🔗 <a href="https://pervejhosen.com"><b>pervejhosen.com</b></a> &nbsp;·&nbsp;
   <a href="https://www.linkedin.com/in/pervejhosen/">LinkedIn</a> &nbsp;·&nbsp;
-  <a href="https://www.kaggle.com/pervejhosen">Kaggle</a> &nbsp;·&nbsp;
   <a href="mailto:hello@pervejhosen.com">Email</a>
 </p>
 
