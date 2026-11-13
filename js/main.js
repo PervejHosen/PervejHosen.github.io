@@ -238,6 +238,42 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   }
 })();
 
+/* ---------- services ---------- */
+(function services() {
+  const list = CONFIG.services || [];
+  if (!list.length) {
+    $("#services").remove();
+    document.querySelector('a[href="#services"]')?.parentElement.remove();
+    $("#servicesBtn")?.remove();
+    return;
+  }
+  $("#servicesIntro").textContent = CONFIG.servicesIntro || "";
+  const I = {
+    report: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+    pipeline: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>',
+    chart: '<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/>',
+    ai: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+    call: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>'
+  };
+  const arrow = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  $("#svcGrid").innerHTML = list.map((s, i) => `
+    <article class="card svc reveal" style="transition-delay:${(i % 3) * 90}ms">
+      <span class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[s.icon] || I.report}</svg></span>
+      <h3>${esc(s.title)}</h3>
+      <p>${esc(s.desc)}</p>
+      ${s.get ? `<p class="svc-get"><b>You get:</b> ${esc(s.get)}</p>` : ""}
+      <a href="#contact" class="svc-cta" data-service="${esc(s.title)}">${esc(s.cta || "Discuss this")} ${arrow}</a>
+    </article>`).join("");
+  // the button writes the service into the contact form, then the page scrolls there
+  $("#svcGrid").addEventListener("click", e => {
+    const a = e.target.closest(".svc-cta"); if (!a) return;
+    const msg = $("#f-msg"); if (!msg) return;
+    const line = `Hi Pervej, I'd like to talk about: ${a.dataset.service}.`;
+    if (!msg.value.trim() || msg.value.startsWith("Hi Pervej, I'd like to talk about:")) msg.value = line + "\n\n";
+    setTimeout(() => $("#f-name")?.focus({ preventScroll: true }), 700);
+  });
+})();
+
 /* ---------- projects ---------- */
 (function projects() {
   const list = (CONFIG.projects || []).filter(p => !p.hidden);
@@ -348,7 +384,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   const g = $("#gallery");
   g.innerHTML = photos.map((p, i) => `
     <figure class="ph reveal" tabindex="0" data-i="${i}" data-cat="${esc(p.category)}">
-      <img src="${esc(p.src)}" alt="${esc(p.title || "Photograph")}${p.place ? " — " + esc(p.place) : ""}" loading="lazy">
+      <img src="${esc(p.src)}" alt="${esc(p.title || "Photograph")}${p.place ? ", " + esc(p.place) : ""}" loading="lazy">
       <figcaption><b>${esc(p.title)}</b><span>${caption(p)}</span></figcaption>
     </figure>`).join("");
 

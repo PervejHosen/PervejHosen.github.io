@@ -37,7 +37,9 @@
     const el = e.target.closest("a, button");
     if (!el) return;
     if (el.id === "resumeBtn") return window.track("resume_open");
-    if (el.id === "hireBtn") return window.track("hire_me_click");
+    if (el.id === "hireBtn") return window.track("get_in_touch_click");
+    if (el.id === "servicesBtn") return window.track("services_click");
+    if (el.classList.contains("svc-cta")) return window.track("service_enquiry", { service: el.dataset.service || "" });
     if (el.classList.contains("copy-email")) return window.track("email_copy");
     const card = el.closest(".proj");
     if (card) return window.track("project_open", { project: text(card.querySelector("h3")), link: el.getAttribute("href") || "" });

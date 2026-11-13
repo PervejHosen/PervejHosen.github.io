@@ -44,7 +44,7 @@ const CONFIG = {
   photos: ["assets/img/hero/headshot.jpg", "assets/img/hero/trek.jpg", "assets/img/hero/paragliding.jpg"],
   resume: "assets/docs/resume.pdf",        // your résumé PDF
   roles: ["Sr. Power BI Developer", "Analytics Engineer", "Data Analyst", "Independent Consultant", "Data Storyteller"],
-  objective: "I turn raw data into decisions people trust — Power BI dashboards, SQL models and analytics pipelines on Snowflake, BigQuery and Databricks for teams in the US, UAE, Germany and Australia.",
+  objective: "I turn raw data into decisions people trust: Power BI dashboards, SQL models and analytics pipelines on Snowflake, BigQuery and Databricks for teams in the US, UAE, Germany and Australia.",
   location: "Based in Dhaka (UTC+6) · Working remotely with teams worldwide",
 
   links: LINKS.social,
@@ -190,6 +190,28 @@ const CONFIG = {
       link: "https://www.kaggle.com/learn/certification/pervejhosen/time-series" }
     // HackerRank SQL (Basic) — left out on purpose. To show it, add:
     // { title: "SQL (Basic)", issuer: "HackerRank", mono: "HR", monoColor: "#1ba94c", link: "https://www.hackerrank.com/certificates/330cb5d307eb" }
+  ],
+
+  /* ---------- services ----------
+     Cards in the Services section. "cta" is the button text; it jumps to the contact form
+     with the service name already written in the message. No prices on purpose. */
+  servicesIntro: "Hands-on help with reporting, data and analysis, from a single dashboard to owning your reporting end to end.",
+  services: [
+    { icon: "report", title: "End-to-end Power BI reporting",
+      desc: "I take full ownership of your reporting: requirements, data model, DAX, design, publishing to Power BI Service with scheduled refresh and row-level security, then fixes and new requests as your business changes.",
+      get: "Reports your team trusts and uses, kept in one well-run place.", cta: "Discuss this" },
+    { icon: "pipeline", title: "Analytics engineering & data pipelines",
+      desc: "SQL transformations and gold-layer models on Snowflake, BigQuery or Databricks, turning raw source data into clean, tested tables ready for Power BI, Sigma or Looker.",
+      get: "One documented source of truth your dashboards can rely on.", cta: "Discuss this" },
+    { icon: "chart", title: "Analysis, segmentation & forecasting",
+      desc: "Focused deep dives on a business question: which customers matter most, who is slipping away, what the next weeks of sales will look like. Written up so decision-makers can act on it.",
+      get: "Clear findings, the numbers behind them and next steps.", cta: "Discuss this" },
+    { icon: "ai", title: "AI automation with Claude",
+      desc: "I use Claude to automate the repetitive parts of analytics work: data cleaning, report commentary, documentation and answering questions from your data, with a person reviewing what matters.",
+      get: "Less manual work on routine reporting tasks.", cta: "Discuss this" },
+    { icon: "call", title: "1:1 call",
+      desc: "A focused session to review a dashboard, data model or reporting setup, or to plan your next data project together.",
+      get: "Honest feedback and a clear list of next steps.", cta: "Book a call" }
   ],
 
   /* ---------- projects ----------
