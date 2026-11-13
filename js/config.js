@@ -13,7 +13,7 @@
 const LINKS = {
   // contact & profiles (icons in the hero + cards in Contact)
   social: {
-    email: "pervejhosen2@gmail.com",
+    email: "hello@pervejhosen.com",
     linkedin: "https://www.linkedin.com/in/pervejhosen/",
     github: "https://github.com/PervejHosen",
     kaggle: "https://www.kaggle.com/pervejhosen"
