@@ -230,6 +230,11 @@ const CONFIG = {
   projectsShow: 6,   // cards shown before the "Show all" button
   projectFilters: ["Dashboards & Reporting", "Data Pipelines & Modeling", "Analysis & Insights", "Forecasting & ML"],
   projects: [
+    { types: ["Dashboards & Reporting", "Analysis & Insights", "Forecasting & ML"], title: "Where It Hurts", pages: 8,
+      desc: "A safety report built as one custom Power BI visual: a 3D body in hand-written WebGL, a case pyramid, a what-if planner and a forecast.",
+      tags: ["Power BI", "Custom visual", "TypeScript", "WebGL"],
+      link: "https://app.powerbi.com/view?r=eyJrIjoiYTQyMDM3YjctZjI4NC00OTc2LTk4ZjQtZDMzZmRlZTEyYmIwIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D&pageName=dc589282d83bdad4dccb",
+      images: ["assets/img/projects/whereithurts-1.jpg", "assets/img/projects/whereithurts-2.jpg", "assets/img/projects/whereithurts-3.jpg", "assets/img/projects/whereithurts-4.jpg"] },
     { types: ["Forecasting & ML", "Data Pipelines & Modeling", "Analysis & Insights"], title: "Store Sales Forecasting", badge: "Case study · Python",
       desc: "Six-week sales forecasts for 1,115 stores, backtested on rolling windows. LightGBM cuts the error by 40% vs a planner's average.",
       tags: ["Python", "LightGBM", "SQL", "Backtesting"],
