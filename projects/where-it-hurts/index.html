@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where It Hurts: A Safety Report in One Visual · Pervej Hosen</title>
+<meta name="description" content="A case study of a workplace safety report built as one custom Power BI visual: a 3D body map, a case pyramid, a what-if planner and a forecast, tested on a fictional dataset with four hidden problems.">
+<meta property="og:title" content="Where It Hurts: A Safety Report in One Visual · Pervej Hosen">
+<meta property="og:description" content="A group injury rate of 2.1 looked fine. Underneath it sat four problems. A case study in rates, not totals.">
+<meta property="og:image" content="https://pervejhosen.com/assets/img/projects/whereithurts-1.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1D4A35; --ink: #16382A; --muted: #4F5E52; --faint: #66766A; --line: #DCCFB6; --grid: #E6DCC8;
+  --bg: #EEE5D4; --card: #F7F1E6; --accent: #1D4A35; --ochre: #B87318; --tomato: #F2462E; --tomato-ink: #B8301C; --slate: #7D8D99; --pale: #C9BFA9;
+  --radius: 14px; --shadow: 0 10px 30px -22px rgba(29, 74, 53, .4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+/* top bar + hero */
+.top { background: var(--navy); color: #EEE5D4; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 0; font-size: .92rem; }
+.top-bar a { color: #EEE5D4; text-decoration: none; font-weight: 600; }
+.top-bar a:hover { color: #FF9A85; }
+.top-bar .gh { border: 1px solid rgba(238, 229, 212, .4); border-radius: 999px; padding: 6px 14px; white-space: nowrap; }
+.hero { padding: 36px 0 60px; }
+.kicker { font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #FF9A85; }
+.hero h1 { font-size: clamp(1.9rem, 4.4vw, 3rem); line-height: 1.12; letter-spacing: -.02em; font-weight: 800; color: #F6F0E4; margin: 10px 0 14px; max-width: 860px; }
+.hero h1 span { color: #FF8A73; }
+.hero p { color: #D9D2C2; max-width: 780px; font-size: 1.05rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.chips span { font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #F6F0E4; border: 1px solid rgba(238, 229, 212, .3); background: rgba(238, 229, 212, .08); border-radius: 999px; padding: 4px 11px; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1rem; text-decoration: none; border-radius: 999px; padding: 12px 22px; }
+.btn.p { background: var(--tomato); color: #fff; box-shadow: 0 12px 28px -14px rgba(242, 70, 46, .75); }
+.btn.p:hover { background: #E23A22; }
+.btn.s { border: 1.5px solid rgba(238, 229, 212, .55); color: #F6F0E4; }
+.btn.s:hover { background: #F6F0E4; color: var(--navy); }
+
+/* KPI tiles */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: -34px; position: relative; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.kpi b { display: block; font-size: 1.85rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+.kpi span { color: var(--muted); font-size: .88rem; }
+@media (max-width: 820px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* sections */
+section { margin-top: 60px; scroll-margin-top: 20px; }
+.lab { font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--tomato-ink); margin-bottom: 4px; }
+h2 { font-size: 1.6rem; letter-spacing: -.01em; font-weight: 800; margin-bottom: 6px; }
+.lead { color: var(--muted); max-width: 780px; margin-bottom: 20px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+.card h3 { font-size: 1.02rem; font-weight: 700; }
+.card .sub { color: var(--faint); font-size: .86rem; margin: 2px 0 14px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+
+/* questions */
+.qgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .qgrid { grid-template-columns: minmax(0, 1fr); } }
+.qcol h3 { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.q { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+.q b { display: block; font-size: .95rem; color: var(--ink); }
+.q span { display: block; color: var(--muted); font-size: .88rem; margin-top: 3px; }
+.q em { font-style: normal; font-weight: 700; color: var(--tomato-ink); }
+
+/* findings */
+.find { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; align-items: center; margin-bottom: 26px; }
+.find.rev { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.find.rev .ftxt { order: 2; }
+@media (max-width: 900px) { .find, .find.rev { grid-template-columns: minmax(0, 1fr); } .find.rev .ftxt { order: 0; } }
+.ftxt .num { font-size: .78rem; font-weight: 800; color: var(--tomato-ink); letter-spacing: .1em; text-transform: uppercase; }
+.ftxt h3 { font-size: 1.35rem; line-height: 1.25; font-weight: 800; letter-spacing: -.01em; margin: 4px 0 8px; }
+.ftxt p { color: var(--muted); }
+.ftxt p + p { margin-top: 8px; }
+.ftxt strong { color: var(--ink); }
+
+/* charts */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: .85rem; color: var(--muted); margin-bottom: 10px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: inherit; }
+.tick { fill: var(--faint); font-size: 11px; }
+.lbl { fill: var(--ink); font-size: 12px; font-weight: 600; }
+.lbl-muted { fill: var(--muted); font-size: 11px; }
+#tip { position: fixed; z-index: 50; pointer-events: none; background: var(--navy); color: #f1f5f9; font-size: .82rem; line-height: 1.45; padding: 8px 11px; border-radius: 8px; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, .5); opacity: 0; transition: opacity .12s; max-width: 260px; }
+#tip b { color: #fff; }
+
+/* gallery */
+.gal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .gal { grid-template-columns: minmax(0, 1fr); } }
+.gal figure { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.gal img { display: block; width: 100%; height: auto; }
+.gal figcaption { padding: 10px 14px; font-size: .86rem; color: var(--muted); }
+.gal figcaption b { color: var(--ink); }
+
+/* readers */
+.readers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .readers { grid-template-columns: minmax(0, 1fr); } }
+.reader { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.reader .tag { display: inline-block; font-size: .7rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 3px 10px; margin-bottom: 8px; background: #DCE8DF; color: var(--navy); }
+.reader h3 { font-size: 1.02rem; margin-bottom: 6px; }
+.reader ul { list-style: none; display: grid; gap: 8px; }
+.reader li { padding-left: 14px; border-left: 3px solid var(--line); color: var(--muted); font-size: .92rem; }
+.reader li b { color: var(--ink); }
+
+/* method */
+.pipe { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .pipe { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .pipe { grid-template-columns: minmax(0, 1fr); } }
+.layer { border-radius: 12px; padding: 16px 18px; border: 1px solid var(--line); background: var(--card); border-top: 4px solid var(--navy); }
+.layer:nth-child(2) { border-top-color: var(--ochre); } .layer:nth-child(3) { border-top-color: var(--slate); } .layer:nth-child(4) { border-top-color: var(--tomato); }
+.layer h4 { font-size: .95rem; margin-bottom: 4px; }
+.layer p, .layer li { color: var(--muted); font-size: .88rem; }
+.layer ul { padding-left: 18px; margin-top: 4px; }
+.review { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+@media (max-width: 700px) { .review { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rv { border-radius: 12px; padding: 14px 16px; background: #fff8ee; border: 1px solid var(--line); }
+.rv b { display: block; font-size: 1.6rem; font-weight: 800; line-height: 1.1; }
+.rv span { font-size: .85rem; color: var(--muted); }
+.dropped { margin-top: 14px; display: grid; gap: 10px; }
+.dropped div { font-size: .9rem; color: var(--muted); padding-left: 14px; border-left: 3px solid var(--tomato); }
+.dropped b { color: var(--ink); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; background: #E9E0CE; padding: 1px 5px; border-radius: 4px; }
+.note { color: var(--faint); font-size: .84rem; margin-top: 10px; }
+.limits { list-style: none; display: grid; gap: 8px; }
+.limits li { color: var(--muted); font-size: .93rem; padding-left: 14px; border-left: 3px solid var(--line); }
+.closer { background: var(--navy); color: #F6F0E4; border-radius: 18px; padding: 30px 28px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; }
+.closer h2 { color: #F6F0E4; }
+.closer p { color: #D9D2C2; max-width: 640px; }
+.closer .btns { margin-top: 0; }
+@media (max-width: 760px) { .closer { grid-template-columns: minmax(0, 1fr); } }
+footer { margin: 64px 0 40px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--faint); font-size: .88rem; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 560px) { .card, .reader { padding: 16px; } .kpi b { font-size: 1.5rem; } .btn { width: 100%; justify-content: center; } }
+.fict { display: flex; gap: 12px; align-items: flex-start; background: #FBE7E1; border: 1px solid #F3C2B6; border-radius: 12px; padding: 12px 16px; margin-top: 22px; color: #6B2A1C; font-size: .92rem; }
+.fict b { color: #8E2A17; }
+.probs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .probs { grid-template-columns: minmax(0, 1fr); } }
+.prob { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+.prob .num { font-size: .74rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--tomato-ink); }
+.prob h3 { font-size: 1.12rem; font-weight: 800; line-height: 1.3; margin: 4px 0 6px; }
+.prob p { color: var(--muted); font-size: .93rem; }
+.prob .where { margin-top: auto; padding-top: 12px; font-size: .84rem; color: var(--muted); border-top: 1px dashed var(--line); }
+.prob .where b { color: var(--ink); }
+.ba { margin: 14px 0 12px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-bar">
+      <a href="../../#projects">← Pervej Hosen · Portfolio</a>
+      <a class="gh" href="https://app.powerbi.com/view?r=eyJrIjoiYTQyMDM3YjctZjI4NC00OTc2LTk4ZjQtZDMzZmRlZTEyYmIwIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D&pageName=dc589282d83bdad4dccb" target="_blank" rel="noopener">Open the live report ↗</a>
+    </div>
+    <div class="hero">
+      <p class="kicker">Case study · Power BI · Custom visual</p>
+      <h1>Where It Hurts: <span>a safety report people actually read</span></h1>
+      <p>Most safety reports are a table of rates that nobody reads. I wanted one where a site manager sees in seconds where people get hurt, whether a rise is real or just more hours worked, and what to fix first. The whole report lives inside one custom visual, including a 3D body you can turn and click.</p>
+      <div class="chips"><span>Power BI</span><span>Custom visual</span><span>TypeScript</span><span>WebGL</span><span>DAX</span><span>Python</span></div>
+      <div class="btns">
+        <a class="btn p" href="https://app.powerbi.com/view?r=eyJrIjoiYTQyMDM3YjctZjI4NC00OTc2LTk4ZjQtZDMzZmRlZTEyYmIwIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D&pageName=dc589282d83bdad4dccb" target="_blank" rel="noopener">Open the live report ↗</a>
+        <a class="btn s" href="#problems">See the four hidden problems</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="kpis">
+    <div class="kpi"><b>20.9M</b><span>hours worked across 8 sites and 30 months</span></div>
+    <div class="kpi"><b>1,492</b><span>injury cases, 219 of them recordable</span></div>
+    <div class="kpi"><b>2.1</b><span>group TRIR: unremarkable for heavy industry</span></div>
+    <div class="kpi"><b>4</b><span>problems hidden underneath that total</span></div>
+  </div>
+  <div class="fict"><span>ⓘ</span><span><b>All numbers here are fictional.</b> The data describes a made-up industrial contractor, generated so that every pattern is known in advance. That makes it a fair test: the question is whether the report finds what was planted.</span></div>
+
+  <section id="question">
+    <p class="lab">The question</p>
+    <h2>Is it a rate problem or a volume problem?</h2>
+    <p class="lead">A site that doubles its headcount will have more injuries without being any less safe. So every number in the report is a rate: cases per 200,000 hours worked, always divided by the hours of the same selection. Filter to one site, one shift or one group of workers, and the denominator follows.</p>
+    <div class="qgrid">
+      <div class="qcol"><h3>For a site manager</h3>
+        <div class="q"><b>Where do people get hurt?</b><span>A <em>3D body</em> with 27 regions, shaded by cases, days lost or recordables.</span></div>
+        <div class="q"><b>Which site needs attention?</b><span>Cases a month set against <em>the hours each site worked</em>.</span></div>
+      </div>
+      <div class="qcol"><h3>For the safety lead</h3>
+        <div class="q"><b>Who is hurt most, per hour worked?</b><span>Employees against contractors, <em>shifts, roles, new starters</em> and PPE.</span></div>
+        <div class="q"><b>Did something change?</b><span>A step finder flags a site whose rate <em>jumped</em> for one part of the body.</span></div>
+      </div>
+      <div class="qcol"><h3>For the director</h3>
+        <div class="q"><b>What do we fix first, and is it enough?</b><span>Sliders on the <em>six biggest harm patterns</em>, with the route to target.</span></div>
+        <div class="q"><b>Where are we heading?</b><span>Six months ahead, with a range <em>checked against the past</em>.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="problems">
+    <p class="lab">The test</p>
+    <h2>Four problems hidden under a TRIR of 2.1</h2>
+    <p class="lead">Each one was planted in the data so it stays small in the group total. Here is what each looks like, and where the report surfaces it.</p>
+    <div class="probs">
+      <div class="prob"><p class="num">Problem 1 · Jebel Ali</p><h3>A cheaper glove</h3>
+        <p>From September 2025 the site switched to a glove with lower cut resistance. Hand and finger injuries rose from <strong>3.3 to 8.8</strong> per 200,000 hours, while the hours worked stayed flat. A rate step, not a volume step.</p>
+        <div class="ba" id="b1"></div>
+        <p class="where"><b>Where it shows:</b> the hand lights up on the 3D body, the Overview's step finder flags the site, and Who's at risk shows wrong-spec PPE turning into recordables.</p></div>
+      <div class="prob"><p class="num">Problem 2 · Rotterdam-Botlek</p><h3>Manual lifting, on nights only</h3>
+        <p>A conveyor was retired in January 2026 and the night shift went back to lifting by hand. On that slice, lower-back cases went from <strong>0.41 to 4.81</strong> per 200,000 hours, and days away per 200,000 hours from 7.8 to 27.3. Invisible in the group rate.</p>
+        <div class="ba" id="b2"></div>
+        <p class="where"><b>Where it shows:</b> filter to the site and the night shift; the lower back turns dark on the body and the Sites page shows the jump.</p></div>
+      <div class="prob"><p class="num">Problem 3 · Pasir Gudang</p><h3>New starters' eyes</h3>
+        <p>Headcount grew 40% from March 2026. Eye injuries looked in line with the extra hours, but 4 of the 7 were people in their first 90 days, a group that is 14% of the workforce: about <strong>4 times</strong> their share.</p>
+        <div class="ba" id="b3"></div>
+        <p class="where"><b>Where it shows:</b> Who's at risk, new starters chart: share of recordables divided by share of people.</p></div>
+      <div class="prob"><p class="num">Problem 4 · Port Arthur</p><h3>A data problem, not a safety one</h3>
+        <p>Two 2024 cases record 214 and 260 days away, past the 180-day cap in US record-keeping rules, and that year codes more cases as "multiple body parts", so every specific region looks lighter than it was.</p>
+        <p style="margin-top:8px">The report does not fix this for you. It is the honest limit of any dashboard: it is only as good as the log behind it, so the Guide page says how to read the data, not just what it shows.</p>
+        <p class="where"><b>Lesson:</b> check the log before trusting the chart.</p></div>
+    </div>
+    <div class="card" style="margin-top:16px"><h3>A flag is a prompt to look, not a verdict</h3><p class="sub" style="margin:4px 0 0">The Overview's step finder looks for a site where the rate for one part of the body rose to at least 1.8 times its earlier level, with a rough Poisson check that the rise is well past chance. It lists four changes. Jebel Ali is one of them; the other three, Vlissingen at the top, were not planted. That is how an alarm should behave: it points to where to look, and a person decides what it means.</p></div>
+  </section>
+
+  <section id="what">
+    <p class="lab">What would help</p>
+    <h2>Fix the right thing first</h2>
+    <p class="lead">The What if page takes the six patterns that cause the most recordable cases and gives each a slider. Move one and the chart shows the route from today's rate to the target, one step per fix. Hours stay the same, and avoided cases are assumed not to move elsewhere; the page says so.</p>
+  </section>
+
+  <section id="report">
+    <p class="lab">The report</p>
+    <h2>Eight pages in one custom visual</h2>
+    <p class="lead">Anatomy, Overview, Pyramid, Sites, Who's at risk, What if, Forecast and Guide. Filters for period, shift, workers, cases and sites follow you across every page, and the Guide shows every formula with the live numbers in it.</p>
+    <div class="gal">
+      <figure><img src="../../assets/img/projects/whereithurts-1.jpg" alt="Anatomy page with a 3D body shaded by injury cases" loading="lazy" width="900" height="506"><figcaption><b>Anatomy.</b> A 3D body with 27 regions. Click one for its causes, sites and months.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/whereithurts-2.jpg" alt="Pyramid page stacking every case by severity" loading="lazy" width="900" height="506"><figcaption><b>Pyramid.</b> Every case is a block, stacked by severity, then grown by the days it cost.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/whereithurts-3.jpg" alt="What if page with sliders on harm patterns" loading="lazy" width="900" height="506"><figcaption><b>What if.</b> Sliders on the six biggest harm patterns, with the route to target.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/whereithurts-4.jpg" alt="Overview page with headline rates, site league and changes the report found" loading="lazy" width="900" height="506"><figcaption><b>Overview.</b> The board pack: four headline rates, rate against volume, the site league and the changes the report found.</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="method">
+    <p class="lab">How it was built</p>
+    <h2>One measure, one visual, no libraries</h2>
+    <p class="lead">The design goal was speed and control: everything is computed in the browser from a compact payload, so a filter answers instantly and nothing depends on a third-party chart library.</p>
+    <div class="pipe">
+      <div class="layer"><h4>Data</h4><ul><li>A star schema: 13 dimensions, facts for cases, hours worked and leading indicators</li><li>Body regions, causes and injury types coded to the OIICS standard</li><li>Generated by a script, so every pattern is known</li></ul></div>
+      <div class="layer"><h4>Model</h4><ul><li>Power BI Project in TMDL</li><li>One DAX measure packs the facts into about 60 KB of JSON</li><li>Hours shipped separately, so every rate has the right denominator</li></ul></div>
+      <div class="layer"><h4>3D</h4><ul><li>A WebGL2 renderer of about 250 lines: lighting, shadows and click picking</li><li>An open-licence body mesh, each vertex assigned to one of 27 regions by a Python script</li></ul></div>
+      <div class="layer"><h4>Report</h4><ul><li>Custom visual in TypeScript and plain JavaScript</li><li>Hand-drawn SVG charts and headlines written from the data</li><li>Tested in a browser harness the way Power BI loads it</li></ul></div>
+    </div>
+  </section>
+
+  <section id="readers">
+    <p class="lab">Who it is for</p>
+    <h2>Built to be adapted</h2>
+    <p class="lead">The data is fictional, but the model takes any incident log with dates, sites, body parts and hours worked. If your safety data sits in spreadsheets or a reporting tool nobody opens, this is the kind of report I can build on it.</p>
+  </section>
+
+  <section>
+    <div class="closer">
+      <div><h2>See it working</h2><p>The live report runs on the fictional dataset, so you can click every region, filter every site and move every slider.</p></div>
+      <div class="btns"><a class="btn p" href="https://app.powerbi.com/view?r=eyJrIjoiYTQyMDM3YjctZjI4NC00OTc2LTk4ZjQtZDMzZmRlZTEyYmIwIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D&pageName=dc589282d83bdad4dccb" target="_blank" rel="noopener">Open the report ↗</a><a class="btn s" href="../../#contact">Get in touch</a></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>All data is fictional. Body mesh: MakeHuman base mesh (CC0). Analysis and build by Pervej Hosen.</span>
+    <a href="../../#projects">← Back to portfolio</a>
+  </footer>
+</main>
+<div id="tip" role="tooltip"></div>
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (n, a, p, t) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (t != null) e.textContent = t; p && p.appendChild(e); return e; };
+  // before and after bars: same scale per card, after in tomato
+  const ba = (id, unit, rows) => {
+    const host = document.getElementById(id), W = Math.max(280, host.clientWidth), rowH = 38, L = 112, R = 64, H = rows.length * rowH;
+    const s = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img" }), max = Math.max(...rows.map(r => r[1]));
+    rows.forEach(([lab, v, after], i) => {
+      const y = i * rowH + 6, w = Math.max(3, (W - L - R) * v / max);
+      el("text", { x: 0, y: y + 17, class: "lbl" }, s, lab);
+      el("rect", { x: L, y, width: w, height: 24, rx: 5, fill: after ? "#F2462E" : "#1D4A35" }, s);
+      el("text", { x: L + w + 8, y: y + 17, class: "lbl", fill: after ? "#B8301C" : "#1D4A35" }, s, String(v) + unit);
+    });
+    host.appendChild(s);
+    const n = document.createElement("p"); n.className = "sub"; n.style.cssText = "font-size:.8rem;color:var(--faint);margin-top:2px"; n.textContent = rows.note || ""; if (rows.note) host.appendChild(n);
+  };
+  const r1 = [["Before Sep 2025", 3.3], ["After", 8.8, 1]]; r1.note = "Hand and finger cases per 200,000 hours"; ba("b1", "", r1);
+  const r2 = [["Before Jan 2026", 0.41], ["After", 4.81, 1]]; r2.note = "Lower-back cases per 200,000 hours, night shift"; ba("b2", "", r2);
+  const r3 = [["Share of people", 14], ["Share of eye cases", 57, 1]]; r3.note = "Workers in their first 90 days, from March 2026"; ba("b3", "%", r3);
+})();
+</script>
+<script src="../../js/analytics.js?v=10e"></script>
+</body>
+</html>
