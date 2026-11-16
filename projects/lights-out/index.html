@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lights Out: Bangladesh's 2026 Load Shedding · Pervej Hosen</title>
+<meta name="description" content="A case study of Bangladesh's 2026 load shedding from every hour of public PGCB data since 2015: when the cuts fell, who carried them, why, and what would have helped. Built as a custom Power BI visual with 3D.">
+<meta property="og:title" content="Lights Out: Bangladesh's 2026 Load Shedding · Pervej Hosen">
+<meta property="og:description" content="About 3,670 GWh lost in 2026, 1.4 times 2023. The deepest cuts came after midnight, Mymensingh carried 3.4 times its share, and the August crisis followed gas supply.">
+<meta property="og:image" content="https://pervejhosen.com/assets/img/projects/lightsout-1.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1D4A35; --ink: #16382A; --muted: #4F5E52; --faint: #66766A; --line: #DCCFB6; --grid: #E6DCC8;
+  --bg: #EEE5D4; --card: #F7F1E6; --accent: #1D4A35; --ochre: #B87318; --tomato: #F2462E; --tomato-ink: #B8301C; --slate: #7D8D99; --pale: #C9BFA9;
+  --radius: 14px; --shadow: 0 10px 30px -22px rgba(29, 74, 53, .4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+/* top bar + hero */
+.top { background: var(--navy); color: #EEE5D4; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 0; font-size: .92rem; }
+.top-bar a { color: #EEE5D4; text-decoration: none; font-weight: 600; }
+.top-bar a:hover { color: #FF9A85; }
+.top-bar .gh { border: 1px solid rgba(238, 229, 212, .4); border-radius: 999px; padding: 6px 14px; white-space: nowrap; }
+.hero { padding: 36px 0 60px; }
+.kicker { font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #FF9A85; }
+.hero h1 { font-size: clamp(1.9rem, 4.4vw, 3rem); line-height: 1.12; letter-spacing: -.02em; font-weight: 800; color: #F6F0E4; margin: 10px 0 14px; max-width: 860px; }
+.hero h1 span { color: #FF8A73; }
+.hero p { color: #D9D2C2; max-width: 780px; font-size: 1.05rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.chips span { font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #F6F0E4; border: 1px solid rgba(238, 229, 212, .3); background: rgba(238, 229, 212, .08); border-radius: 999px; padding: 4px 11px; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1rem; text-decoration: none; border-radius: 999px; padding: 12px 22px; }
+.btn.p { background: var(--tomato); color: #fff; box-shadow: 0 12px 28px -14px rgba(242, 70, 46, .75); }
+.btn.p:hover { background: #E23A22; }
+.btn.s { border: 1.5px solid rgba(238, 229, 212, .55); color: #F6F0E4; }
+.btn.s:hover { background: #F6F0E4; color: var(--navy); }
+
+/* KPI tiles */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: -34px; position: relative; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.kpi b { display: block; font-size: 1.85rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+.kpi span { color: var(--muted); font-size: .88rem; }
+@media (max-width: 820px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* sections */
+section { margin-top: 60px; scroll-margin-top: 20px; }
+.lab { font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--tomato-ink); margin-bottom: 4px; }
+h2 { font-size: 1.6rem; letter-spacing: -.01em; font-weight: 800; margin-bottom: 6px; }
+.lead { color: var(--muted); max-width: 780px; margin-bottom: 20px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+.card h3 { font-size: 1.02rem; font-weight: 700; }
+.card .sub { color: var(--faint); font-size: .86rem; margin: 2px 0 14px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+
+/* questions */
+.qgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .qgrid { grid-template-columns: minmax(0, 1fr); } }
+.qcol h3 { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.q { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+.q b { display: block; font-size: .95rem; color: var(--ink); }
+.q span { display: block; color: var(--muted); font-size: .88rem; margin-top: 3px; }
+.q em { font-style: normal; font-weight: 700; color: var(--tomato-ink); }
+
+/* findings */
+.find { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; align-items: center; margin-bottom: 26px; }
+.find.rev { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.find.rev .ftxt { order: 2; }
+@media (max-width: 900px) { .find, .find.rev { grid-template-columns: minmax(0, 1fr); } .find.rev .ftxt { order: 0; } }
+.ftxt .num { font-size: .78rem; font-weight: 800; color: var(--tomato-ink); letter-spacing: .1em; text-transform: uppercase; }
+.ftxt h3 { font-size: 1.35rem; line-height: 1.25; font-weight: 800; letter-spacing: -.01em; margin: 4px 0 8px; }
+.ftxt p { color: var(--muted); }
+.ftxt p + p { margin-top: 8px; }
+.ftxt strong { color: var(--ink); }
+
+/* charts */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: .85rem; color: var(--muted); margin-bottom: 10px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: inherit; }
+.tick { fill: var(--faint); font-size: 11px; }
+.lbl { fill: var(--ink); font-size: 12px; font-weight: 600; }
+.lbl-muted { fill: var(--muted); font-size: 11px; }
+#tip { position: fixed; z-index: 50; pointer-events: none; background: var(--navy); color: #f1f5f9; font-size: .82rem; line-height: 1.45; padding: 8px 11px; border-radius: 8px; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, .5); opacity: 0; transition: opacity .12s; max-width: 260px; }
+#tip b { color: #fff; }
+
+/* gallery */
+.gal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .gal { grid-template-columns: minmax(0, 1fr); } }
+.gal figure { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.gal img { display: block; width: 100%; height: auto; }
+.gal figcaption { padding: 10px 14px; font-size: .86rem; color: var(--muted); }
+.gal figcaption b { color: var(--ink); }
+
+/* readers */
+.readers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .readers { grid-template-columns: minmax(0, 1fr); } }
+.reader { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.reader .tag { display: inline-block; font-size: .7rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 3px 10px; margin-bottom: 8px; background: #DCE8DF; color: var(--navy); }
+.reader h3 { font-size: 1.02rem; margin-bottom: 6px; }
+.reader ul { list-style: none; display: grid; gap: 8px; }
+.reader li { padding-left: 14px; border-left: 3px solid var(--line); color: var(--muted); font-size: .92rem; }
+.reader li b { color: var(--ink); }
+
+/* method */
+.pipe { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .pipe { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .pipe { grid-template-columns: minmax(0, 1fr); } }
+.layer { border-radius: 12px; padding: 16px 18px; border: 1px solid var(--line); background: var(--card); border-top: 4px solid var(--navy); }
+.layer:nth-child(2) { border-top-color: var(--ochre); } .layer:nth-child(3) { border-top-color: var(--slate); } .layer:nth-child(4) { border-top-color: var(--tomato); }
+.layer h4 { font-size: .95rem; margin-bottom: 4px; }
+.layer p, .layer li { color: var(--muted); font-size: .88rem; }
+.layer ul { padding-left: 18px; margin-top: 4px; }
+.review { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+@media (max-width: 700px) { .review { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rv { border-radius: 12px; padding: 14px 16px; background: #fff8ee; border: 1px solid var(--line); }
+.rv b { display: block; font-size: 1.6rem; font-weight: 800; line-height: 1.1; }
+.rv span { font-size: .85rem; color: var(--muted); }
+.dropped { margin-top: 14px; display: grid; gap: 10px; }
+.dropped div { font-size: .9rem; color: var(--muted); padding-left: 14px; border-left: 3px solid var(--tomato); }
+.dropped b { color: var(--ink); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; background: #E9E0CE; padding: 1px 5px; border-radius: 4px; }
+.note { color: var(--faint); font-size: .84rem; margin-top: 10px; }
+.limits { list-style: none; display: grid; gap: 8px; }
+.limits li { color: var(--muted); font-size: .93rem; padding-left: 14px; border-left: 3px solid var(--line); }
+.closer { background: var(--navy); color: #F6F0E4; border-radius: 18px; padding: 30px 28px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; }
+.closer h2 { color: #F6F0E4; }
+.closer p { color: #D9D2C2; max-width: 640px; }
+.closer .btns { margin-top: 0; }
+@media (max-width: 760px) { .closer { grid-template-columns: minmax(0, 1fr); } }
+footer { margin: 64px 0 40px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--faint); font-size: .88rem; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 560px) { .card, .reader { padding: 16px; } .kpi b { font-size: 1.5rem; } .btn { width: 100%; justify-content: center; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-bar">
+      <a href="../../#projects">← Pervej Hosen · Portfolio</a>
+      <a class="gh" href="https://github.com/PervejHosen/lights-out" target="_blank" rel="noopener">View code on GitHub ↗</a>
+    </div>
+    <div class="hero">
+      <p class="kicker">Case study · Power BI · Public data</p>
+      <h1>Lights Out: <span>Bangladesh's 2026 load shedding</span></h1>
+      <p>2026 was the worst year for load shedding in the public record. I took every hour of the grid's public data since 2015, asked twelve plain questions about when, where and why the power was cut, and answered each one with a chart that reads in a few seconds.</p>
+      <div class="chips"><span>Power BI</span><span>Custom visual</span><span>WebGL</span><span>Python</span><span>DuckDB</span><span>LightGBM</span><span>Postgres</span></div>
+      <div class="btns">
+        <a class="btn p" href="https://app.powerbi.com/view?r=eyJrIjoiYzE1N2UxZGUtNTkxZC00Y2Y3LTk1ZWMtZWQwM2M5MThjZTIyIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D" target="_blank" rel="noopener">Open the live report ↗</a>
+        <a class="btn s" href="lights-out-policy-brief.pdf" target="_blank" rel="noopener">Two-page policy brief (PDF)</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="kpis">
+    <div class="kpi"><b>3,670 GWh</b><span>lost to load shedding in 2026, PGCB estimates</span></div>
+    <div class="kpi"><b>1.4×</b><span>2023, the previous worst year since 2015</span></div>
+    <div class="kpi"><b>256 of 319</b><span>days with a cut somewhere on the grid</span></div>
+    <div class="kpi"><b>61%</b><span>of the lost energy was lost after dark</span></div>
+  </div>
+
+  <section id="questions">
+    <p class="lab">The brief</p>
+    <h2>Twelve questions, each answered with a number</h2>
+    <p class="lead">Different readers need different things from the same data. Before building anything I wrote down who would read this and what each of them would want answered.</p>
+    <div class="qgrid">
+      <div class="qcol"><h3>For government</h3>
+        <div class="q"><b>Did the shop closing rules work?</b><span><em>No effect this data can show.</em> The April rules pointed the expected way.</span></div>
+        <div class="q"><b>How much is gas worth in power?</b><span><em>3.6 to 5.7 MW</em> per million cubic feet a day.</span></div>
+        <div class="q"><b>What breaks first?</b><span>On lighter days the first hour cut is <em>6 pm</em> (76% of them).</span></div>
+        <div class="q"><b>Fuel, storage or solar?</b><span><em>61%</em> of the loss came after dark, so daytime solar reaches little of it.</span></div>
+        <div class="q"><b>Can cuts be forecast?</b><span><em>Partly.</em> Public data beats a 4-week average, but a crisis needs the supply plan.</span></div>
+        <div class="q"><b>What would open data add?</b><span>Area figures would show <em>why one zone</em> carries so much more.</span></div>
+      </div>
+      <div class="qcol"><h3>For industry and households</h3>
+        <div class="q"><b>When does it hit?</b><span>June to September, worst <em>after midnight</em>: 1,450 MW against 920 MW in the evening.</span></div>
+        <div class="q"><b>How much next week?</b><span>A <em>7-day forecast</em> with a range that held 81% of the time.</span></div>
+        <div class="q"><b>Which shifts are safest?</b><span><em>6 am to 2 pm</em> in the monsoon (720 MW); 10 pm to 6 am was worst (1,210 MW).</span></div>
+        <div class="q"><b>How much does heat add?</b><span>About <em>270 MW</em> per °C of feels-like temperature above 30 °C.</span></div>
+      </div>
+      <div class="qcol"><h3>For everyone</h3>
+        <div class="q"><b>How bad is 2026?</b><span><em>3,670 GWh</em>, 1.4 times 2023, cuts on 256 of 319 days.</span></div>
+        <div class="q"><b>Why?</b><span>Gas plants made <em>760 MW less</em>; heat added under 200 MW.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="findings">
+    <p class="lab">What the data shows</p>
+    <h2>Five findings</h2>
+    <p class="lead">All load shed figures are PGCB's grid-level estimates. Year totals count 1 am to 11 pm because the older data has no midnight readings.</p>
+
+    <div class="find">
+      <div class="ftxt"><p class="num">Finding 1</p><h3>The worst year in the public record</h3>
+        <p>About <strong>3,670 GWh</strong> lost to 15 November, <strong>1.4 times 2023</strong>. Power was cut somewhere on the grid on 256 of 319 days. August alone lost about 1,160 GWh.</p>
+        <p>2025 was the quiet year in between, which is why 2026 felt like such a shock.</p></div>
+      <div class="card"><h3>GWh lost each year</h3><p class="sub">1 am to 11 pm · hover a bar</p><div id="cYears"></div></div>
+    </div>
+
+    <div class="find rev">
+      <div class="ftxt"><p class="num">Finding 2</p><h3>The deepest cuts came after midnight</h3>
+        <p>From June to September the cut averaged about <strong>1,450 MW from midnight to 3 am</strong>, against 920 MW in the 6 to 10 pm evening peak. Solar peaked at 796 MW, and 61% of the lost energy fell after dark.</p>
+        <p>Overnight, oil plants stepped down from about 2,840 MW to 1,350 MW while demand stayed above 15,000 MW until 3 am. Why is a question only the load dispatch centre can answer.</p></div>
+      <div class="card"><h3>Average cut by hour, June to September 2026</h3><p class="sub">MW · red: midnight to 3 am · shaded: evening peak</p><div id="cHours"></div></div>
+    </div>
+
+    <div class="find">
+      <div class="ftxt"><p class="num">Finding 3</p><h3>The August crisis followed gas, not heat</h3>
+        <p>In August and September the average cut rose about <strong>1,250 MW</strong> on a year earlier. Gas plants produced about <strong>760 MW less</strong> after the Qatar force majeure and the LNG terminal fire on 21 July. Coal and oil added about 1,450 MW and still could not close the gap.</p>
+        <p>August was only about 0.7 °C warmer than 2025, worth under 200 MW of demand.</p></div>
+      <div class="card"><h3>August and September 2026 against 2025</h3><p class="sub">Average change in MW · an exact identity, nothing modelled</p><div id="cCrisis"></div></div>
+    </div>
+
+    <div class="find rev">
+      <div class="ftxt"><p class="num">Finding 4</p><h3>Mymensingh carried far more than its share</h3>
+        <p>In BPDB's zone report the Mymensingh zone carried <strong>28% of load shed with 8% of demand</strong>, 3.4 times its share. It has carried more than its share every year since 2022. Dhaka carried 16% with 36% of demand.</p>
+        <p>The report does not say why. That is the strongest case for publishing load shedding by area.</p></div>
+      <div class="card"><h3>Share of load shed vs share of demand, 2026</h3><p class="sub">BPDB evening peak report, to 3 August · six of nine zones</p><div class="legend"><span><i style="background:var(--tomato)"></i>share of load shed</span><span><i style="background:var(--navy)"></i>share of demand</span></div><div id="cZones"></div></div>
+    </div>
+
+    <div class="find">
+      <div class="ftxt"><p class="num">Finding 5</p><h3>The shop closing rules: no effect this data can show</h3>
+        <p>None of the seven changes to shop closing hours moved evening demand beyond normal week to week swings, even with the weather taken out. The April rules pointed the expected way, about 510 MW lower.</p>
+        <p>That is not proof they saved nothing. Grid totals are too noisy for an effect this size; meter data from shops would settle it.</p></div>
+      <div class="card"><h3>Change in evening demand after each rule</h3><p class="sub">MW, weather taken out · shaded band: normal week to week swing</p><div id="cPolicy"></div></div>
+    </div>
+  </section>
+
+  <section id="whatif">
+    <p class="lab">What would have helped</p>
+    <h2>Power at every hour, not more daytime power</h2>
+    <p class="lead">Each option applied to every real hour of 2026, as the share of lost energy it would have removed. It ignores grid limits, cost and where the fuel would come from. The report has sliders to try your own mix.</p>
+    <div class="card"><div id="cWhatif"></div><p class="note">Gas converted at 3.6 to 5.7 MW per million cubic feet a day, depending on plant efficiency; the striped part is that range.</p></div>
+  </section>
+
+  <section id="report">
+    <p class="lab">The report</p>
+    <h2>Nine pages in one custom visual</h2>
+    <p class="lead">Built like a small app: a side rail, a filter panel for period, season, weekday and hours, and 3D scenes drawn in WebGL that turn and pause when you point at them. It opens on the Grid Clock, a 3D landscape of every hour since 2022.</p>
+    <div class="gal">
+      <figure><img src="../../assets/img/projects/lightsout-1.jpg" alt="Grid Clock page with a 3D landscape of every hour of load shedding" loading="lazy" width="900" height="506"><figcaption><b>Grid Clock.</b> Every hour since 2022 as a 3D landscape, with who carried the cuts.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/lightsout-2.jpg" alt="Summary page with nine plain-words cards" loading="lazy" width="900" height="506"><figcaption><b>In plain words.</b> Nine short answers, each linked to the page with the detail.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/lightsout-3.jpg" alt="Why page with 3D stacks of power sources" loading="lazy" width="900" height="506"><figcaption><b>Why.</b> Where the power came from, block by block, against a year earlier.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/lightsout-4.jpg" alt="Night Gap page with a 3D map of the country at night" loading="lazy" width="900" height="506"><figcaption><b>Night Gap.</b> The country at night, hour by hour, with the sources that fall away.</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="readers">
+    <p class="lab">Who could use it</p>
+    <h2>Options by reader</h2>
+    <p class="lead">Options, not demands. Each is something the data suggests would help, with who is in a position to act.</p>
+    <div class="readers">
+      <div class="reader"><span class="tag">Government</span><h3>Power Division, PGCB, Petrobangla</h3><ul>
+        <li><b>Set the power value of gas beside its other uses.</b> 100 million cubic feet a day to power plants would have removed 31 to 43% of 2026's lost energy.</li>
+        <li><b>Publish a 7-day outlook.</b> Public data alone gets part of the way; the supply plan would do the rest.</li>
+        <li><b>Answer why oil output drops at night</b> while demand stays high.</li></ul></div>
+      <div class="reader"><span class="tag">Distribution</span><h3>BREB and distribution companies</h3><ul>
+        <li><b>Announce cut schedules by area in advance.</b> Bad days come in runs: after a day above 1,500 MW the next was too 85% of the time.</li>
+        <li><b>Publish load shedding by area and hour,</b> as the national figures already are.</li></ul></div>
+      <div class="reader"><span class="tag">Industry</span><h3>Factory managers, BGMEA, BTMA</h3><ul>
+        <li><b>Plan shifts by season.</b> The 6 am to 2 pm shift was hit least in the 2026 monsoon; the night shift most.</li>
+        <li><b>Budget generator hours</b> from the hours the report shows as risky.</li></ul></div>
+      <div class="reader"><span class="tag">Households</span><h3>Homes and shops</h3><ul>
+        <li><b>Charge, pump and cook in the safer windows.</b> Late morning was the calmest part of the day; after midnight the worst.</li>
+        <li><b>Check the week ahead</b> on the This Week page before planning anything that needs power.</li></ul></div>
+    </div>
+  </section>
+
+  <section id="method">
+    <p class="lab">How it was built</p>
+    <h2>From public files to a checked report</h2>
+    <p class="lead">Everything runs from scripts, so the whole report can be rebuilt when new data arrives. The analysis code, review and data pack are open on GitHub.</p>
+    <div class="pipe">
+      <div class="layer"><h4>Collect</h4><ul><li>PGCB hourly generation, demand and load shedding, 2015 to 2026</li><li>Daily collection from PGCB's portal from March 2026, matched 100% to the published file</li><li>BPDB zone reports; Open-Meteo weather for 9 cities</li></ul></div>
+      <div class="layer"><h4>Model</h4><ul><li>DuckDB bronze, silver and gold layers</li><li>An exact bridge: cut = demand − generation, by fuel</li><li>Weather fit of demand above 30 °C, plus a placebo test for the policy check</li></ul></div>
+      <div class="layer"><h4>Forecast</h4><ul><li>LightGBM blended with a 4-week planner's average</li><li>Backtested on rolling origins; misses by about 620 MW an hour against 650</li><li>An 80% range by regime and day ahead</li></ul></div>
+      <div class="layer"><h4>Report</h4><ul><li>Neon Postgres feeding Power BI</li><li>One DAX measure hands the data to a custom visual</li><li>SVG charts, a canvas clock and WebGL 3D scenes</li></ul></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>Checked before it went out</h3>
+      <p class="sub">Every published number was recomputed a second way, straight from the cleaned data, by a separate script: 45 checks, all passing. Then every finding went through a review for source, range, what it cannot say and neutral wording.</p>
+      <div class="review">
+        <div class="rv"><b>13</b><span>findings kept as written</span></div>
+        <div class="rv"><b>5</b><span>softened: true, but worded too strongly</span></div>
+        <div class="rv"><b>2</b><span>corrected: a date or a figure was wrong</span></div>
+        <div class="rv"><b>2</b><span>dropped: not strong enough to publish</span></div>
+      </div>
+      <div class="dropped">
+        <div><b>Dropped:</b> "After the crisis the grid served 800 to 900 MW of new load." A second check on peak demand showed about 300 MW, inside normal error.</div>
+        <div><b>Dropped:</b> "Every 100 MW less gas generation went with 53 MW more load shed." Coal and oil filling in confused the regression; an exact bridge replaced it.</div>
+        <div><b>Corrected:</b> heat adds about 270 MW per °C, not 331. The first figure used Dhaka's air temperature only.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="limits">
+    <p class="lab">Limits</p>
+    <h2>What this cannot tell you</h2>
+    <div class="card"><ul class="limits">
+      <li>Load shed is PGCB's estimate at grid level (estimated demand minus generation). It is not a meter reading at homes and misses local faults.</li>
+      <li>Zone figures come from BPDB's evening peak report and stop on 3 August 2026.</li>
+      <li>Weather is ERA5 reanalysis from Open-Meteo, weighted by each zone's demand, not station data.</li>
+      <li>The data cannot say why one zone carries more, why oil output drops at night, or whether the shop rules saved energy at the meter.</li>
+    </ul></div>
+  </section>
+
+  <section>
+    <div class="closer">
+      <div><h2>Open to correction</h2><p>This is independent work on public data. If a number looks wrong, open an issue on GitHub or get in touch through the contact form and I will fix it.</p></div>
+      <div class="btns"><a class="btn p" href="https://app.powerbi.com/view?r=eyJrIjoiYzE1N2UxZGUtNTkxZC00Y2Y3LTk1ZWMtZWQwM2M5MThjZTIyIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D" target="_blank" rel="noopener">Open the report ↗</a><a class="btn s" href="../../#contact">Get in touch</a></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Data: PGCB hourly generation and load shedding (via Mendeley Data and PGCB's portal), BPDB zone reports, <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Analysis by Pervej Hosen.</span>
+    <a href="../../#projects">← Back to portfolio</a>
+  </footer>
+</main>
+<div id="tip" role="tooltip"></div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const NS = "http://www.w3.org/2000/svg";
+  const fmt = n => Math.round(n).toLocaleString("en-GB");
+  const C = { g: "#1D4A35", t: "#F2462E", ti: "#B8301C", o: "#B87318", s: "#7D8D99", p: "#C9BFA9", band: "#E9E0CE" };
+  const tip = $("#tip");
+  const showTip = (e, html) => { tip.innerHTML = html; tip.style.opacity = 1; const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8); const y = e.clientY + 16 + tip.offsetHeight > innerHeight ? e.clientY - tip.offsetHeight - 12 : e.clientY + 16; tip.style.left = x + "px"; tip.style.top = y + "px"; };
+  const hideTip = () => tip.style.opacity = 0;
+  const bindTip = (el, html) => { el.addEventListener("mousemove", e => showTip(e, html)); el.addEventListener("mouseleave", hideTip); el.addEventListener("touchstart", e => showTip(e.touches[0], html), { passive: true }); };
+  const svg = (w, h) => { const s = document.createElementNS(NS, "svg"); s.setAttribute("viewBox", `0 0 ${w} ${h}`); s.setAttribute("role", "img"); return s; };
+  const el = (name, attrs, parent, text) => { const n = document.createElementNS(NS, name); for (const k in attrs) n.setAttribute(k, attrs[k]); if (text != null) n.textContent = text; parent && parent.appendChild(n); return n; };
+  const cw = id => Math.max(300, Math.round(document.querySelector(id).clientWidth));
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // grow bars when a chart scrolls into view
+  const grow = (s, list) => {
+    if (reduce || !("IntersectionObserver" in window)) return;
+    list.forEach(([r, attr, to]) => r.setAttribute(attr, 0));
+    const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; io.disconnect(); const t0 = performance.now();
+      const step = t => { const q = Math.min(1, (t - t0) / 700), k = 1 - Math.pow(1 - q, 3); list.forEach(([r, attr, to, base]) => { r.setAttribute(attr, to * k); if (base != null) r.setAttribute("y", base - to * k); }); if (q < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step); }), { threshold: .35 });
+    io.observe(s);
+  };
+
+  // 1. years
+  (function () {
+    const Y = [[2015, 7], [2016, 7], [2017, 0], [2018, 3], [2019, 3], [2020, 4], [2021, 1], [2022, 1730], [2023, 2590], [2024, 2070], [2025, 360], [2026, 3670]];
+    const W = cw("#cYears"), H = 280, B = 24, T = 22, bw = W / Y.length, max = 3670, s = svg(W, H), anim = [];
+    Y.forEach(([y, v], i) => {
+      const h = Math.max(2, (H - B - T) * v / max), x = i * bw + 5, base = H - B;
+      const r = el("rect", { x, y: base - h, width: bw - 10, height: h, rx: 4, fill: y === 2026 ? C.t : v > 1000 ? C.g : C.p }, s);
+      anim.push([r, "height", h, base]);
+      if (v > 300) el("text", { x: x + (bw - 10) / 2, y: base - h - 7, "text-anchor": "middle", class: "lbl", "font-size": W < 480 ? 10 : 12, fill: y === 2026 ? C.ti : C.g }, s, fmt(v));
+      el("text", { x: x + (bw - 10) / 2, y: H - 6, "text-anchor": "middle", class: "tick" }, s, "’" + String(y).slice(2));
+      const hit = el("rect", { x: i * bw, y: 0, width: bw, height: H, fill: "transparent" }, s);
+      bindTip(hit, `<b>${y}</b><br>${fmt(v)} GWh lost`);
+    });
+    $("#cYears").appendChild(s); grow(s, anim);
+  })();
+
+  // 2. hours
+  (function () {
+    const P = [1536, 1492, 1434, 1331, 1171, 1046, 832, 706, 644, 626, 587, 611, 877, 894, 895, 1179, 1030, 890, 691, 1000, 949, 1047, 914, 1083];
+    const lab = h => h === 0 ? "12 am" : h < 12 ? h + " am" : h === 12 ? "noon" : (h - 12) + " pm";
+    const W = cw("#cHours"), H = 260, B = 24, L = 40, T = 10, bw = (W - L) / 24, max = 1600, s = svg(W, H), anim = [];
+    const y = v => T + (H - B - T) * (1 - v / max);
+    el("rect", { x: L + 18 * bw, y: T, width: 5 * bw, height: H - B - T, fill: C.band, rx: 4 }, s);
+    el("text", { x: L + 20.5 * bw, y: T + 14, "text-anchor": "middle", class: "lbl-muted" }, s, "evening peak");
+    [0, 500, 1000, 1500].forEach(v => { el("line", { x1: L, x2: W, y1: y(v), y2: y(v), stroke: C.band }, s); el("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", class: "tick" }, s, fmt(v)); });
+    P.forEach((v, h) => {
+      const base = H - B, hh = base - y(v);
+      const r = el("rect", { x: L + h * bw + 2, y: y(v), width: bw - 4, height: hh, rx: 3, fill: h <= 3 ? C.t : C.g }, s);
+      anim.push([r, "height", hh, base]);
+      if (h % 6 === 0) el("text", { x: L + h * bw + bw / 2, y: H - 6, "text-anchor": "middle", class: "tick" }, s, lab(h));
+      const hit = el("rect", { x: L + h * bw, y: 0, width: bw, height: H, fill: "transparent" }, s);
+      bindTip(hit, `<b>${lab(h)}</b><br>${fmt(v)} MW cut on average`);
+    });
+    $("#cHours").appendChild(s); grow(s, anim);
+  })();
+
+  // 3. crisis bridge
+  (function () {
+    const R = [["Gas plants", -760, C.t, "produced less"], ["Coal and oil", 1450, C.g, "added"], ["Imports", 0, C.s, "barely moved"], ["Heat effect on demand", 200, C.p, "under 200 MW"], ["Average cut", 1250, C.ti, "rose"]];
+    const W = cw("#cCrisis"), rowH = 46, L = W < 480 ? 120 : 170, H = R.length * rowH + 10, s = svg(W, H), mid = L + (W - L - 70) * 0.35, sc = (W - L - 70) * 0.65 / 1450, anim = [];
+    el("line", { x1: mid, x2: mid, y1: 0, y2: H, stroke: "#9C927C" }, s);
+    R.forEach(([n, v, col, d], i) => {
+      const y = i * rowH + 10, w = Math.max(3, Math.abs(v) * sc);
+      el("text", { x: 0, y: y + 18, class: "lbl" }, s, n);
+      const r = el("rect", { x: v < 0 ? mid - w : mid, y, width: w, height: 24, rx: 4, fill: col }, s);
+      if (v >= 0) anim.push([r, "width", w]);
+      el("text", { x: v < 0 ? mid - w - 8 : mid + w + 8, y: y + 17, "text-anchor": v < 0 ? "end" : "start", class: "lbl" }, s, n === "Heat effect on demand" ? "< 200" : n === "Imports" ? "≈ 0" : (v > 0 ? "+" : "−") + fmt(Math.abs(v)));
+      bindTip(r, `<b>${n}</b><br>${d}${v ? ", about " + fmt(Math.abs(v)) + " MW" : ""}`);
+    });
+    $("#cCrisis").appendChild(s); grow(s, anim);
+  })();
+
+  // 4. zones
+  (function () {
+    const Z = [["Mymensingh", 28.4, 8.4, "3.4×"], ["Khulna", 14.4, 12.1, "1.2×"], ["Cumilla", 10.8, 9.6, "1.1×"], ["Rajshahi", 9.1, 10.2, "0.9×"], ["Chattogram", 5.8, 10.0, "0.6×"], ["Dhaka", 16.1, 36.2, "0.4×"]];
+    const W = cw("#cZones"), rowH = 46, L = W < 480 ? 92 : 110, R = 54, H = Z.length * rowH, s = svg(W, H), max = 37, sc = (W - L - R) / max, anim = [];
+    Z.forEach(([n, a, d, x], i) => {
+      const y = i * rowH + 6;
+      el("text", { x: 0, y: y + 17, class: "lbl" }, s, n);
+      const r1 = el("rect", { x: L, y, width: a * sc, height: 13, rx: 4, fill: C.t }, s);
+      const r2 = el("rect", { x: L, y: y + 16, width: d * sc, height: 13, rx: 4, fill: C.g }, s);
+      anim.push([r1, "width", a * sc], [r2, "width", d * sc]);
+      el("text", { x: W, y: y + 19, "text-anchor": "end", class: "lbl", fill: i === 0 ? C.ti : C.g }, s, x);
+      const hit = el("rect", { x: 0, y: y - 4, width: W, height: rowH - 4, fill: "transparent" }, s);
+      bindTip(hit, `<b>${n}</b><br>${Math.round(a)}% of load shed<br>${Math.round(d)}% of demand`);
+    });
+    $("#cZones").appendChild(s); grow(s, anim);
+  })();
+
+  // 5. policy
+  (function () {
+    const E = [["2 Apr", "Shops close 8 pm", -511, 1], ["3 Apr", "Shops close 6 pm", -238, 1], ["5 Apr", "Relaxed to 7 pm", -141, 0], ["12 May", "Open to 10 pm", -153, 0], ["1 Jun", "Malls close 7 pm", -224, 1], ["11 Jun", "Open to 9 pm", 533, 0], ["13 Aug", "11 am to 8 pm", 167, 1]];
+    const W = cw("#cPolicy"), sm = W < 480, rowH = 34, L = sm ? 62 : 190, H = E.length * rowH + 34, s = svg(W, H), lo = -700, hi = 700, x = v => L + (W - L - 20) * (v - lo) / (hi - lo);
+    el("rect", { x: x(-643), y: 0, width: x(567) - x(-643), height: E.length * rowH, fill: C.band, rx: 6 }, s);
+    el("line", { x1: x(0), x2: x(0), y1: 0, y2: E.length * rowH, stroke: "#9C927C" }, s);
+    [-600, -300, 0, 300, 600].forEach(v => el("text", { x: x(v), y: E.length * rowH + 16, "text-anchor": "middle", class: "tick" }, s, (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v)));
+    E.forEach(([d, n, v, tight], i) => {
+      const y = i * rowH + rowH / 2;
+      el("text", { x: 0, y: y + 4, class: "lbl" }, s, d);
+      if (!sm) el("text", { x: 56, y: y + 4, class: "lbl-muted" }, s, n);
+      const c = el("circle", { cx: x(v), cy: y, r: 7, fill: tight ? C.g : C.o }, s);
+      el("text", { x: x(v) + (v < 0 ? -12 : 12), y: y + 4, "text-anchor": v < 0 ? "end" : "start", class: "lbl" }, s, (v > 0 ? "+" : "−") + Math.abs(v));
+      bindTip(c, `<b>${d}: ${n}</b><br>${v > 0 ? "+" : "−"}${Math.abs(v)} MW evening demand, weather taken out<br>${tight ? "Tightened" : "Relaxed"}`);
+    });
+    el("circle", { cx: L, cy: H - 8, r: 5, fill: C.g }, s); el("text", { x: L + 10, y: H - 4, class: "lbl-muted" }, s, "tightened");
+    el("circle", { cx: L + 100, cy: H - 8, r: 5, fill: C.o }, s); el("text", { x: L + 110, y: H - 4, class: "lbl-muted" }, s, "relaxed");
+    $("#cPolicy").appendChild(s);
+  })();
+
+  // 6. what-if
+  (function () {
+    const R = [["1,000 MW more at every hour, from any source", 63, 63], ["100 million cubic feet a day more gas for power plants", 31, 43], ["1,000 MW of new solar (the worst hour unchanged)", 16, 16], ["500 MW saved from 6 to 10 pm", 9, 9]];
+    const W = cw("#cWhatif"), narrow = W < 640, rowH = narrow ? 64 : 46, L = narrow ? 0 : 380, R2 = narrow ? 92 : 110, H = R.length * rowH, s = svg(W, H), sc = (W - L - R2) / 100, anim = [];
+    const defs = el("defs", {}, s), pat = el("pattern", { id: "stripe", width: 8, height: 8, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs);
+    el("rect", { width: 8, height: 8, fill: "#9DB3A4" }, pat); el("rect", { width: 4, height: 8, fill: C.g }, pat);
+    R.forEach(([n, a, b], i) => {
+      const y = i * rowH + (narrow ? 26 : 8);
+      el("text", { x: 0, y: narrow ? y - 8 : y + 18, class: "lbl", "font-size": 13 }, s, n);
+      el("rect", { x: L, y, width: 100 * sc, height: 26, rx: 5, fill: "#F1EADB" }, s);
+      const r = el("rect", { x: L, y, width: a * sc, height: 26, rx: 5, fill: C.g }, s); anim.push([r, "width", a * sc]);
+      if (b > a) el("rect", { x: L + a * sc, y, width: (b - a) * sc, height: 26, fill: "url(#stripe)" }, s);
+      el("text", { x: W, y: y + 20, "text-anchor": "end", fill: C.ti, "font-size": 18, "font-weight": 800 }, s, a === b ? a + "%" : a + " to " + b + "%");
+    });
+    $("#cWhatif").appendChild(s); grow(s, anim);
+  })();
+})();
+</script>
+<script src="../../js/analytics.js?v=10e"></script>
+</body>
+</html>

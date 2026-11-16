@@ -481,3 +481,37 @@ button.contact-card { width: 100%; font: inherit; text-align: left; color: inher
 .nl-btn { flex: 0 0 auto; }
 .nl-btn svg { width: 16px; height: 16px; }
 @media (max-width: 760px) { .nl-inner { flex-direction: column; align-items: flex-start; gap: 18px; } .nl-band { padding: 36px 16px; } }
+
+/* ---------- case studies ---------- */
+.cs-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.cs { position: relative; overflow: hidden; display: flex; flex-direction: column; transition: transform .3s, box-shadow .3s; }
+.cs:hover { transform: translateY(-4px); }
+.cs .thumb img { opacity: 1; }
+.cs:hover .thumb img { transform: scale(1.04); }
+.cs-body { padding: 20px 22px 22px; display: flex; flex-direction: column; flex: 1; }
+.cs-kicker { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--tomato-ink); }
+.cs h3 { font-size: 1.3rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.25; color: var(--text); margin-top: 6px; }
+.cs-q { color: var(--muted); font-size: .95rem; margin-top: 6px; }
+.cs-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+.cs-stat { background: var(--oat); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+.cs-stat b { display: block; font-size: 1.25rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; color: var(--green); }
+.cs-stat span { display: block; font-size: .78rem; line-height: 1.35; color: var(--muted); margin-top: 3px; }
+.cs-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.cs-links .btn { position: relative; z-index: 2; padding: 9px 18px; font-size: .9rem; }
+.cs-main { color: inherit; text-decoration: none; }
+.cs-main::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.cs.feature { grid-column: 1 / -1; display: grid; grid-template-columns: 1.15fr 1fr; }
+.cs.feature .thumb { aspect-ratio: auto; min-height: 100%; border-bottom: 0; border-right: 1px solid var(--border); }
+.cs.feature .thumb img { object-position: left top; }
+.cs.feature .cs-body { padding: 28px 30px; justify-content: center; }
+.cs.feature h3 { font-size: 1.7rem; }
+@media (max-width: 900px) {
+  .cs-list { grid-template-columns: minmax(0, 1fr); }
+  .cs.feature { display: flex; }
+  .cs.feature .thumb { aspect-ratio: 16 / 9; min-height: 0; border-right: 0; border-bottom: 1px solid var(--border); }
+  .cs.feature .cs-body { padding: 20px 22px 22px; }
+  .cs.feature h3 { font-size: 1.35rem; }
+}
+@media (max-width: 480px) { .cs-stats { grid-template-columns: minmax(0, 1fr); } .cs-stat { display: flex; align-items: baseline; gap: 10px; } .cs-stat span { margin-top: 0; } }
+.proj-sub { margin: 0 0 18px; }
+.cs-list + .proj-sub { margin-top: 56px; }

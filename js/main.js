@@ -279,6 +279,30 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   });
 })();
 
+/* ---------- case studies ---------- */
+(function caseStudies() {
+  const list = (CONFIG.caseStudies || []).filter(c => !c.hidden);
+  if (!list.length) {
+    $("#csBlock")?.remove();
+    return;
+  }
+  $("#csList").innerHTML = list.map((c, i) => `
+    <article class="card cs reveal${c.featured ? " feature" : ""}" style="transition-delay:${(i % 2) * 90}ms">
+      <div class="thumb"><img src="${esc(c.image)}" alt="${esc(c.title)}, preview" loading="lazy"></div>
+      <div class="cs-body">
+        <p class="cs-kicker">${esc(c.kicker || "Case study")}</p>
+        <h3><a class="cs-main" href="${esc(c.link)}">${esc(c.title)}</a></h3>
+        <p class="cs-q">${esc(c.question)}</p>
+        <div class="cs-stats">${(c.stats || []).map(([b, t]) => `<div class="cs-stat"><b>${esc(b)}</b><span>${esc(t)}</span></div>`).join("")}</div>
+        <div class="tags">${(c.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+        <div class="cs-links">
+          <a class="btn btn-primary" href="${esc(c.link)}">Read the case study</a>
+          ${c.extra ? `<a class="btn btn-light" href="${esc(c.extra.link)}" target="_blank" rel="noopener">${esc(c.extra.label)} ↗</a>` : ""}
+        </div>
+      </div>
+    </article>`).join("");
+})();
+
 /* ---------- projects ---------- */
 (function projects() {
   const list = (CONFIG.projects || []).filter(p => !p.hidden);
