@@ -230,6 +230,11 @@ const CONFIG = {
   projectsShow: 6,   // cards shown before the "Show all" button
   projectFilters: ["Dashboards & Reporting", "Data Pipelines & Modeling", "Analysis & Insights", "Forecasting & ML"],
   projects: [
+    { types: ["Dashboards & Reporting", "Analysis & Insights", "Forecasting & ML", "Data Pipelines & Modeling"], title: "Lights Out", pages: 9,
+      desc: "Bangladesh's 2026 load shedding from every hour of public grid data since 2015: who carried the cuts, why they happened and what would have helped, in one custom visual with 3D.",
+      tags: ["Power BI", "Custom visual", "WebGL", "Python"],
+      link: "https://app.powerbi.com/view?r=eyJrIjoiYzE1N2UxZGUtNTkxZC00Y2Y3LTk1ZWMtZWQwM2M5MThjZTIyIiwidCI6IjIyOTM4MjRkLWE0YjQtNDNmMi1hM2ZlLWU0Mjc2YzcxNjY2NCIsImMiOjEwfQ%3D%3D",
+      images: ["assets/img/projects/lightsout-1.jpg", "assets/img/projects/lightsout-2.jpg", "assets/img/projects/lightsout-3.jpg", "assets/img/projects/lightsout-4.jpg"] },
     { types: ["Dashboards & Reporting", "Analysis & Insights", "Forecasting & ML"], title: "Where It Hurts", pages: 8,
       desc: "A safety report built as one custom Power BI visual: a 3D body in hand-written WebGL, a case pyramid, a what-if planner and a forecast.",
       tags: ["Power BI", "Custom visual", "TypeScript", "WebGL"],
