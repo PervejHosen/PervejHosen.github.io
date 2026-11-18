@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thread Count: Bangladesh Garments and the US Tariffs · Pervej Hosen</title>
+<meta name="description" content="A case study of Bangladesh's garment exports to the US from every month of public US Census trade data since 2017: who gained as China lost share, what the 2025 and 2026 tariffs did, and what comes next. Built as a custom Power BI visual with 3D.">
+<meta property="og:title" content="Thread Count: Bangladesh Garments and the US Tariffs · Pervej Hosen">
+<meta property="og:description" content="Bangladesh now supplies one in ten garments the US imports. China lost about nine points of share; the tariff on Bangladesh garments rose from about 17% to 36% and is now about 26%.">
+<meta property="og:image" content="https://pervejhosen.com/assets/img/projects/threadcount-1.jpg">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1D4A35; --ink: #16382A; --muted: #4F5E52; --faint: #66766A; --line: #DCCFB6; --grid: #E6DCC8;
+  --bg: #EEE5D4; --card: #F7F1E6; --accent: #1D4A35; --ochre: #B87318; --tomato: #F2462E; --tomato-ink: #B8301C; --slate: #7D8D99; --pale: #C9BFA9;
+  --radius: 14px; --shadow: 0 10px 30px -22px rgba(29, 74, 53, .4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+/* top bar + hero */
+.top { background: var(--navy); color: #EEE5D4; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 0; font-size: .92rem; }
+.top-bar a { color: #EEE5D4; text-decoration: none; font-weight: 600; }
+.top-bar a:hover { color: #FF9A85; }
+.top-bar .gh { border: 1px solid rgba(238, 229, 212, .4); border-radius: 999px; padding: 6px 14px; white-space: nowrap; }
+.hero { padding: 36px 0 60px; }
+.kicker { font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #FF9A85; }
+.hero h1 { font-size: clamp(1.9rem, 4.4vw, 3rem); line-height: 1.12; letter-spacing: -.02em; font-weight: 800; color: #F6F0E4; margin: 10px 0 14px; max-width: 860px; }
+.hero h1 span { color: #FF8A73; }
+.hero p { color: #D9D2C2; max-width: 780px; font-size: 1.05rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.chips span { font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #F6F0E4; border: 1px solid rgba(238, 229, 212, .3); background: rgba(238, 229, 212, .08); border-radius: 999px; padding: 4px 11px; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1rem; text-decoration: none; border-radius: 999px; padding: 12px 22px; }
+.btn.p { background: var(--tomato); color: #fff; box-shadow: 0 12px 28px -14px rgba(242, 70, 46, .75); }
+.btn.p:hover { background: #E23A22; }
+.btn.s { border: 1.5px solid rgba(238, 229, 212, .55); color: #F6F0E4; }
+.btn.s:hover { background: #F6F0E4; color: var(--navy); }
+
+/* KPI tiles */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: -34px; position: relative; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.kpi b { display: block; font-size: 1.85rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+.kpi span { color: var(--muted); font-size: .88rem; }
+@media (max-width: 820px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* sections */
+section { margin-top: 60px; scroll-margin-top: 20px; }
+.lab { font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--tomato-ink); margin-bottom: 4px; }
+h2 { font-size: 1.6rem; letter-spacing: -.01em; font-weight: 800; margin-bottom: 6px; }
+.lead { color: var(--muted); max-width: 780px; margin-bottom: 20px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+.card h3 { font-size: 1.02rem; font-weight: 700; }
+.card .sub { color: var(--faint); font-size: .86rem; margin: 2px 0 14px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+
+/* questions */
+.qgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .qgrid { grid-template-columns: minmax(0, 1fr); } }
+.qcol h3 { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.q { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+.q b { display: block; font-size: .95rem; color: var(--ink); }
+.q span { display: block; color: var(--muted); font-size: .88rem; margin-top: 3px; }
+.q em { font-style: normal; font-weight: 700; color: var(--tomato-ink); }
+
+/* findings */
+.find { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; align-items: center; margin-bottom: 26px; }
+.find.rev { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.find.rev .ftxt { order: 2; }
+@media (max-width: 900px) { .find, .find.rev { grid-template-columns: minmax(0, 1fr); } .find.rev .ftxt { order: 0; } }
+.ftxt .num { font-size: .78rem; font-weight: 800; color: var(--tomato-ink); letter-spacing: .1em; text-transform: uppercase; }
+.ftxt h3 { font-size: 1.35rem; line-height: 1.25; font-weight: 800; letter-spacing: -.01em; margin: 4px 0 8px; }
+.ftxt p { color: var(--muted); }
+.ftxt p + p { margin-top: 8px; }
+.ftxt strong { color: var(--ink); }
+
+/* charts */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: .85rem; color: var(--muted); margin-bottom: 10px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: inherit; }
+.tick { fill: var(--faint); font-size: 11px; }
+.lbl { fill: var(--ink); font-size: 12px; font-weight: 600; }
+.lbl-muted { fill: var(--muted); font-size: 11px; }
+#tip { position: fixed; z-index: 50; pointer-events: none; background: var(--navy); color: #f1f5f9; font-size: .82rem; line-height: 1.45; padding: 8px 11px; border-radius: 8px; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, .5); opacity: 0; transition: opacity .12s; max-width: 260px; }
+#tip b { color: #fff; }
+
+/* gallery */
+.gal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .gal { grid-template-columns: minmax(0, 1fr); } }
+.gal figure { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.gal img { display: block; width: 100%; height: auto; }
+.gal figcaption { padding: 10px 14px; font-size: .86rem; color: var(--muted); }
+.gal figcaption b { color: var(--ink); }
+
+/* readers */
+.readers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .readers { grid-template-columns: minmax(0, 1fr); } }
+.reader { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.reader .tag { display: inline-block; font-size: .7rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 3px 10px; margin-bottom: 8px; background: #DCE8DF; color: var(--navy); }
+.reader h3 { font-size: 1.02rem; margin-bottom: 6px; }
+.reader ul { list-style: none; display: grid; gap: 8px; }
+.reader li { padding-left: 14px; border-left: 3px solid var(--line); color: var(--muted); font-size: .92rem; }
+.reader li b { color: var(--ink); }
+
+/* method */
+.pipe { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .pipe { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .pipe { grid-template-columns: minmax(0, 1fr); } }
+.layer { border-radius: 12px; padding: 16px 18px; border: 1px solid var(--line); background: var(--card); border-top: 4px solid var(--navy); }
+.layer:nth-child(2) { border-top-color: var(--ochre); } .layer:nth-child(3) { border-top-color: var(--slate); } .layer:nth-child(4) { border-top-color: var(--tomato); }
+.layer h4 { font-size: .95rem; margin-bottom: 4px; }
+.layer p, .layer li { color: var(--muted); font-size: .88rem; }
+.layer ul { padding-left: 18px; margin-top: 4px; }
+.review { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+@media (max-width: 700px) { .review { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rv { border-radius: 12px; padding: 14px 16px; background: #fff8ee; border: 1px solid var(--line); }
+.rv b { display: block; font-size: 1.6rem; font-weight: 800; line-height: 1.1; }
+.rv span { font-size: .85rem; color: var(--muted); }
+.dropped { margin-top: 14px; display: grid; gap: 10px; }
+.dropped div { font-size: .9rem; color: var(--muted); padding-left: 14px; border-left: 3px solid var(--tomato); }
+.dropped b { color: var(--ink); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; background: #E9E0CE; padding: 1px 5px; border-radius: 4px; }
+.note { color: var(--faint); font-size: .84rem; margin-top: 10px; }
+.limits { list-style: none; display: grid; gap: 8px; }
+.limits li { color: var(--muted); font-size: .93rem; padding-left: 14px; border-left: 3px solid var(--line); }
+.closer { background: var(--navy); color: #F6F0E4; border-radius: 18px; padding: 30px 28px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; }
+.closer h2 { color: #F6F0E4; }
+.closer p { color: #D9D2C2; max-width: 640px; }
+.closer .btns { margin-top: 0; }
+@media (max-width: 760px) { .closer { grid-template-columns: minmax(0, 1fr); } }
+footer { margin: 64px 0 40px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--faint); font-size: .88rem; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 560px) { .card, .reader { padding: 16px; } .kpi b { font-size: 1.5rem; } .btn { width: 100%; justify-content: center; } }
+.mark { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:0; }
+.evk { display:flex; flex-wrap:wrap; gap:6px 16px; font-size:.82rem; color:var(--muted); margin-top:10px; }
+.evk b { color:var(--ink); }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-bar">
+      <a href="../../#projects">← Pervej Hosen · Portfolio</a>
+      <a class="gh" href="REPORT_URL_PENDING" target="_blank" rel="noopener">Open the live report ↗</a>
+    </div>
+    <div class="hero">
+      <p class="kicker">Case study · Power BI · Public data</p>
+      <h1>Thread Count: <span>Bangladesh garments and the US tariffs</span></h1>
+      <p>Garments are most of what Bangladesh sells abroad, and the US is its largest single market. In 2025 and 2026 US tariffs changed several times in a year. I took every month of US import data since 2017, product by product, for Bangladesh and seven competitors, and asked what actually changed.</p>
+      <div class="chips"><span>Power BI</span><span>Custom visual</span><span>WebGL</span><span>Python</span><span>DuckDB</span><span>statsmodels</span><span>Postgres</span></div>
+      <div class="btns">
+        <a class="btn p" href="REPORT_URL_PENDING" target="_blank" rel="noopener">Open the live report ↗</a>
+        <a class="btn s" href="#findings">Read the findings</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="kpis">
+    <div class="kpi"><b>10.3%</b><span>Bangladesh's share of US garment imports, January to September 2026</span></div>
+    <div class="kpi"><b>$5.90bn</b><span>US garment imports from Bangladesh in the same months</span></div>
+    <div class="kpi"><b>25.6%</b><span>duty paid on Bangladesh garments now, against 16.8% in 2024</span></div>
+    <div class="kpi"><b>−9.3 points</b><span>China's share, from 21.8% to 12.5% in two years</span></div>
+  </div>
+
+  <section id="questions">
+    <p class="lab">The brief</p>
+    <h2>Eight questions, each answered with a number</h2>
+    <p class="lead">Before building anything I wrote down who would read this and what each of them would want answered.</p>
+    <div class="qgrid">
+      <div class="qcol"><h3>For exporters and industry</h3>
+        <div class="q"><b>Where did China's lost business go?</b><span>In China's 15 biggest losses, <em>Vietnam took 1.35 points</em>, Cambodia 1.06, Bangladesh 1.02.</span></div>
+        <div class="q"><b>Which products carry Bangladesh?</b><span>Five products are <em>52%</em> of the value; men's cotton trousers alone 19%.</span></div>
+        <div class="q"><b>Do we pay more than competitors?</b><span><em>Less than most</em>: 25.6% against Vietnam's 28.5%, mostly because Bangladesh ships cotton.</span></div>
+      </div>
+      <div class="qcol"><h3>For policy</h3>
+        <div class="q"><b>What did each tariff step do?</b><span>Duty paid rose from about <em>17% to 36%</em>, then fell to about 26% after the court ruling.</span></div>
+        <div class="q"><b>Where would a concession help most?</b><span><em>Cotton</em> is 71% of Bangladesh's US garments, the fibre the US-cotton route in the February 2026 deal would affect.</span></div>
+        <div class="q"><b>What is the outlook?</b><span>2027 between <em>$7.2bn and $8.4bn</em>, depending on share.</span></div>
+      </div>
+      <div class="qcol"><h3>For everyone</h3>
+        <div class="q"><b>How big is the US market for Bangladesh?</b><span><em>$7.9bn</em> of garments in 2025, up 12% on 2024.</span></div>
+        <div class="q"><b>Is Bangladesh winning?</b><span>Its share rose <em>1.6 points</em> in two years, though value fell in 2026 as the US bought less.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="findings">
+    <p class="lab">What the data shows</p>
+    <h2>Five findings</h2>
+    <p class="lead">US imports of garments (HS chapters 61 and 62), January 2017 to September 2026. Years are compared on January to September, because 2026 data stops in September.</p>
+
+    <div class="find">
+      <div class="ftxt"><p class="num">Finding 1</p><h3>One in ten garments the US imports now comes from Bangladesh</h3>
+        <p>Bangladesh supplied <strong>10.3%</strong> of US garment imports from January to September 2026, up from 8.7% two years earlier and 6.2% in 2017. Only Vietnam and China supply more.</p>
+        <p>The value still fell in 2026, to $5.90bn against $6.17bn, because the US bought about 6% fewer garments overall.</p></div>
+      <div class="card"><h3>Bangladesh's share of US garment imports</h3><p class="sub">January to September of each year · hover a bar</p><div id="cShare"></div></div>
+    </div>
+
+    <div class="find rev">
+      <div class="ftxt"><p class="num">Finding 2</p><h3>China lost about nine points, and most of it went to Vietnam, Cambodia and Bangladesh</h3>
+        <p>China's share fell by <strong>9.3 points</strong> between 2024 and 2026. Vietnam gained 3.6, Cambodia 2.0, Bangladesh 1.6. India lost ground too.</p>
+        <p>Half of China's loss sits in 15 products, such as sweaters, bras and socks. Bangladesh's single biggest gain was <strong>women's cotton trousers</strong>, almost exactly what China lost in that product.</p></div>
+      <div class="card"><h3>Change in share, January to September 2026 against 2024</h3><p class="sub">Share points of all US garment imports</p><div id="cShift"></div></div>
+    </div>
+
+    <div class="find">
+      <div class="ftxt"><p class="num">Finding 3</p><h3>The tariff on Bangladesh garments went from about 17% to 36%, and is now about 26%</h3>
+        <p>Duty paid stayed near 17% for years. It rose after the <strong>10% tariff on all countries</strong> (5 April 2025) and Bangladesh's <strong>20% country rate</strong> (7 August 2025), to about 36% from October 2025 to January 2026.</p>
+        <p>The Supreme Court struck those tariffs down on 20 February 2026. A flat 10% has applied since 24 February, under a new law from 24 July.</p></div>
+      <div class="card"><h3>Duty paid on Bangladesh garments, by month</h3><p class="sub">Calculated duty as a share of value · dotted lines: tariff actions</p><div id="cTariff"></div>
+        <div class="evk"><span><b>1</b> 10% on all, 5 Apr 2025</span><span><b>2</b> 20% country rate, 7 Aug 2025</span><span><b>3</b> court ruling, then 10%, Feb 2026</span><span><b>4</b> Section 301, 24 Jul 2026</span></div></div>
+    </div>
+
+    <div class="find rev">
+      <div class="ftxt"><p class="num">Finding 4</p><h3>Bangladesh pays less than most competitors, mostly because it ships cotton</h3>
+        <p>Bangladesh pays <strong>25.6%</strong> now, Vietnam 28.5%, China 31.5%. <strong>71%</strong> of Bangladesh's US garments are cotton (Vietnam 38%), and the normal US duty on cotton garments is lower.</p>
+        <p>Priced product by product at the average rate the other countries pay, the seven countries other than China land within a point of their actual rate. China pays about six points more, from US duties dating to 2018 and 2019.</p></div>
+      <div class="card"><h3>Tariff paid now, and what product mix alone would give</h3><p class="sub">March to September 2026 · bar: actual · dot: product mix only</p><div id="cMix"></div></div>
+    </div>
+
+    <div class="find">
+      <div class="ftxt"><p class="num">Finding 5</p><h3>Five products carry half of Bangladesh's US garment sales</h3>
+        <p>From March to September 2026 the top five products were <strong>52%</strong> of the value, and men's cotton trousers alone 19%. Only Pakistan relies on fewer products.</p>
+        <p>That keeps tariffs low for now, since cotton pays less, but leaves Bangladesh exposed to any change on a few product lines. Only 14% of its value pays 30% or more, against 30% for Vietnam and 61% for China.</p></div>
+      <div class="card"><h3>Bangladesh's biggest products in the US</h3><p class="sub">Share of value, March to September 2026 · green: cotton · red: man-made fibre</p><div id="cProd"></div></div>
+    </div>
+  </section>
+
+  <section id="outlook">
+    <p class="lab">What comes next</p>
+    <h2>To 2027, share matters as much as US demand</h2>
+    <p class="lead">Three paths, not a prediction. Each keeps today's tariffs and the usual seasonal pattern; they differ only in Bangladesh's share. The US market forecast was tested from four past start dates and missed by about 7% a month on average.</p>
+    <div class="card"><div id="cOut"></div><p class="note">2026 adds a forecast for October to December. A start date for the US-cotton route, a change to the 10% tariff, or refunds of the tariffs struck down in February 2026 would each move these numbers.</p></div>
+  </section>
+
+  <section id="report">
+    <p class="lab">The report</p>
+    <h2>Eight pages in one custom visual</h2>
+    <p class="lead">Built like a small app: a side rail, a country picker on the detail pages, and a 3D port where every container is $100m of garments. Press play to watch 2017 to 2026, or stack the duty paid on top.</p>
+    <div class="gal">
+      <figure><img src="../../assets/img/projects/threadcount-1.jpg" alt="Share page with a 3D port of shipping containers for eight countries" loading="lazy" width="900" height="506"><figcaption><b>The port.</b> One container is $100m of garments; stacks grow and shrink year by year.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/threadcount-2.jpg" alt="Headline page with four key numbers and six short answers" loading="lazy" width="900" height="506"><figcaption><b>Headline.</b> Six short answers, each linked to the page with the detail.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/threadcount-3.jpg" alt="Tariffs page with monthly duty paid and numbered tariff actions" loading="lazy" width="900" height="506"><figcaption><b>Tariffs.</b> Duty paid by month, with every tariff action dated and sourced.</figcaption></figure>
+      <figure><img src="../../assets/img/projects/threadcount-4.jpg" alt="China's share page with product level gains and losses" loading="lazy" width="900" height="506"><figcaption><b>China's share.</b> Where China's lost business went, product by product.</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="readers">
+    <p class="lab">Who could use it</p>
+    <h2>Options by reader</h2>
+    <p class="lead">Options, not demands. Each is something the data suggests would help, with who is in a position to act.</p>
+    <div class="readers">
+      <div class="reader"><span class="tag">Exporters</span><h3>Factories, BGMEA, BTMA</h3><ul>
+        <li><b>Look at the products China is still losing.</b> Sweaters, bras, socks and nightwear moved mostly to Vietnam and Cambodia so far.</li>
+        <li><b>Weigh the five-product dependence.</b> Over half the value rides on trousers, sweaters, T-shirts and shirts in cotton.</li></ul></div>
+      <div class="reader"><span class="tag">Policy</span><h3>Commerce Ministry, EPB, negotiators</h3><ul>
+        <li><b>Confirm when and how the US-cotton route applies.</b> Cotton is 71% of Bangladesh's US garments.</li>
+        <li><b>Track duty paid, not only headline rates.</b> The rate actually collected moves months after an announcement.</li></ul></div>
+      <div class="reader"><span class="tag">Buyers</span><h3>Sourcing teams</h3><ul>
+        <li><b>Compare like with like.</b> Most of the tariff gap between countries is product mix, not country treatment.</li>
+        <li><b>Plan for seasonal peaks</b> from July to October, when arrivals run highest.</li></ul></div>
+      <div class="reader"><span class="tag">Press and public</span><h3>Journalists and readers</h3><ul>
+        <li><b>Use share and value together.</b> Share rose in 2026 while value fell, because the US bought less.</li>
+        <li><b>Note the definition.</b> This uses HS 61 and 62; OTEXA counts a wider set, so its totals run higher.</li></ul></div>
+    </div>
+  </section>
+
+  <section id="method">
+    <p class="lab">How it was built</p>
+    <h2>From public files to a checked report</h2>
+    <p class="lead">Everything runs from scripts, so the report rebuilds when new monthly data arrives.</p>
+    <div class="pipe">
+      <div class="layer"><h4>Collect</h4><ul><li>US Census Bureau trade API, HS6 by country and month, 2017 to 2026</li><li>Eight countries plus the world total, four chapters</li><li>21 tariff actions, each dated and sourced</li></ul></div>
+      <div class="layer"><h4>Model</h4><ul><li>DuckDB bronze, silver and gold layers</li><li>Share changes split exactly by product</li><li>Product mix priced at peer average rates to separate mix from treatment</li></ul></div>
+      <div class="layer"><h4>Forecast</h4><ul><li>Exponential smoothing with a damped trend and monthly pattern</li><li>Backtested from four start dates, 12 months ahead</li><li>Three share scenarios for Bangladesh</li></ul></div>
+      <div class="layer"><h4>Report</h4><ul><li>Neon Postgres feeding Power BI</li><li>One DAX measure hands the data to a custom visual</li><li>SVG charts and a WebGL 3D port</li></ul></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>Checked before it went out</h3>
+      <p class="sub">A separate script recomputes the headline numbers straight from the raw Census files, without the database: 39 checks, all matching. An outside check against OTEXA's 2025 figures matched on growth (11.72% against 11.75%).</p>
+      <div class="review">
+        <div class="rv"><b>39</b><span>headline numbers recomputed from raw files</span></div>
+        <div class="rv"><b>21</b><span>tariff actions, each with a source</span></div>
+        <div class="rv"><b>4</b><span>backtests of the forecast</span></div>
+        <div class="rv"><b>1</b><span>outside check against OTEXA</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="limits">
+    <p class="lab">Limits</p>
+    <h2>What this cannot tell you</h2>
+    <div class="card"><ul class="limits">
+      <li>It shows what the US imported, valued at the border before duty, not what Bangladesh exported, and not prices or profits.</li>
+      <li>Duty paid is calculated duty over value for goods entered for consumption. Refunds of the tariffs struck down in February 2026 are still in court and are not reflected.</li>
+      <li>HS6 detail hides finer product differences. Fibre is read from product descriptions, so it is approximate.</li>
+      <li>The data cannot say why a buyer moved an order. Tariffs are one reason among many.</li>
+    </ul></div>
+  </section>
+
+  <section>
+    <div class="closer">
+      <div><h2>Open to correction</h2><p>This is independent work on public data. If a number looks wrong, get in touch through the contact form and I will fix it.</p></div>
+      <div class="btns"><a class="btn p" href="REPORT_URL_PENDING" target="_blank" rel="noopener">Open the report ↗</a><a class="btn s" href="../../#contact">Get in touch</a></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Data: US Census Bureau international trade API (imports by HS6, country and month). Tariff actions from the sources listed in the report. Analysis by Pervej Hosen.</span>
+    <a href="../../#projects">← Back to portfolio</a>
+  </footer>
+</main>
+<div id="tip" role="tooltip"></div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const NS = "http://www.w3.org/2000/svg";
+  const fmt = n => Math.round(n).toLocaleString("en-GB");
+  const C = { g: "#1D4A35", t: "#F2462E", ti: "#B8301C", o: "#B87318", s: "#7D8D99", p: "#C9BFA9", band: "#E9E0CE" };
+  const tip = $("#tip");
+  const showTip = (e, html) => { tip.innerHTML = html; tip.style.opacity = 1; const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8); const y = e.clientY + 16 + tip.offsetHeight > innerHeight ? e.clientY - tip.offsetHeight - 12 : e.clientY + 16; tip.style.left = x + "px"; tip.style.top = y + "px"; };
+  const hideTip = () => tip.style.opacity = 0;
+  const bindTip = (el, html) => { el.addEventListener("mousemove", e => showTip(e, html)); el.addEventListener("mouseleave", hideTip); el.addEventListener("touchstart", e => showTip(e.touches[0], html), { passive: true }); };
+  const svg = (w, h) => { const s = document.createElementNS(NS, "svg"); s.setAttribute("viewBox", `0 0 ${w} ${h}`); s.setAttribute("role", "img"); return s; };
+  const el = (name, attrs, parent, text) => { const n = document.createElementNS(NS, name); for (const k in attrs) n.setAttribute(k, attrs[k]); if (text != null) n.textContent = text; parent && parent.appendChild(n); return n; };
+  const cw = id => Math.max(300, Math.round(document.querySelector(id).clientWidth));
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // grow bars when a chart scrolls into view
+  const grow = (s, list) => {
+    if (reduce || !("IntersectionObserver" in window)) return;
+    list.forEach(([r, attr, to]) => r.setAttribute(attr, 0));
+    const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; io.disconnect(); const t0 = performance.now();
+      const step = t => { const q = Math.min(1, (t - t0) / 700), k = 1 - Math.pow(1 - q, 3); list.forEach(([r, attr, to, base]) => { r.setAttribute(attr, to * k); if (base != null) r.setAttribute("y", base - to * k); }); if (q < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step); }), { threshold: .35 });
+    io.observe(s);
+  };
+
+  // 1. Bangladesh share by year
+  (function () {
+    const Y = [[2017, 6.2], [2018, 6.4], [2019, 6.7], [2020, 7.6], [2021, 8.1], [2022, 9.1], [2023, 9.0], [2024, 8.7], [2025, 10.1], [2026, 10.3]];
+    const W = cw("#cShare"), H = 260, B = 24, T = 22, bw = W / Y.length, max = 11, s = svg(W, H), anim = [];
+    Y.forEach(([y, v], i) => {
+      const h = (H - B - T) * v / max, x = i * bw + 5, base = H - B;
+      const r = el("rect", { x, y: base - h, width: bw - 10, height: h, rx: 4, fill: y >= 2025 ? C.t : C.p }, s);
+      anim.push([r, "height", h, base]);
+      el("text", { x: x + (bw - 10) / 2, y: base - h - 7, "text-anchor": "middle", class: "lbl", "font-size": W < 480 ? 10 : 12, fill: y >= 2025 ? C.ti : C.g }, s, v.toFixed(1));
+      el("text", { x: x + (bw - 10) / 2, y: H - 6, "text-anchor": "middle", class: "tick" }, s, "’" + String(y).slice(2));
+      bindTip(el("rect", { x: i * bw, y: 0, width: bw, height: H, fill: "transparent" }, s), `<b>${y}, January to September</b><br>${v.toFixed(1)}% of US garment imports`);
+    });
+    $("#cShare").appendChild(s); grow(s, anim);
+  })();
+
+  // 2. share change by country
+  (function () {
+    const R = [["Vietnam", 3.57], ["Cambodia", 2.03], ["Bangladesh", 1.63], ["Indonesia", 1.12], ["Pakistan", 0.40], ["Sri Lanka", 0.20], ["India", -0.69], ["China", -9.27]];
+    const W = cw("#cShift"), rowH = 36, L = W < 480 ? 86 : 100, H = R.length * rowH + 6, s = svg(W, H), lo = -10, hi = 4.5, x = v => L + (W - L - 50) * (v - lo) / (hi - lo);
+    el("line", { x1: x(0), x2: x(0), y1: 0, y2: H, stroke: "#9C927C" }, s);
+    R.forEach(([n, v], i) => {
+      const y = i * rowH + 6, w = Math.abs(x(v) - x(0));
+      el("text", { x: 0, y: y + 17, class: "lbl", fill: n === "Bangladesh" ? C.ti : C.g }, s, n);
+      const r = el("rect", { x: v < 0 ? x(v) : x(0), y, width: w, height: 22, rx: 4, fill: n === "Bangladesh" ? C.t : v < 0 ? C.s : C.g }, s);
+      el("text", { x: v < 0 ? x(v) - 6 : x(v) + 6, y: y + 16, "text-anchor": v < 0 ? "end" : "start", class: "lbl" }, s, (v > 0 ? "+" : "−") + Math.abs(v).toFixed(2));
+      bindTip(r, `<b>${n}</b><br>${v > 0 ? "+" : "−"}${Math.abs(v).toFixed(2)} share points`);
+    });
+    $("#cShift").appendChild(s);
+  })();
+
+  // 3. Bangladesh tariff by month, Jan 2024 to Sep 2026
+  (function () {
+    const V = [16.9, 16.8, 16.4, 16.6, 16.7, 16.7, 16.9, 16.8, 16.9, 17.0, 16.8, 16.8, 16.8, 16.8, 16.6, 17.6, 21.2, 25.6, 26.5, 27.5, 32.3, 35.9, 36.0, 36.0, 36.3, 33.1, 24.8, 25.6, 25.6, 25.7, 25.0, 26.2, 26.2];
+    const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const W = cw("#cTariff"), H = 250, B = 24, L = 34, T = 18, n = V.length, s = svg(W, H), max = 40;
+    const x = i => L + (W - L - 10) * (i + 0.5) / n, y = v => T + (H - B - T) * (1 - v / max);
+    [0, 10, 20, 30, 40].forEach(v => { el("line", { x1: L, x2: W, y1: y(v), y2: y(v), stroke: C.band }, s); el("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", class: "tick" }, s, v + "%"); });
+    [[15.1, "1"], [19.2, "2"], [25.8, "3"], [30.75, "4"]].forEach(([m, t]) => { const xx = L + (W - L - 10) * m / n; el("line", { x1: xx, x2: xx, y1: T - 4, y2: H - B, stroke: C.t, "stroke-dasharray": "3 4" }, s); el("circle", { cx: xx, cy: T - 8, r: 8, fill: C.g }, s); el("text", { x: xx, y: T - 4, "text-anchor": "middle", fill: "#fff", "font-size": 10, "font-weight": 700 }, s, t); });
+    const d = V.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1)).join("");
+    el("path", { d, fill: "none", stroke: C.t, "stroke-width": 3 }, s);
+    [2024, 2025, 2026].forEach((yy, k) => el("text", { x: x(k * 12), y: H - 6, class: "tick" }, s, yy));
+    V.forEach((v, i) => bindTip(el("rect", { x: x(i) - (W - L) / n / 2, y: 0, width: (W - L) / n, height: H, fill: "transparent" }, s), `<b>${MON[i % 12]} ${2024 + Math.floor(i / 12)}</b><br>${v.toFixed(1)}% duty paid`));
+    $("#cTariff").appendChild(s);
+  })();
+
+  // 4. tariff now vs product mix only
+  (function () {
+    const R = [["India", 23.41, 23.63], ["Pakistan", 25.15, 25.12], ["Bangladesh", 25.61, 26.10], ["Sri Lanka", 25.79, 26.19], ["Cambodia", 27.14, 27.40], ["Indonesia", 27.87, 28.04], ["Vietnam", 28.50, 28.05], ["China", 31.46, 25.18]];
+    const W = cw("#cMix"), rowH = 34, L = W < 480 ? 86 : 100, H = R.length * rowH + 26, s = svg(W, H), max = 35, x = v => L + (W - L - 50) * v / max, anim = [];
+    [0, 10, 20, 30].forEach(v => el("text", { x: x(v), y: H - 4, "text-anchor": "middle", class: "tick" }, s, v + "%"));
+    R.forEach(([n, a, m], i) => {
+      const y = i * rowH + 4, bd = n === "Bangladesh";
+      el("text", { x: 0, y: y + 16, class: "lbl", fill: bd ? C.ti : C.g }, s, n);
+      const r = el("rect", { x: L, y, width: x(a) - L, height: 20, rx: 4, fill: bd ? C.t : C.g }, s); anim.push([r, "width", x(a) - L]);
+      el("circle", { cx: x(m), cy: y + 10, r: 6, fill: "#fff", stroke: C.o, "stroke-width": 3 }, s);
+      el("text", { x: x(Math.max(a, m)) + 12, y: y + 15, class: "lbl" }, s, a.toFixed(1) + "%");
+      bindTip(r, `<b>${n}</b><br>Actual ${a.toFixed(1)}%<br>Product mix only ${m.toFixed(1)}%`);
+    });
+    $("#cMix").appendChild(s); grow(s, anim);
+  })();
+
+  // 5. top products
+  (function () {
+    const R = [["Men's cotton trousers, woven", 18.8, 0, 25.2], ["Women's cotton trousers, woven", 12.6, 0, 25.7], ["Cotton sweaters, knit", 8.4, 0, 25.8], ["Cotton T-shirts, knit", 6.6, 0, 24.0], ["Men's cotton shirts, woven", 5.8, 0, 28.8], ["Men's synthetic trousers, woven", 3.9, 1, 31.0], ["Man-made fibre sweaters, knit", 2.6, 1, 41.2], ["Men's man-made fibre jackets", 2.4, 1, 21.2]];
+    const W = cw("#cProd"), narrow = W < 560, rowH = narrow ? 50 : 34, L = narrow ? 0 : 230, H = R.length * rowH, s = svg(W, H), sc = (W - L - 56) / 20, anim = [];
+    R.forEach(([n, v, f, t], i) => {
+      const y = i * rowH + (narrow ? 20 : 4);
+      el("text", { x: 0, y: narrow ? y - 6 : y + 15, class: "lbl" }, s, n);
+      const r = el("rect", { x: L, y, width: v * sc, height: 20, rx: 4, fill: f ? C.t : C.g }, s); anim.push([r, "width", v * sc]);
+      el("text", { x: L + v * sc + 8, y: y + 15, class: "lbl" }, s, v.toFixed(1) + "%");
+      bindTip(r, `<b>${n}</b><br>${v.toFixed(1)}% of value<br>Tariff now ${t.toFixed(1)}%`);
+    });
+    $("#cProd").appendChild(s); grow(s, anim);
+  })();
+
+  // 6. outlook
+  (function () {
+    const R = [["2024", 7.05, 0], ["2025", 7.88, 0], ["2026", 7.80, 1], ["2027: back to 2024 share", 7.24, 2], ["2027: share holds", 7.91, 2], ["2027: gain continues", 8.41, 2]];
+    const W = cw("#cOut"), narrow = W < 640, rowH = narrow ? 56 : 40, L = narrow ? 0 : 230, H = R.length * rowH, s = svg(W, H), sc = (W - L - 80) / 9, anim = [];
+    R.forEach(([n, v, k], i) => {
+      const y = i * rowH + (narrow ? 22 : 6);
+      el("text", { x: 0, y: narrow ? y - 6 : y + 17, class: "lbl" }, s, n);
+      const r = el("rect", { x: L, y, width: v * sc, height: 24, rx: 5, fill: k === 2 ? C.t : k === 1 ? "#E89B8A" : C.p }, s); anim.push([r, "width", v * sc]);
+      el("text", { x: L + v * sc + 10, y: y + 18, fill: k === 2 ? C.ti : C.g, "font-size": 16, "font-weight": 800 }, s, "$" + v.toFixed(1) + "bn");
+      bindTip(r, `<b>${n}</b><br>$${v.toFixed(2)}bn of garments to the US`);
+    });
+    $("#cOut").appendChild(s); grow(s, anim);
+  })();
+})();
+</script>
+<script src="../../js/analytics.js?v=10f"></script>
+</body>
+</html>

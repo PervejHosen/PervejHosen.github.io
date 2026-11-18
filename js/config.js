@@ -230,6 +230,12 @@ const CONFIG = {
   projectsShow: 6,   // cards shown before the "Show all" button
   projectFilters: ["Case studies", "Live reports"],
   projects: [
+    { types: ["Case studies", "Live reports"], title: "Thread Count", badge: "Case study · Power BI",
+      desc: "Bangladesh garments in the US market from every month of US trade data since 2017: who gained as China lost share, what the 2025 and 2026 tariffs did, and what comes next, in one custom visual with a 3D container port.",
+      tags: ["Power BI", "Custom visual", "WebGL", "Python"],
+      link: "projects/thread-count/", cta: "Read the case study",
+      extra: { label: "Open live report", link: "REPORT_URL_PENDING" },
+      images: ["assets/img/projects/threadcount-1.jpg", "assets/img/projects/threadcount-2.jpg", "assets/img/projects/threadcount-3.jpg", "assets/img/projects/threadcount-4.jpg"] },
     { types: ["Case studies", "Live reports"], title: "Lights Out", badge: "Case study · Power BI",
       desc: "Bangladesh's 2026 load shedding from every hour of public grid data since 2015: who carried the cuts, why they happened and what would have helped, in one custom visual with 3D.",
       tags: ["Power BI", "Custom visual", "WebGL", "Python"],
