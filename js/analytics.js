@@ -5,7 +5,7 @@
    ========================================================= */
 (() => {
   const GA4_ID = "G-2X9JPMPRP8";     // Google Analytics 4 measurement ID, e.g. "G-AB12CD34EF"
-  const CLARITY_ID = "";   // Microsoft Clarity project ID, e.g. "k3x9abcd12"
+  const CLARITY_ID = "zfjikqheom";// Microsoft Clarity project ID, e.g. "k3x9abcd12"
 
   window.track = () => {};                 // safe to call even when analytics is off
   if (!GA4_ID && !CLARITY_ID) return;
