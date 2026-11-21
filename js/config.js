@@ -52,6 +52,12 @@ const CONFIG = {
   /* ---------- about ---------- */
   careerStart: "2022-08",   // {years} in the About text is counted from this month, so it updates itself
   about: [
+    "I'm <span class='grad-text'>Pervej Hosen</span>, a Power BI developer and analytics engineer in Dhaka, Bangladesh. I build the data models, dashboards and pipelines that teams in the US, the UAE, Germany and Australia run their business on.",
+    "I started in pharma sales and distribution, where I learned that a report only matters if someone acts on it. Every dashboard I build still starts from the decision it needs to support.",
+    "I hold an MSc in Applied Statistics and Data Science and I'm a Microsoft Certified Power BI Data Analyst (PL-300). I care as much about the clarity of a dashboard as the correctness of the numbers behind it."
+  ],
+  // the earlier, longer About text (not shown): rename this to "about" and the one above to something else to bring it back
+  aboutLong: [
     "I'm <span class='grad-text'>Pervej Hosen</span>, a Power BI developer and analytics engineer based in Dhaka, Bangladesh. I build the data models, dashboards and pipelines that teams in the US, the UAE, Germany and Australia run their business on, across circular-fashion e-commerce, prop trading, a restaurant chain and mining.",
     "I started on the commercial side of the pharmaceutical industry, in sales and distribution. That's where I learned that a report only matters if someone acts on it, and it still shapes how I work: every dashboard starts from the decision it needs to support.",
     "I hold an MSc in Applied Statistics and Data Science from Jahangirnagar University and I'm a Microsoft Certified Power BI Data Analyst (PL-300). My toolkit centers on Power BI, DAX, SQL, Snowflake, BigQuery, Databricks and Python, and I care as much about the clarity of a dashboard as the correctness of the numbers behind it."
@@ -104,6 +110,8 @@ const CONFIG = {
      Left: grouped list. Right: logo tiles.
      icon = logo name from js/icons.js (leave it out for tools without a logo) */
   skillsIntro: "The tools I use to take data from source systems to a decision, built up across pharma, e-commerce, prop trading, restaurants and mining.",
+  skillsView: "merged",   // "pipeline" = steps from data to decision · "merged" = one panel, each group with logo chips · "classic" = grouped list + logo tiles. All stay in the code.
+  skillsFlow: ["Warehouse & cloud", "Query & model", "Analyze with code", "Visualize & report", "Workflow & collaboration"],   // pipeline order (group titles)
   skillGroups: [
     { title: "Visualize & report", items: ["Power BI", "Excel", "Looker Studio", "Sigma"] },
     { title: "Query & model", items: ["SQL", "Microsoft SQL Server", "MySQL", "Data Modeling"] },
@@ -144,6 +152,7 @@ const CONFIG = {
   ],
   // optional: one shared Google Drive folder with all your certificates → shows a "View all certificates" button
   certificatesFolder: LINKS.drive.certificatesFolder,
+  credentialsLayout: "compact",   // "compact" = two columns, certificates grouped by issuer · "classic" = the original stacked cards
 
   /* ---------- training (shown under Certifications) ----------
      Programs without an individual credential. No link needed. */
@@ -151,6 +160,7 @@ const CONFIG = {
     {
       title: "Data Analytics & Data Science Bootcamp",
       by: "Mentored by Md. Shabbir Hossain Bhuiyea",
+      mentor: "Md. Shabbir Hossain Bhuiyea", mentorLink: "https://www.linkedin.com/in/shabbir-hossain-rossi/",   // the name inside "by" becomes a link
       year: "2023 · 6 months",
       summary: "99 live sessions and 9 hands-on projects, from statistics and Excel through SQL and cloud data warehouses to Python and machine learning, ending with ETL pipelines and portfolio projects.",
       topics: ["Excel", "Power BI", "Looker Studio", "SQL", "Snowflake", "BigQuery", "Databricks", "MongoDB", "Python", "Machine learning", "ETL"]
@@ -203,6 +213,7 @@ const CONFIG = {
   /* ---------- services ----------
      Cards in the Services section. "cta" is the button text; it jumps to the contact form
      with the service name already written in the message. No prices on purpose. */
+  servicesView: "grid",       // "grid" = the service cards · "carousel" = 3D ring (js/orbit.js). Both stay in the code.
   servicesIntro: "Hands-on help with reporting, data and analysis, from a single dashboard to owning your reporting end to end.",
   services: [
     { icon: "report", title: "End-to-end Power BI reporting",
@@ -229,6 +240,8 @@ const CONFIG = {
   projectsSubtitle: "Interactive reports and case studies. Click any card to explore it.",
   projectsShow: 6,   // cards shown before the "Show all" button
   projectFilters: ["Case studies", "Live reports"],
+  projectsView: "carousel",      // "carousel" = 3D ring (js/orbit.js) · "grid" = the card grid. Both stay in the code.
+  projectsViewSwitch: false,     // true shows a "3D carousel | Grid" switch to visitors
   projects: [
     { types: ["Case studies", "Live reports"], title: "Thread Count", badge: "Case study · Power BI",
       desc: "Bangladesh garments in the US market from every month of US trade data since 2017: who gained as China lost share, what the 2025 and 2026 tariffs did, and what comes next, in one custom visual with a 3D container port.",
@@ -286,6 +299,7 @@ const CONFIG = {
   photographySubtitle: "Away from dashboards, I chase mountains and light. Frames from my trek to Annapurna Base Camp in Nepal, and from home in Bangladesh.",
   photographyMore: "",   // optional: your Instagram / Flickr / 500px link
   galleryShow: 12,       // on phones/tablets: how many photos show before the "Show all" button
+  galleryView: "carousel",   // "carousel" = 3D ring (js/orbit.js) · "grid" = the photo grid. Both stay in the code.
   gallery: [
     { src: "assets/img/photography/01.jpg", title: "Morning over the valley", place: "Annapurna region, Nepal", category: "Mountains" },
     { src: "assets/img/photography/02.jpg", title: "Into the Sanctuary", place: "Annapurna Sanctuary, Nepal", category: "Trek" },

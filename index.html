@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=12e">
+  <link rel="stylesheet" href="css/style.css?v=12r">
 </head>
 <body>
 
@@ -28,8 +28,8 @@
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
-        <li><a href="#credentials">Credentials</a></li>
         <li><a href="#projects">Projects</a></li>
+        <li><a href="#credentials">Credentials</a></li>
         <li><a href="#photography">Photography</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -100,30 +100,12 @@
           <h2 class="sec-title">What I <span class="hl">build with</span>.</h2>
           <p class="sec-intro" id="skillsIntro"></p>
         </div>
-        <div class="skills-layout">
+        <div class="skills-flow reveal" id="skillsFlow" hidden></div>
+        <div class="skills-merged panel reveal" id="skillsMerged" hidden></div>
+        <div class="skills-layout" id="skillsClassic">
           <div class="panel skill-groups reveal" id="skillGroups"></div>
           <div class="panel tiles reveal" id="tiles" aria-label="Tools I use"></div>
         </div>
-      </div>
-    </section>
-
-    <!-- ================= EDUCATION & CERTIFICATIONS ================= -->
-    <section id="credentials">
-      <div class="wrap">
-        <div class="center-head reveal">
-          <p class="kicker">Credentials</p>
-          <h2 class="sec-title">Education &amp; <span class="hl">certifications</span>.</h2>
-        </div>
-        <div class="sub-head reveal">
-          <h3 class="sub-title">Education</h3>
-          <a class="btn btn-outline btn-sm" id="certFolder" target="_blank" rel="noopener">View all certificates ↗</a>
-        </div>
-        <div class="edu-grid" id="eduGrid"></div>
-        <h3 class="sub-title reveal">Certifications</h3>
-        <a class="cert-featured reveal" id="certFeatured" target="_blank" rel="noopener"></a>
-        <div class="cert-grid" id="certGrid"></div>
-        <h3 class="sub-title reveal" id="trainTitle">Training</h3>
-        <div class="train-grid" id="trainGrid"></div>
       </div>
     </section>
 
@@ -141,9 +123,33 @@
           <h3 class="sub-title proj-sub reveal">Dashboards and reports</h3>
         </div>
         <div class="ph-filters reveal" id="projFilters"></div>
+        <div class="proj-view" id="projView" hidden><button type="button" data-v="orbit">3D carousel</button><button type="button" data-v="grid">Grid</button></div>
+        <div class="proj-orbit" id="projOrbit" hidden></div>
         <div class="proj-grid" id="projGrid"></div>
         <div class="more-wrap" id="projMoreWrap"><button type="button" class="btn btn-outline">Show all projects</button></div>
-        <div class="more-wrap reveal proj-gh"><a class="btn btn-light" id="ghMore" target="_blank" rel="noopener">More projects on GitHub</a></div>
+      </div>
+    </section>
+
+    <!-- ================= EDUCATION & CERTIFICATIONS ================= -->
+    <section id="credentials">
+      <div class="wrap">
+        <div class="center-head reveal">
+          <p class="kicker">Credentials</p>
+          <h2 class="sec-title">Education &amp; <span class="hl">certifications</span>.</h2>
+        </div>
+        <div class="cred-x" id="credCompact" hidden></div>
+        <div id="credClassic">
+        <div class="sub-head reveal">
+          <h3 class="sub-title">Education</h3>
+          <a class="btn btn-outline btn-sm" id="certFolder" target="_blank" rel="noopener">View all certificates ↗</a>
+        </div>
+        <div class="edu-grid" id="eduGrid"></div>
+        <h3 class="sub-title reveal">Certifications</h3>
+        <a class="cert-featured reveal" id="certFeatured" target="_blank" rel="noopener"></a>
+        <div class="cert-grid" id="certGrid"></div>
+        <h3 class="sub-title reveal" id="trainTitle">Training</h3>
+        <div class="train-grid" id="trainGrid"></div>
+        </div>
       </div>
     </section>
 
@@ -156,6 +162,7 @@
           <p class="sec-intro" id="phSub"></p>
         </div>
         <div class="ph-filters reveal" id="phFilters"></div>
+        <div class="ph-orbit" id="phOrbit" hidden></div>
         <div class="gallery" id="gallery"></div>
         <div class="more-wrap reveal" id="phMoreWrap"><a class="btn btn-outline" id="phMore" target="_blank" rel="noopener">See more photos</a></div>
       </div>
@@ -169,6 +176,7 @@
           <h2 class="sec-title">What I can do <span class="hl">for you</span>.</h2>
           <p class="sec-intro" id="servicesIntro"></p>
         </div>
+        <div class="svc-orbit" id="svcOrbit" hidden></div>
         <div class="svc-grid" id="svcGrid"></div>
       </div>
     </section>
@@ -207,9 +215,10 @@
     <button class="lb-btn lb-next" id="lbNext" aria-label="Next photo">&#8250;</button>
   </div>
 
-  <script src="js/icons.js?v=12e"></script>
-  <script src="js/config.js?v=12e"></script>
-  <script src="js/main.js?v=12e"></script>
-  <script src="js/analytics.js?v=12e"></script>
+  <script src="js/icons.js?v=12r"></script>
+  <script src="js/config.js?v=12r"></script>
+  <script src="js/orbit.js?v=12r"></script>
+  <script src="js/main.js?v=12r"></script>
+  <script src="js/analytics.js?v=12r"></script>
 </body>
 </html>

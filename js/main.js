@@ -168,6 +168,43 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     <span>${esc(t.name)}</span>
   </div>`).join("");
 
+/* ---------- skills as a pipeline (CONFIG.skillsView = "pipeline") ----------
+   The same groups, in the order data travels (CONFIG.skillsFlow), each tool once with its logo.
+   "classic" keeps the grouped list + logo tiles above. */
+(function skillsPipeline() {
+  const box = $("#skillsFlow"), merged = $("#skillsMerged");
+  const view = CONFIG.skillsView;
+  if (view !== "pipeline") box?.remove();
+  if (view !== "merged") merged?.remove();
+  if (view !== "pipeline" && view !== "merged") return;
+  const alias = { "Microsoft SQL Server": "SQL Server", "Google BigQuery": "BigQuery" };
+  const iconOf = name => {
+    const t = CONFIG.tiles.find(x => x.name === (alias[name] || name));
+    return t ? ((typeof ICON_DATA !== "undefined" && ICON_DATA[t.icon]) || "assets/img/icons/" + t.icon) : "";
+  };
+  const glyph = '<svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+  const order = CONFIG.skillsFlow || CONFIG.skillGroups.map(g => g.title);
+  const groups = order.map(t => CONFIG.skillGroups.find(g => g.title === t)).filter(Boolean)
+    .concat(CONFIG.skillGroups.filter(g => !order.includes(g.title)));
+  const chip = t => { const src = iconOf(t); return `<li>${src ? `<img src="${src}" alt="" width="20" height="20">` : `<span class="flow-glyph">${glyph}</span>`}<span>${esc(t)}</span></li>`; };
+  const old = $("#skillsClassic"); if (old) old.hidden = true;
+  if (view === "merged") {   // same groups (original order), one row each, logo chips
+    merged.innerHTML = CONFIG.skillGroups.map((g, i) => `
+      <div class="mg-row" style="--d:${i * 80}ms"><h4>${esc(g.title)}</h4><ul>${g.items.map(chip).join("")}</ul></div>`).join("");
+    merged.hidden = false;
+    return;
+  }
+  box.innerHTML = `<div class="flow-line" aria-hidden="true"><i></i></div>` + groups.map((g, i) => `
+    <div class="flow-step" style="--d:${i * 110}ms">
+      <span class="flow-node">${String(i + 1).padStart(2, "0")}</span>
+      <div class="flow-card">
+        <h4>${esc(g.title)}</h4>
+        <ul>${g.items.map(t => { const src = iconOf(t); return `<li>${src ? `<img src="${src}" alt="" width="20" height="20">` : `<span class="flow-glyph">${glyph}</span>`}<span>${esc(t)}</span></li>`; }).join("")}</ul>
+      </div>
+    </div>`).join("");
+  box.hidden = false;
+})();
+
 /* ---------- education ---------- */
 (function education() {
   const cap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 4 2 9l10 5 10-5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/></svg>';
@@ -185,6 +222,13 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     </article>`).join("");
 })();
 
+/* training "by" line, with the mentor's name linked when mentorLink is set */
+const trainBy = t => {
+  const by = esc(t.by || "");
+  if (!t.mentor || !t.mentorLink || !by.includes(esc(t.mentor))) return by;
+  return by.replace(esc(t.mentor), `<a class="mentor-link" href="${esc(t.mentorLink)}" target="_blank" rel="noopener">${esc(t.mentor)}</a>`);
+};
+
 /* ---------- training ---------- */
 (function training() {
   const box = $("#trainGrid"), list = CONFIG.training || [];
@@ -196,11 +240,73 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
       <span class="train-icon">${icon}</span>
       <div class="train-main">
         <h4>${esc(t.title)}</h4>
-        <p class="cert-meta">${[t.by, t.year].filter(Boolean).map(esc).join(" · ")}</p>
+        <p class="cert-meta">${[trainBy(t), esc(t.year || "")].filter(Boolean).join(" · ")}</p>
         ${t.summary ? `<p class="train-sum">${esc(t.summary)}</p>` : ""}
         ${t.topics ? `<div class="train-tags">${t.topics.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : ""}
       </div>
     </article>`).join("");
+})();
+
+/* ---------- credentials, compact layout ----------
+   CONFIG.credentialsLayout: "compact" (two columns: education timeline + training | featured cert + certificates by issuer)
+   or "classic" (the original stacked cards below). Both stay in the code. */
+(function credentialsCompact() {
+  const box = $("#credCompact");
+  if (!box || CONFIG.credentialsLayout === "classic") { box?.remove(); return; }
+  const arrow = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const logo = c => c.logo && typeof ICON_DATA !== "undefined" && ICON_DATA[c.logo]
+    ? `<img src="${ICON_DATA[c.logo]}" alt="" width="26" height="26" data-logo="${esc(c.logo.replace(/\..*$/, ""))}">`
+    : `<span class="cert-mono" style="background:${c.monoColor || "#0f172a"}">${esc(c.mono || c.issuer.slice(0, 2))}</span>`;
+  // education: a timeline, newest first
+  const edu = (CONFIG.education || []).map(e => {
+    const yrs = (e.meta || "").split("·")[0].trim(), extra = (e.meta || "").split("·").slice(1).join("·").trim();
+    return `<li class="cx-edu">
+      <span class="cx-yr">${esc(yrs.replace(/\s*[–-]\s*/, " to "))}</span>
+      <div><b>${esc(e.degree)}</b><span>${esc(e.school)}${extra ? " · " + esc(extra) : ""}</span>
+      ${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">Certificate ${arrow}</a>` : ""}</div></li>`;
+  }).join("");
+  const train = (CONFIG.training || []).map(t => `
+    <div class="cx-train"><b>${esc(t.title)}</b><span class="cx-sub">${[trainBy(t), esc(t.year || "")].filter(Boolean).join(" · ")}</span>
+      ${t.summary ? `<p>${esc(t.summary)}</p>` : ""}
+      ${t.topics ? `<div class="cx-tags">${t.topics.map(x => `<span>${esc(x)}</span>`).join("")}</div>` : ""}</div>`).join("");
+  // certificates grouped by the organisation that issued them
+  const orgOf = c => c.issuer.split("·")[0].trim();
+  const groups = [];
+  (CONFIG.certifications || []).forEach(c => { let g = groups.find(x => x.org === orgOf(c)); if (!g) groups.push(g = { org: orgOf(c), first: c, items: [] }); g.items.push(c); });
+  groups.sort((x, y) => y.items.length - x.items.length);
+  // two stacks: the biggest issuer on its own, the rest beside it; CSS stretches both so they end on one line
+  const stacks = groups.length > 1 ? [groups.slice(0, 1), groups.slice(1)] : [groups];
+  const f = CONFIG.featuredCert;
+  const active = f && (!f.expires || new Date() <= new Date(f.expires + "T23:59:59"));
+  const total = (CONFIG.certifications || []).length + (f ? 1 : 0);
+  box.innerHTML = `
+    <div class="cx-col">
+      <h3 class="sub-title">Education</h3>
+      <ol class="cx-timeline">${edu}</ol>
+      ${train ? `<h3 class="sub-title cx-gap">Training</h3>${train}` : ""}
+    </div>
+    <div class="cx-col">
+      <h3 class="sub-title">Certifications <small>${total}</small></h3>
+      ${f ? `<a class="cert-featured cx-featured" href="${esc(f.link)}" target="_blank" rel="noopener">
+        <span class="cert-logo big">${logo(f)}</span>
+        <span class="cert-main"><small>${esc(f.code || f.issuer)}</small><b>${esc(f.title)}</b>
+          <span class="cert-meta">${[f.earned && "Earned " + f.earned, f.renewed && "Renewed " + f.renewed].filter(Boolean).map(esc).join(" · ")}</span></span>
+        <span class="cert-side">${active && f.expires ? `<span class="cert-active">Active${f.expiresLabel ? " · until " + esc(f.expiresLabel) : ""}</span>` : ""}<span class="cert-verify">Verify ${arrow}</span></span>
+      </a>` : ""}
+      <div class="cx-groups">${stacks.map(st => `<div class="cx-stack">${st.map(g => `
+        <div class="cx-group">
+          <button type="button" class="cx-org" aria-expanded="false"><span class="cert-logo">${logo(g.first)}</span><b>${esc(g.org)}</b><span>${g.items.length}</span></button>
+          <ul>${g.items.map(c => `<li><a href="${esc(c.link)}" target="_blank" rel="noopener"><span class="cx-t">${esc(c.title)}</span>
+            <span class="cx-d">${esc([c.issuer.split("·").slice(1).join("·").trim(), c.date].filter(Boolean).join(" · "))}</span>${arrow}</a></li>`).join("")}</ul>
+        </div>`).join("")}</div>`).join("")}</div>
+      ${CONFIG.certificatesFolder ? `<a class="btn btn-outline cx-all" href="${esc(CONFIG.certificatesFolder)}" target="_blank" rel="noopener">View all certificates ↗</a>` : ""}
+    </div>`;
+  // phones: each issuer folds to one line; tap it to see its certificates (CSS only folds below 640px)
+  box.querySelectorAll(".cx-org").forEach(o => o.addEventListener("click", () => {
+    const open = o.parentElement.classList.toggle("open"); o.setAttribute("aria-expanded", open);
+  }));
+  box.hidden = false;
+  const old = $("#credClassic"); if (old) old.hidden = true;   // the classic markup stays (its renderers still run) but is not shown
 })();
 
 /* ---------- certifications ---------- */
@@ -269,8 +375,23 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
       ${s.get ? `<p class="svc-get"><b>You get:</b> ${esc(s.get)}</p>` : ""}
       <a href="#contact" class="svc-cta" data-service="${esc(s.title)}">${esc(s.cta || "Discuss this")} ${arrow}</a>
     </article>`).join("");
+  // view: CONFIG.servicesView picks "carousel" (3D ring, js/orbit.js) or "grid" (the cards above). Both stay in the code.
+  const svcOrbitEl = $("#svcOrbit");
+  if (CONFIG.servicesView !== "grid" && window.Orbit && svcOrbitEl) {
+    const cards = [...$("#svcGrid").children];
+    const orbit = Orbit.create({
+      cls: "orb-svc", label: "Services", width: 380, widthPhone: 280, step: 42,
+      hint: "Drag, swipe or use the arrows · pick a service to get in touch",
+      card: (s, i) => `<div class="svc">${cards[i].innerHTML}</div>`,
+      // the front card behaves like its button: fill the contact form and go there
+      open: (s, i, e) => { if (!e.target.closest(".svc-cta")) svcOrbitEl.querySelector(".orb-card.front .svc-cta")?.click(); }
+    });
+    orbit.mount(svcOrbitEl); svcOrbitEl.hidden = false; $("#svcGrid").hidden = true;
+    orbit.set(list); orbit.start();
+  } else svcOrbitEl?.remove();
+
   // the button writes the service into the contact form, then the page scrolls there
-  $("#svcGrid").addEventListener("click", e => {
+  $("#services").addEventListener("click", e => {
     const a = e.target.closest(".svc-cta"); if (!a) return;
     const msg = $("#f-msg"); if (!msg) return;
     const line = `Hi Pervej, I'd like to talk about: ${a.dataset.service}.`;
@@ -344,7 +465,24 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   else filters.remove();
   const moreWrap = $("#projMoreWrap");
   let type = "All", expanded = list.length <= SHOW;
+  // view: CONFIG.projectsView picks "carousel" (3D ring, js/orbit.js) or "grid" (the card grid above).
+  // Both are kept in the code; CONFIG.projectsViewSwitch: true shows a switch so visitors can choose.
+  const orbitEl = $("#projOrbit"), viewEl = $("#projView");
+  let view = CONFIG.projectsView === "grid" || !window.ProjOrbit ? "grid" : "orbit";
+  if (window.ProjOrbit && orbitEl) ProjOrbit.mount(orbitEl);
+  if (!CONFIG.projectsViewSwitch || !window.ProjOrbit) viewEl?.remove();
+  const filtered = () => list.filter(p => type === "All" || catsOf(p).includes(type));
+  const setView = v => {
+    view = window.ProjOrbit ? v : "grid";
+    viewEl?.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === view));
+    const orbit = view === "orbit";
+    orbitEl.hidden = !orbit; $("#projGrid").hidden = orbit;
+    if (orbit) { ProjOrbit.set(filtered()); ProjOrbit.start(); } else window.ProjOrbit?.stop();
+    apply();
+  };
+  if (viewEl && viewEl.isConnected) { viewEl.hidden = false; viewEl.addEventListener("click", e => { const b = e.target.closest("button"); if (b) setView(b.dataset.v); }); }
   const apply = () => {
+    if (view === "orbit") { if (moreWrap) moreWrap.hidden = true; ProjOrbit.set(filtered()); return; }
     let shown = 0;
     document.querySelectorAll("#projGrid .proj").forEach(c => {
       const match = type === "All" || c.dataset.types.split("|").includes(type);
@@ -364,7 +502,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     moreWrap.querySelector("button").textContent = `Show all ${list.length} projects`;
     moreWrap.querySelector("button").addEventListener("click", () => { expanded = true; apply(); });
   }
-  apply();
+  setView(view);
 
   // each preview cycles through its pages, like the hero photo
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -381,7 +519,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
       imgs[n].classList.add("on"); dots[n]?.classList.add("on");
     }, 2800), i * 700);
   });
-  $("#ghMore").href = L.github;
+  const gh = $("#ghMore"); if (gh) gh.href = L.github;   // the GitHub button was removed from index.html; add it back there to show it again
 })();
 
 /* ---------- photography ---------- */
@@ -432,7 +570,7 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
   allBtn.className = "more-wrap";
   allBtn.innerHTML = `<button class="btn btn-outline" type="button">Show all ${photos.length} photos</button>`;
   g.after(allBtn);
-  const apply = () => {
+  let apply = () => {
     g.querySelectorAll(".ph").forEach(f => {
       const out = cat !== "All" ? f.dataset.cat !== cat : (!expanded && +f.dataset.i >= LIMIT);
       f.classList.toggle("hide", out);
@@ -441,6 +579,19 @@ $("#tiles").innerHTML = CONFIG.tiles.map((t, i) => `
     allBtn.hidden = expanded || cat !== "All";
   };
   allBtn.querySelector("button").addEventListener("click", () => { expanded = true; apply(); });
+
+  // view: CONFIG.galleryView picks "carousel" (3D ring, js/orbit.js) or "grid" (the masonry above). Both stay in the code.
+  const phOrbitEl = $("#phOrbit");
+  const phCarousel = CONFIG.galleryView !== "grid" && window.PhotoOrbit && phOrbitEl;
+  if (phCarousel) {
+    expanded = true;                                   // every photo sits on the ring; the lightbox can step through all of them
+    PhotoOrbit.mount(phOrbitEl); phOrbitEl.hidden = false; g.hidden = true;
+    const ringList = () => photos.filter(p => cat === "All" || p.category === cat);
+    const baseApply = apply;
+    apply = () => { baseApply(); allBtn.hidden = true; PhotoOrbit.set(ringList()); };
+    PhotoOrbit.onOpen = p => open(photos.indexOf(p));
+    PhotoOrbit.set(ringList()); PhotoOrbit.start();
+  } else phOrbitEl?.remove();
   apply();
 
   $("#phFilters").addEventListener("click", e => {
